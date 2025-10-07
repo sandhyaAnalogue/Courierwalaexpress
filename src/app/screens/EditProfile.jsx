@@ -12,19 +12,29 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import React, { useState } from "react";
-import InputField from "../../../customComponents/InputField";
-import PersonIcon from "../../../assets/svgs/SVGIcons/PersonIcon";
-import MailIcon from "../../../assets/svgs/SVGIcons/MailIcon";
-import CalenderIcon from "../../../assets/svgs/SVGIcons/CalenderIcon";
-import LocationIcon from "../../../assets/svgs/SVGIcons/LocationIcon";
-import DownArrow from "../../../assets/svgs/SVGIcons/DownArrow";
+// import InputField from "../../../customComponents/InputField";
+import InputField from "../../customComponents/InputField";
+// import PersonIcon from "../../../assets/svgs/SVGIcons/PersonIcon";
+import PersonIcon from "../../assets/svgIcons/PersonIcon";
+
+// import MailIcon from "../../../assets/svgs/SVGIcons/MailIcon";
+import MailIcon from "../../assets/svgIcons/MailIcon";
+
+// import CalenderIcon from "../../../assets/svgs/SVGIcons/CalenderIcon";
+import CalenderIcon from "../../assets/svgIcons/CalenderIcon";
+// import LocationIcon from "../../../assets/svgs/SVGIcons/LocationIcon";
+import LocationIcon from "../../assets/svgIcons/LocationIcon";
+// import DownArrow from "../../../assets/svgs/SVGIcons/DownArrow";
+import DownArrow from "../../assets/svgIcons/DownArrow";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import DropDownInputfield from "../../../customComponents/DropDownInputfield";
-import { ProfileValidationSchema } from "../../../validations/ProfileValidation";
-import GenderDropDown from "../../../customComponents/GenderDropDown";
+// import DropDownInputfield from "../../../customComponents/DropDownInputfield";
+import DropDownInputfield from "../../customComponents/DropDownInputfield";
+import { ProfileValidationSchema } from "../../validations/ProfileValidation";
+import GenderDropDown from "../../customComponents/GenderDropDown";
 import { Stack, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import BackArrow from "../../../assets/svgs/SVGIcons/BackArrow";
+import BackArrow from "../../assets/svgIcons/BackArrow";
+// import BackArrow from "../../../assets/svgs/SVGIcons/BackArrow";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from "formik";
@@ -40,6 +50,7 @@ const ProfileScreen = () => {
   const isWeb = Platform.OS === "web";
   return (
     <View style={{flex:1,backgroundColor:"#f8f8ff"}}>
+      <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content"/>
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={{ flex: 1 }}
@@ -68,8 +79,8 @@ const ProfileScreen = () => {
                 <TouchableOpacity
                   onPress={() => router.replace("/(profile)")}
                   style={{
-                    backgroundColor: "#d7d7dcff",
-                    padding: 6,
+                    backgroundColor: "#E7E7E7",
+                    padding: 8,
                     borderRadius: 16,
                     marginLeft: 15,
                   }}
@@ -78,14 +89,14 @@ const ProfileScreen = () => {
                 </TouchableOpacity>
                 <Text
                   style={{
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: "500",
                     marginLeft: 14,
                     color: "#252525",
                   }}
                 >
                   
-                 Add address details
+                 My Profile
                 </Text>
               </View>
             );
@@ -269,8 +280,8 @@ const ProfileScreen = () => {
                 )}
 
                 <InputField
-                  placeholder="Address"
-                  label="Enter drop address"
+                  placeholder="Enter drop address"
+                  label="Address"
                   iconComponent={<LocationIcon />}
                   keyboardType="default"
                   iconStyle={styles.locatinIcon}
@@ -288,7 +299,7 @@ const ProfileScreen = () => {
                     <Text style={styles.txt1}>Clear</Text>
                   </Pressable>
                   <Pressable style={styles.btn2} onPress={handleSubmit}>
-                    <Text style={styles.txt2}>Submit</Text>
+                    <Text style={styles.txt2}>Save changes</Text>
                   </Pressable>
                 </View>
               </>
@@ -340,29 +351,30 @@ const styles = StyleSheet.create({
     marginHorizontal: 22,
     paddingHorizontal: 5,
     display: "flex",
+    // gap:20,
     flexDirection: "row",
     justifyContent: "space-between",
   },
   btn1: {
     borderWidth: 1,
     paddingHorizontal: 55,
-    paddingVertical: 12,
+    paddingVertical: 10,
     borderRadius: 5,
   },
   btn2: {
     borderWidth: 1,
-    paddingHorizontal: 50,
-    paddingVertical: 12,
+    paddingHorizontal: 30,
+    paddingVertical: 10,
     borderRadius: 5,
     backgroundColor: "#252525",
   },
   txt1: {
-    fontWeight: "500",
-    fontSize: 17,
+    fontWeight: "600",
+    fontSize: 14,
   },
   txt2: {
-    fontWeight: "500",
-    fontSize: 17,
+    fontWeight: "600",
+    fontSize: 14,
     color: "white",
   },
   locatinIcon: {
@@ -382,7 +394,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   scrollContainer: {
-    flexGrow: 1,
-    justifyContent: "flex-start",
+    // flexGrow: 1,
+    // justifyContent: "flex-start",
+    paddingBottom: 220,
   },
 });

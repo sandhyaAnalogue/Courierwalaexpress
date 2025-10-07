@@ -7,7 +7,8 @@ import {
   FlatList,
 } from "react-native";
 import React, { useState } from "react";
-import DownArrow from "../assets/icons/DownArrow";
+// import DownArrow from "../assets/icons/DownArrow";
+import DownArrow from "../assets/svgIcons/icons/DownArrow";
 
 const DropDownInputfield = ({
   label,

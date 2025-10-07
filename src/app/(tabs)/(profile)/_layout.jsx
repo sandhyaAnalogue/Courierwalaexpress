@@ -1,5 +1,6 @@
 import { Stack,router, useNavigation } from "expo-router";
-import BackArrow from "../../../../assets/svgs/SVGIcons/BackArrow";
+// import BackArrow from "../../../../assets/svgs/SVGIcons/BackArrow";
+import BackArrow from "../../../assets/svgIcons/BackArrow";
 import { Platform, Pressable, StyleSheet } from "react-native";
 
 const _layout = () => {

@@ -1,49 +1,28 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-//import { useLayoutEffect } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import BookingIcon from '../../../../BookingIcon/BooingIcon';
-import RaiseIssue from '../../../../RaiseIssue/RaiseIssueIcon';
-import Rebook from '../../../../Rebook/Rebook';
- import { useSafeAreaInsets } from 'react-native-safe-area-context';
- import Feather from '@expo/vector-icons/Feather';
- import {Stack} from 'expo-router'
+// import BookingIcon from '../../../assets/svgIcons/BooingIcon';
+import BookingIcon from '../../../assets/svgIcons/BooingIcon';
+
+import RaiseIssue from '../../../assets/svgIcons/RaiseIssueIcon';
+import Rebook from '../../../assets/svgIcons/Rebook';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Feather from '@expo/vector-icons/Feather';
+import { Stack } from 'expo-router';
 import TextStyles from '../../TextStyles/TextStyles';
- 
-//dynamic colors getStatusStyle
-// const getStatusStyle = (status) => {
-//   switch (status.toLowerCase()) {
-//     case 'In-transit':
-//       return {
-//         backgroundColor: '#d4edda',
-//         color: '#eee',
-//         borderWidth: 1
-//       };
-//     case 'Awaiting pickup':
-//       return {
-//        backgroundColor: '#d4edda',
-//         color: '#eee',
-//         borderWidth: 1
-//       };
-//     case 'cancelled':
-//       return {
-//         backgroundColor: '#e7210fff',
-//         color: '#eee',
-//       borderWidth: 0
-//       };
-//     case 'delivered':
-//       return {
-//         backgroundColor: '#3ea340ff',
-//         color: '#eee',
-//       borderWidth: 0
-//       };
-//     default:
-//       return {
-//         backgroundColor: '#eee',
-//         color: '#333',
-//         borderColor: '#ccc',
-//       };
-//   }
-// };
+// import img1 from '../../../assets/svgIcons/img1'
+import img1 from '../../../assets/svgIcons/img1'
+
+import img2 from '../../../assets/svgIcons/img2'
+import img3 from '../../../assets/svgIcons/img3'
+import img4 from '../../../assets/svgIcons/img4'
+import img5 from '../../../assets/svgIcons/img5'
+
+// // Use the correct image paths from your assets folder
+// const img1 = require('../../../../image/img1');
+// const img2 = require('../../../../image/img2');
+// const img3 = require('../../../../image/img3');
+// const img4 = require('../../../../image/img4');
+// const img5 = require('../../../../image/img5');
 
 const orders = [
   {
@@ -59,14 +38,12 @@ const orders = [
     pickupAddress: 'Jaya Vijaya Plaza, Vital Rao Nagar',
     dropAddress: 'Durgam Cheruvu, Madhapur',
     totalAmount: 326,
-    packageImages: [
-  'https://via.placeholder.com/100/92c952',
-  'https://via.placeholder.com/100/771796',
-  'https://via.placeholder.com/100/24f355',
-  'https://via.placeholder.com/100/24f355',
-  'https://via.placeholder.com/100/24f355',
-],
-
+    packageImages:[ { SvgComponent: img1, title: 'img1' },
+      { SvgComponent: img2, title: 'img2' },
+      { SvgComponent: img3, title: 'img3' },
+      { SvgComponent: img4, title: 'img4' },
+      { SvgComponent: img5, title: 'img5' },
+    ],
   },
   {
     bookingId: 'CW254615',
@@ -78,12 +55,17 @@ const orders = [
     dimensions: '20×15cm, 1kg',
     bookingTime: '10:00 AM',
     bookingMode: 'Instant',
-   pickupAddress: 'Jaya Vijaya Plaza, Vital Rao Nagar',
+    pickupAddress: 'Jaya Vijaya Plaza, Vital Rao Nagar',
     dropAddress: 'Durgam Cheruvu, Madhapur',
     totalAmount: 150,
-    packageImages: [  'https://via.placeholder.com/100/92c952',
-  'https://via.placeholder.com/100/771796',
-  'https://via.placeholder.com/100/24f355',],
+    packageImages: [
+      { SvgComponent: img1, title: 'img1' },
+      { SvgComponent: img2, title: 'img2' },
+      { SvgComponent: img3, title: 'img3' },
+      { SvgComponent: img4, title: 'img4' },
+      { SvgComponent: img5, title: 'img5' },
+    
+    ],
   },
   {
     bookingId: 'CW254616',
@@ -98,12 +80,14 @@ const orders = [
     pickupAddress: 'Jaya Vijaya Plaza, Vital Rao Nagar',
     dropAddress: 'Durgam Cheruvu, Madhapur',
     totalAmount: 325,
+    packageImages: [
+      { SvgComponent: img1, title: 'img1' },
+      { SvgComponent: img2, title: 'img2' },
+      { SvgComponent: img3, title: 'img3' },
+      { SvgComponent: img4, title: 'img4' },
+      { SvgComponent: img5, title: 'img5' },
     
- packageImages: [  'https://via.placeholder.com/100/92c952',
-  'https://via.placeholder.com/100/771796',
-  ],
-
-
+    ],
   },
   {
     bookingId: 'CW254617',
@@ -118,26 +102,20 @@ const orders = [
     pickupAddress: 'Jaya Vijaya Plaza, Vital Rao Nagar',
     dropAddress: 'Durgam Cheruvu, Madhapur',
     totalAmount: 200,
-    packageImages: [  'https://via.placeholder.com/100/92c952',
-  'https://via.placeholder.com/100/771796',
-  'https://via.placeholder.com/100/24f355',]
+    packageImages: [
+       { SvgComponent: img1, title: 'img1' },
+      { SvgComponent: img2, title: 'img2' },
+      { SvgComponent: img3, title: 'img3' },
+      { SvgComponent: img4, title: 'img4' },
+      { SvgComponent: img5, title: 'img5' },
+    ],
   },
-  
 ];
 
 export default function OrderDetailsScreen() {
   const { id } = useLocalSearchParams();
-    const inserts=useSafeAreaInsets();
-    const router=useRouter();
-//  const navigation = useNavigation();
-
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerTitle: 'My Orders', 
-  //     headerShown: false,
-      
-  //   });
-  // }, [navigation]);
+  const inserts = useSafeAreaInsets();
+  const router = useRouter();
 
   const order = orders.find(o => o.bookingId === id);
 
@@ -152,28 +130,26 @@ export default function OrderDetailsScreen() {
   const statusLower = order.status.toLowerCase();
   const isInTransit = statusLower === 'in-transit';
   const isCancelled = statusLower === 'cancelled';
-//const isDelivered = statusLower === 'delivered';
-
   const isAwaitingPickup = statusLower === 'awaiting pickup';
   const showParcel = isAwaitingPickup && order.insured;
-  //const showActionButtons = isInTransit || isAwaitingPickup;
 
   return (
     <ScrollView style={styles.main}>
-       <Stack.Screen options={{
-        header:()=>{
-          return(
-            <View style={{backgroundColor:"#F8F8ff",paddingTop:inserts.top+30,flexDirection:"row",alignItems:"center"}}>
+      <Stack.Screen options={{
+        header: () => {
+          return (
+            <View style={{ backgroundColor: "#F8F8ff", paddingTop: inserts.top + 20, flexDirection: "row", alignItems: "center" }}>
               <TouchableOpacity
-               onPress={() => router.back()}
-              style={{backgroundColor:"#E7E7E7",padding:6,borderRadius:16,marginLeft:15}}>
+                onPress={() => router.navigate("/(myOrders)")}
+                style={{ backgroundColor: "#E7E7E7", padding: 6, borderRadius: 16, marginLeft: 20 }}>
                 <Feather name="chevron-left" size={20} color="black" />
               </TouchableOpacity>
-             <Text style={{fontSize:16,fontWeight:'500',marginLeft:10,color:'#252525'}}> My Orders</Text>
+              <Text style={{ fontSize: 16, fontWeight: '500', marginLeft: 10, color: '#252525' }}> My Orders</Text>
             </View>
           )
         }
-      }}/>
+      }} />
+      
       <View style={styles.container}>
         <View style={styles.rowBetween}>
           <View style={styles.row}>
@@ -186,29 +162,25 @@ export default function OrderDetailsScreen() {
             </View>
           </View>
           <View>
-<Text style={{maxWidth:100, fontSize: 14,
-   paddingHorizontal: 15,
-   paddingVertical: 6,
- backgroundColor: '#E7E7E7',
-  borderRadius: 20,
-  borderWidth:order.status==='Cancelled'?0:order.status==='Delivered'?0:1,
-  borderColor: '#000000',
-  color:order.status ==='Cancelled'?'#FFFFFF':order.status==="Delivered"?'#FFFFFF':'#252525',
-  
-  fontWeight: '500',
-   flexWrap: 'wrap', 
-   textAlign:"center",
-   backgroundColor:
-    order.status === 'Cancelled'
-        ? '#FF0000'
-        : order.status === 'Delivered'
-        ? '#3ea340'
-        : "#e5ecf0ff",
-
- }}>
-  {order.status}
-</Text>
-            </View>
+            <Text style={{
+              maxWidth: 100, 
+              // borderWidth:1,
+              fontSize: 10,
+              paddingHorizontal: 20,
+              paddingVertical: 11,
+              backgroundColor: '#E7E7E7',
+              borderRadius: 25,
+              borderWidth: order.status === 'Cancelled' ? 0 : 1,
+              borderColor: '#000000',
+              color: order.status === 'Cancelled' ? '#FFFFFF' : '#252525',
+              fontWeight: '500',
+              flexWrap: 'wrap', 
+              textAlign: "center",
+              backgroundColor: order.status === 'Cancelled' ? '#FF0000' : '#F8F8ff'
+            }}>
+              {order.status}
+            </Text>
+          </View>
           
           {showParcel && (
             <View style={styles.insuredTag}>
@@ -219,72 +191,88 @@ export default function OrderDetailsScreen() {
         
         <View style={styles.detailRow}>
           <View style={styles.detailBox}>
-            <Text style={styles.labeldata}>Booking Date</Text>
-            <Text style={styles.value}>{order.date}</Text>
+            <View style={styles.labelValuePair}>
+              <Text style={styles.labeldata}>Booking Date</Text>
+              <Text style={styles.value}>{order.date}</Text>
+            </View>
+
+            <View style={styles.labelValuePair}>
+              <Text style={styles.labeldata}>Courier Type</Text>
+              <Text style={styles.value}>{order.courierType}</Text>
+            </View>
+
+            <View style={styles.labelValuePair}>
+              <Text style={styles.labeldata}>Dimensions</Text>
+              <Text style={styles.value}>{order.dimensions}</Text>
+            </View>
           </View>
+
           <View style={styles.detailBox}>
-            <Text style={styles.labeldata}>Booking Time</Text>
-            <Text style={styles.value}>{order.bookingTime}</Text>
+            <View style={styles.labelValuePair}>
+              <Text style={styles.labeldata}>Booking Time</Text>
+              <Text style={styles.value}>{order.bookingTime}</Text>
+            </View>
+
+            <View style={styles.labelValuePair}>
+              <Text style={styles.labeldata}>Item Name</Text>
+              <Text style={styles.value}>{order.itemName}</Text>
+            </View>
+
+            <View style={styles.labelValuePair}>
+              <Text style={styles.labeldata}>Booking Mode</Text>
+              <Text style={styles.value}>{order.bookingMode}</Text>
+            </View>
           </View>
         </View>
 
-        <View style={styles.detailRow}>
-          <View style={styles.detailBox}>
-            <Text style={styles.labeldata}>Courier Type</Text>
-            <Text style={styles.value}>{order.courierType}</Text>
+        <View
+          style={[
+            styles.addressContainer,
+            order.status === "awaiting pickup" ? styles.row : styles.column,
+          ]}
+        >
+          <View style={[styles.addressBox, order.status === "awaiting pickup" && { marginRight: 2 }]}>
+            <Text style={styles.labeldata}>Pickup Address</Text>
+            <Text style={styles.value} numberOfLines={2}>
+              {order.pickupAddress}
+            </Text>
           </View>
-          <View style={styles.detailBox}>
-            <Text style={styles.labeldata}>Item Name</Text>
-            <Text style={styles.value}>{order.itemName}</Text>
+
+          <View style={styles.addressBox}>
+            <Text style={styles.labeldata}>Drop Address</Text>
+            <Text style={styles.value} numberOfLines={2}>
+              {order.dropAddress}
+            </Text>
           </View>
         </View>
 
-        <View style={styles.detailRow}>
-          <View style={styles.detailBox}>
-            <Text style={styles.labeldata}>Dimensions</Text>
-            <Text style={styles.value}>{order.dimensions}</Text>
-          </View>
-          <View style={styles.detailBox}>
-            <Text style={styles.labeldata}>Booking Mode</Text>
-            <Text style={styles.value}>{order.bookingMode}</Text>
-          </View>
-        </View>
-
-        <View style={styles.pickup}>
-          <Text style={styles.labeldata}>Pickup Address</Text>
-          <Text style={styles.value}>{order.pickupAddress}</Text>
-        </View>
-        
-        <View style={styles.drop}>
-          <Text style={styles.labeldata}>Drop Address</Text>
-          <Text style={styles.value}>{order.dropAddress}</Text>
-        </View>
-        
         <View style={styles.img}>
-          <Text style={styles.labeldata}>Package Images</Text>
-          <View style={styles.packageImagesContainer}>
-            {order.packageImages.map((imageUri, i) => (
-              <Image
-                key={i}
-                source={{ uri: imageUri }}
-                style={styles.packageImage}
-                resizeMode="cover"
-              />
-            ))}
-          </View>
+          <Text style={styles.labeldata}>Package images</Text>
+         <View style={styles.packageImagesContainer}>
+  {order.packageImages.map((imgObj, i) => {
+    const SvgComponent = imgObj.SvgComponent;  // get the component
+    return (
+      <View key={i} style={{ alignItems: 'center', marginRight: 1}}>
+        <SvgComponent width={20} height={20} />
+        <Text style={{ fontSize: 10, color: '#444' }}>{imgObj.title}</Text>
+      </View>
+    );
+  })}
+</View>
+
         </View>
         
         {showParcel && (
           <View style={styles.packedparcel}>
-            <Text style={styles.parcel} >This parcel is insured</Text>
-            <Text style={{color:'6D6D6D'}}>Covered: ₹20,000</Text>
+            <Text style={styles.parcel}>This parcel is insured</Text>
+            <Text style={{color: '#6D6D6D'}}>Covered: ₹20,000</Text>
           </View>
         )}
         
         <View style={styles.border}></View>
         
         <View style={styles.detailRow}>
-          <View style={styles.detailBox}>
+          <View style={styles.price}>
             <Text style={styles.amount}>Total Amount</Text>
           </View>
           <View style={styles.price}>
@@ -292,13 +280,14 @@ export default function OrderDetailsScreen() {
           </View>
         </View>
 
-       {(isCancelled || isAwaitingPickup) && (
-  <View>
-    <Text style={styles.para}>
-      *Final Price may vary after physical verification during pickup
-    </Text>
-  </View>
-)}
+        {(isCancelled || isAwaitingPickup) && (
+          <View>
+            <Text style={styles.para} numberOfLines={2}>
+              *Final Price may vary after physical {'\n'}   
+           <Text></Text>  verification during pickup
+            </Text>
+          </View>
+        )}
         
         {/* In-Transit: Show Rebook + View Less */}
         {isInTransit && (
@@ -316,30 +305,30 @@ export default function OrderDetailsScreen() {
           </>
         )}
 
-        {/* Awaiting Pickup or others ,0(excluding In-Transit)0: Show Rebook + Raise Issue */}
-        {!isInTransit  && !showParcel && (
+        {/* Awaiting Pickup or others (excluding In-Transit): Show Rebook + Raise Issue */}
+        {!isInTransit && !showParcel && (
           <View style={styles.actionsRow}>
             <TouchableOpacity style={styles.rebookButton}>
-              <Rebook width={24} height={24} />
+              <Rebook width={20} height={20} />
               <Text style={styles.rebookText}>Rebook</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.rebookButton}>
+            <TouchableOpacity style={styles.rebookButton2}>
               <RaiseIssue width={20} height={20} />
               <Text style={styles.raiseText}>Raise Issue</Text>
             </TouchableOpacity>
           </View>
         )}
 
-        {/* Insured Parcel =>Show Rebook , Cancel Order */}
+        {/* Insured Parcel => Show Rebook, Cancel Order */}
         {!isInTransit && showParcel && (
           <View style={styles.actionsRow}>
             <TouchableOpacity style={styles.rebookButton}>
-              <Rebook width={24} height={24} />
+              <Rebook width={22} height={22} />
               <Text style={styles.rebookText}>Rebook</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.rebookButton}>
+            <TouchableOpacity style={styles.rebookButton2cancel}>
               <Text style={styles.raiseText}>Cancel Order</Text>
             </TouchableOpacity>
           </View>
@@ -357,37 +346,45 @@ export default function OrderDetailsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#fff',marginTop:20,marginHorizontal:6 },
+  container: { flex: 1, padding: 20, backgroundColor: '#fff', marginTop: 20, marginHorizontal: 6 },
   rowBetween: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
-    elevation:5,
-    
   },
   packageImagesContainer: {
     flexDirection: 'row',
     marginTop: 10,
     flexWrap: 'wrap',
     gap: 10,
+    marginBottom:12,
   },
-   main: {
+  rows: {
+    flexDirection: "row",
+  },
+  column: {
+    flexDirection: "column",
+    gap: 24
+  },
+  labelValuePair: {
+    marginBottom: 12, 
+  },
+  main: {
     padding: 10,
     paddingBottom: 40, 
-    backgroundColor:"#f8f8ff",
-    flex:1,
-    marginBottom:40
+    backgroundColor: "#f8f8ff",
+    flex: 1,
+    marginBottom: 40
   },
-  lastView:{
-    paddingHorizontal:104,
-    paddingVertical:14,
+  lastView: {
+    paddingHorizontal: 104,
+    paddingVertical: 14,
     color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '500',
     backgroundColor: '#252525',
     borderRadius: 4,
-    marginBottom:30
+    marginBottom: 30
   },
   packageImage: {
     width: 40,
@@ -396,33 +393,19 @@ const styles = StyleSheet.create({
   },
   row: { flexDirection: 'row', alignItems: 'center' },
   iconWrapper: {
-   backgroundColor: '#E7E7E7',
+    backgroundColor: '#E7E7E7',
     borderRadius: 20,
     padding: 6,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  label: { fontSize: 14, fontWeight: '500',color:'#252525' },
-  labeldata: { fontSize: 14, fontWeight: '500',color:'#252525' },
-  amount:{fontSize: 16, fontWeight: '700', color: '#000000',margin:10},
-  parcel:{color:'#16A263',fontWeight:'bold' ,fontSize:16,paddingVertical:5},
-  packedparcel:{margin:10,backgroundColor:'#E7F5EC',padding:20},
-  value: { fontSize: 14, color: '#5D5D5D',fontWeight:'400' },
-  para:{fontSize: 12, color: '#6D6D6D',paddingHorizontal:14},
-  // status: {
-  //   paddingHorizontal: 12,
-  //   paddingVertical: 6,
-  //   borderRadius: 20,
-  //   fontWeight: '600',
-  //   textAlign: 'center',
-  //   overflow: 'hidden',
-  //   borderWidth:1,
-  //   color: '#333',
-  // fontWeight: '500',
-  // maxWidth: 100,           
-  // textAlign: 'center',     
-  // flexWrap: 'wrap',       
-  // },
+  label: { fontSize: 14, fontWeight: '500', color: '#252525' },
+  labeldata: { fontSize: 14, fontWeight: '500', color: '#252525' },
+  amount: { fontSize: 16, fontWeight: '700', color: '#000000', marginVertical: 10 },
+  parcel: { color: '#16A263', fontWeight: 'bold', fontSize: 16, },
+  packedparcel: { marginVertical: 20, backgroundColor: '#E7F5EC', padding: 15 },
+  value: { fontSize: 10, color: '#5D5D5D', fontWeight: '500',paddingLeft:2, },
+  para: { fontSize: 12, color: '#6D6D6D' },
   actionsRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -435,33 +418,53 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: '#6D6D6D',
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
     paddingVertical: 10,
     borderRadius: 5,
   },
-  rebookText: {
-    fontSize: 16,
-    color: '#454545',
-    marginLeft: 6,
+  rebookButton2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#6D6D6D',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 5,
   },
-  raiseText:{
-    fontSize: 16,
+  rebookButton2cancel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#6D6D6D',
+    paddingHorizontal: 15,
+    paddingVertical: 10.5,
+    borderRadius: 5,
+  },
+  rebookText: {
+    fontSize: 14,
+    color: '#454545',
+    // marginLeft: 6,
+    fontWeight:500,
+  },
+  raiseText: {
+    fontSize: 14,
+    fontWeight:500,
     color: '#454545',
     marginLeft: 6,
   },
   linkText: {
     color: 'white',
-    fontSize: 18,
-    fontWeight: '500',
+    fontSize: 17,
+    fontWeight: '400',
     backgroundColor: 'black',
-    paddingHorizontal: 19,
+    paddingHorizontal: 27,
     paddingVertical: 10,
     borderRadius: 4,
   },
   insuredTag: {
     position: 'absolute',
-    top: -28,
-    left: -26,
+    top: -20,
+    left: -30,
     backgroundColor: '#EBFEED',
     paddingHorizontal: 10,
     paddingVertical: 4,
@@ -474,27 +477,42 @@ const styles = StyleSheet.create({
     elevation: 4,
     zIndex: 1,
   },
-  border:{borderWidth:0.3,marginTop:10},
-  insuredText: { color: '#222', fontSize: 12, fontWeight: '600' },
+  border: { borderWidth: 0.3, marginTop: 10 },
   title: { fontSize: 22, fontWeight: 'bold' },
   detailRow: {
+    // borderWidth:1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 15,
-    // paddingHorizontal:10
-    gap:30
+    gap: 10,
+    marginRight:16
+
   },
   detailBox: {
+    // backgroundColor:"pink",
+    // borderWidth:1,
+    paddingHorizontal:1,
+    // flex: 1,
+    paddingVertical: 20,
+    gap: 10
+  },
+  
+  addressContainer: {
+    
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: -13,
+    // marginHorizontal:1,
+    gap: 70
+  },
+  addressBox: {
     flex: 1,
-    paddingHorizontal: 5,
+    marginHorizontal: -2,
   },
-  pickup:{
-    margin:6
+  img: {
+    marginTop: 32,
+    marginLeft: -1
   },
-  drop:{
-    margin:6
-  },
-  img:{
-    margin:6
+  price: {
+    
   }
 });

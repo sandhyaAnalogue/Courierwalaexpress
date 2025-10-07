@@ -1,6 +1,7 @@
 import { StyleSheet, Pressable, Platform } from "react-native";
 import { Stack, router } from "expo-router";
-import BackArrow from "../../../assets/svgs/SVGIcons/BackArrow";
+// import BackArrow from "../../../assets/svgs/SVGIcons/BackArrow";
+import BackArrow from "../../assets/svgIcons/BackArrow";
 
 const _layout = () => {
   return (
@@ -13,6 +14,7 @@ const _layout = () => {
           backgroundColor: "transparent",
         },
         headerShadowVisible: false,
+        
       }}
     >
       <Stack.Screen

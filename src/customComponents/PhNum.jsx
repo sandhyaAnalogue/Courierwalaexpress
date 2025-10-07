@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 12,
+    fontWeight:400,
     paddingVertical: 10,
   },
   label: {
@@ -65,6 +66,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     marginRight: 10,
+    color:"#888888",
     // paddingLeft:10,
     paddingRight: 7,
     paddingTop: 10,

@@ -18,5 +18,9 @@ npx expo prebuild
 npm start -- --reset-cache
 
 
+npm install react-native-safe-area-context
+
+
+
 
 

@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   ScrollView,
+  StatusBar,
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
@@ -17,11 +18,12 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import BackArrow from "../../../assets/svgs/SVGIcons/BackArrow";
+// import BackArrow from "../../../assets/svgs/SVGIcons/BackArrow";
+import BackArrow from "../../assets/svgIcons/BackArrow";
 
 const AddAddress = () => {
-   const router = useRouter();
-        const inserts = useSafeAreaInsets();
+  const router = useRouter();
+  const inserts = useSafeAreaInsets();
   const { address } = useLocalSearchParams();
   const parsedAddress = address ? JSON.parse(address) : null;
 
@@ -39,11 +41,15 @@ const AddAddress = () => {
   // };
 
   const validationSchema = Yup.object().shape({
-    houseNo: Yup.string().required("House No. & Floor is required").min(3, "Must contain at least 3 characters"),
-    receiverName: Yup.string().required("Receiver’s name is required").min(3, "Name must contain at least 3 letters"),
+    houseNo: Yup.string()
+      .required("House No. & Floor is required")
+      .min(3, "Must contain at least 3 characters"),
+    receiverName: Yup.string()
+      .required("Receiver’s name is required")
+      .min(3, "Name must contain at least 3 letters"),
     receiverPhNum: Yup.string()
-    .required("Mobile number is required")
-    .matches(/^[6-9]\d{9}$/, "Enter a valid 10-digit mobile number")
+      .required("Mobile number is required")
+      .matches(/^[6-9]\d{9}$/, "Enter a valid 10-digit mobile number"),
   });
 
   const handleSaveAddress = async (values) => {
@@ -67,184 +73,185 @@ const AddAddress = () => {
 
       await AsyncStorage.setItem("userAddresses", JSON.stringify(addresses));
       // alert(parsedAddress ? "Address Updated!" : "Address Saved!");
-      router.back();
+      router.navigate("/(profile)/ManageAddress");
     } catch (error) {
       console.log("Error saving address:", error);
     }
   };
 
   return (
-    <View style={{flex:1,backgroundColor:"#f8f8ff",}}>
-    <KeyboardAvoidingView
-      style={{ flex: 1, }}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} >
-        <ScrollView
-          contentContainerStyle={styles.container}
-          keyboardShouldPersistTaps="handled"
-        >
-          <Stack.Screen options={{
-          header: () => {
-            return (
-              <View
-                style={{
-                  backgroundColor: "#f8f8ff",
-                  paddingTop: inserts.top + 20,
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => router.replace("/(profile)/ManageAddress")}
-                  style={{
-                    backgroundColor: "#d7d7dcff",
-                    padding: 6,
-                    borderRadius: 16,
-                    marginLeft: 15,
-                  }}
-                >
-                  <BackArrow width={16} height={16} />
-                </TouchableOpacity>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontWeight: "500",
-                    marginLeft: 14,
-                    color: "#252525",
-                  }}
-                >
-                  
-                 Add address details
-                </Text>
-              </View>
-            );
-          },
-        }} />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleSaveAddress}
+    <View style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
+      <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content"/>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView
+            contentContainerStyle={styles.container}
+            keyboardShouldPersistTaps="handled"
           >
-            {({handleChange, handleSubmit, values, errors, touched, setFieldValue,setFieldTouched,})=>(<>
-              <View style={styles.inputContainer}>
-              <Text style={styles.title}>Add Address</Text>
-
-              <TextInput
-                placeholder="House No. & Floor*"
-                placeholderTextColor="#999"
-                style={[styles.input,touched.houseNo && errors.houseNo && styles.inputError,]}
-                value={values.houseNo}
-                onChangeText={handleChange("houseNo")}
-                keyboardType="default"
-                onBlur={() => setFieldTouched("houseNo")}
-
-              />
-              {touched.houseNo && errors.houseNo && <Text style={styles.error}>{errors.houseNo}</Text>}
-
-              <TextInput
-                placeholder="Building & Block No. (Optional)"
-                placeholderTextColor="#999"
-                style={styles.input}
-                value={values.building}
-                onChangeText={handleChange("building")}
-              />
-
-              <TextInput
-                placeholder="Landmark & Area Name (Optional)"
-                placeholderTextColor="#999"
-                style={styles.input}
-                value={values.landmark}
-                onChangeText={handleChange("landmark")}
-              />
-              </View>
-
-              <View style={styles.addAddressLabel}>
-                <Text style={styles.subtitle}>Add Address Label</Text>
-                <View style={styles.labelContainer}>
-                  {["home", "work", "other"].map((lbl) => (
-                      <Pressable
-                        key={lbl}
-                        style={[styles.label, values.label === lbl && styles.activeLabel]}
-                        onPress={() => setFieldValue("label", lbl)}
+            <Stack.Screen
+              options={{
+                header: () => {
+                  return (
+                    <View
+                      style={{
+                        backgroundColor: "#f8f8ff",
+                        paddingTop: inserts.top + 20,
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <TouchableOpacity
+                        onPress={() =>
+                          router.replace("/(profile)/ManageAddress")
+                        }
+                        style={{
+                          backgroundColor: "#E7E7E7",
+                          padding: 8,
+                          borderRadius: 16,
+                          marginLeft: 15,
+                        }}
                       >
-                        <Text style={{ fontWeight: "500" }}>{lbl.charAt(0).toUpperCase() + lbl.slice(1)}</Text>
-                      </Pressable>
-                    ))}
+                        <BackArrow width={16} height={16} />
+                      </TouchableOpacity>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          fontWeight: "500",
+                          marginLeft: 14,
+                          color: "#252525",
+                        }}
+                      >
+                        Add address details
+                      </Text>
+                    </View>
+                  );
+                },
+              }}
+            />
+
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={handleSaveAddress}
+            >
+              {({
+                handleChange,
+                handleSubmit,
+                values,
+                errors,
+                touched,
+                setFieldValue,
+                setFieldTouched,
+              }) => (
+                <>
+                  <View style={styles.inputContainer}>
+                    <Text style={styles.title}>Add Address</Text>
+
+                    <TextInput
+                      placeholder="House No. & Floor*"
+                      placeholderTextColor="#888888"
+                      style={[
+                        styles.input,
+                        touched.houseNo && errors.houseNo && styles.inputError,
+                      ]}
+                      value={values.houseNo}
+                      onChangeText={handleChange("houseNo")}
+                      keyboardType="default"
+                      onBlur={() => setFieldTouched("houseNo")}
+                    />
+                    {touched.houseNo && errors.houseNo && (
+                      <Text style={styles.error}>{errors.houseNo}</Text>
+                    )}
+
+                    <TextInput
+                      placeholder="Building & Block No. (Optional)"
+                      placeholderTextColor="#999"
+                      style={styles.input}
+                      value={values.building}
+                      onChangeText={handleChange("building")}
+                    />
+
+                    <TextInput
+                      placeholder="Landmark & Area Name (Optional)"
+                      placeholderTextColor="#999"
+                      style={styles.input}
+                      value={values.landmark}
+                      onChangeText={handleChange("landmark")}
+                    />
                   </View>
-                </View>
 
+                  <View style={styles.addAddressLabel}>
+                    <Text style={styles.subtitle}>Add Address Label</Text>
+                    <View style={styles.labelContainer}>
+                      {["home", "work", "other"].map((lbl) => (
+                        <Pressable
+                          key={lbl}
+                          style={[
+                            styles.label,
+                            values.label === lbl && styles.activeLabel,
+                          ]}
+                          onPress={() => setFieldValue("label", lbl)}
+                        >
+                          <Text style={{ fontWeight: "500",fontSize:12, }}>
+                            {lbl.charAt(0).toUpperCase() + lbl.slice(1)}
+                          </Text>
+                        </Pressable>
+                      ))}
+                    </View>
+                  </View>
 
-                 <View style={styles.receiverDetailsContainer}>
-                  <Text style={styles.title}>Receiver Details</Text>
+                  <View style={styles.receiverDetailsContainer}>
+                    <Text style={styles.title}>Receiver Details</Text>
 
-                  <TextInput
-                    placeholder="Receiver’s Name"
-                    placeholderTextColor="#999"
-                    style={[styles.input, touched.receiverName &&
-                        errors.receiverName &&
-                        styles.inputError,]}
-                    value={values.receiverName}
-                    onChangeText={handleChange("receiverName")}
-                    onBlur={() => setFieldTouched("receiverName")}
-                  />
-                  {touched.receiverName && errors.receiverName && <Text style={styles.error}>{errors.receiverName}</Text>}
+                    <TextInput
+                      placeholder="Receiver’s Name"
+                      placeholderTextColor="#999"
+                      style={[
+                        styles.input,
+                        touched.receiverName &&
+                          errors.receiverName &&
+                          styles.inputError,
+                      ]}
+                      value={values.receiverName}
+                      onChangeText={handleChange("receiverName")}
+                      onBlur={() => setFieldTouched("receiverName")}
+                    />
+                    {touched.receiverName && errors.receiverName && (
+                      <Text style={styles.error}>{errors.receiverName}</Text>
+                    )}
 
-                  <TextInput
-                    placeholder="Receiver’s Phone Number"
-                    placeholderTextColor="#999"
-                    maxLength={10}
-                     style={[
-                      styles.input,
-                      touched.receiverPhNum &&
-                        errors.receiverPhNum &&
-                        styles.inputError,
-                    ]}
-                    keyboardType="phone-pad"
-                    value={values.receiverPhNum}
-                    onChangeText={handleChange("receiverPhNum")}
-                    onBlur={() => setFieldTouched("receiverPhNum")}
-                  />
-                  {touched.receiverPhNum && errors.receiverPhNum && <Text style={styles.error}>{errors.receiverPhNum}</Text>}
-                </View>
+                    <TextInput
+                      placeholder="Receiver’s Phone Number"
+                      placeholderTextColor="#999"
+                      maxLength={10}
+                      style={[
+                        styles.input,
+                        touched.receiverPhNum &&
+                          errors.receiverPhNum &&
+                          styles.inputError,
+                      ]}
+                      keyboardType="phone-pad"
+                      value={values.receiverPhNum}
+                      onChangeText={handleChange("receiverPhNum")}
+                      onBlur={() => setFieldTouched("receiverPhNum")}
+                    />
+                    {touched.receiverPhNum && errors.receiverPhNum && (
+                      <Text style={styles.error}>{errors.receiverPhNum}</Text>
+                    )}
+                  </View>
 
-                <View style={styles.btncontainer}>
-                  <Pressable style={styles.btnStyling} onPress={handleSubmit}>
-                    <Text style={styles.txtStyle}>Save Address</Text>
-                  </Pressable>
-                </View>
+                  <View style={styles.btncontainer}>
+                    <Pressable style={styles.btnStyling} onPress={handleSubmit}>
+                      <Text style={styles.txtStyle}>Save Address</Text>
+                    </Pressable>
+                  </View>
+                </>
+              )}
 
-            </>)}
-            
-              
-
-              
-
-              
-
-              
-            
-
-            
-              
-              
-                {/* <Pressable
+              {/* <Pressable
                   style={[
                     styles.label,
                     userAddress.label === "home" && styles.activeLabel,
@@ -274,7 +281,7 @@ const AddAddress = () => {
               </View>
             </View> */}
 
-            {/* <View style={styles.receiverDetailsContainer}>
+              {/* <View style={styles.receiverDetailsContainer}>
               <Text style={styles.title}>Receiver Details</Text>
 
               <TextInput
@@ -305,10 +312,10 @@ const AddAddress = () => {
                 <Text style={styles.txtStyle}>Save Address</Text>
               </Pressable>
             </View> */}
-          </Formik>
-        </ScrollView>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+            </Formik>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </View>
   );
 };
@@ -322,8 +329,8 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 14,
+    fontWeight: "500",
     marginBottom: 10,
   },
   inputContainer: {
@@ -333,17 +340,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     marginTop: 10,
     borderRadius: 6,
-    height: 50,
+    height: 45,
     paddingHorizontal: 12,
     elevation: 0.1,
     borderWidth: 0.5,
     borderColor: "#CCC",
+    fontSize:10,
   },
   addAddressLabel: {
     marginTop: 20,
   },
   subtitle: {
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: "500",
     marginBottom: 10,
   },
@@ -354,6 +362,8 @@ const styles = StyleSheet.create({
   },
   label: {
     borderWidth: 1,
+    // backgroundColor:"pink",
+    // fontSize:12,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
@@ -376,6 +386,7 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     textAlign: "center",
     fontWeight: "500",
+    fontSize:12,
   },
   btncontainer: {
     marginTop: 30,

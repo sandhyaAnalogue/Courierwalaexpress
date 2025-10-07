@@ -9,6 +9,7 @@ const Button = ({
   paddingVertical,
   fontWeight,
   borderWidth,
+  fontSize,
   style
 }) => {
   return (
@@ -24,7 +25,7 @@ const Button = ({
         <Text
           style={[
             styles.buttonText,
-            { color: color,paddingVertical: paddingVertical,fontWeight: fontWeight },
+            { color: color,paddingVertical: paddingVertical,fontWeight: fontWeight,fontSize:fontSize },
             style
           ]}
         >

@@ -9,10 +9,11 @@ import {
 } from "react-native";
 import React, { useEffect, useState, useRef } from "react";
 import { TextInput } from "react-native";
-import Button from "../../../customComponents/Button";
+// import Button from "../../../customComponents/Button";
+import Button from "../../customComponents/Button";
 import { useIsFocused } from "@react-navigation/native";
 import { StatusBar } from "react-native";
-import AlertModel from "../../../customComponents/AlertModel";
+import AlertModel from "../../customComponents/AlertModel";
 // import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { router } from "expo-router";
 // import { Keyboard } from "react-native";
@@ -52,21 +53,31 @@ const OTPForm = () => {
     }
   };
 
+  //TIMER FUNCTION
+  const startTimer = () => {
+    setTimer(60);
+    setIsRunning(true);
+    setShowTimer(true);
+  };
+
   useEffect(() => {
-    // console.log(currentOtp, "useEFFCETdata");
+    startTimer();
+  }, []);
+
+  useEffect(() => {
     const firstEmptyBox = otp.findIndex((digit) => digit === "");
 
     if (firstEmptyBox !== -1 && inputRefs.current[firstEmptyBox]) {
       inputRefs.current[firstEmptyBox].focus();
     }
   }, [otp]);
+  
 
   //TimerFunction
   const handleTimerFunction = () => {
     setAttempts((prev) => prev + 1);
     console.log(attempts, "attempts");
-
-    router.replace("/AuthProfile");
+    
 
     if (attempts >= 3) {
       setShowCustomAlert(true);
@@ -75,10 +86,11 @@ const OTPForm = () => {
     }
 
     if (currentOtp?.length === 6) {
-      setTimer(60);
-      setIsRunning(true);
-      setShowTimer(true);
+      // setTimer(60);
+      // setIsRunning(true);
+      // setShowTimer(true);
       setError("");
+      router.replace("/AuthProfile");
 
       //    const focusedIndex = otp.findIndex((digit, i) => inputRefs.current[i]?.isFocused());
       // if (focusedIndex !== -1) {
@@ -107,12 +119,13 @@ const OTPForm = () => {
     return () => clearInterval(interval);
   }, [isRunning]);
 
+  
+
   //RESEND FUNCTION:
   const handleResend = () => {
-    // alert("OTP Sended");
     setOtp(Array(6).fill(""));
     setCurentOtp("");
-
+    startTimer();
     setTimer(60);
     setIsRunning(true);
     setShowTimer(true);
@@ -135,12 +148,14 @@ const OTPForm = () => {
         contentContainerStyle={styles.scrollContainer}
       >
         <View style={styles.otpContainer}>
-          <StatusBar backgroundColor="white" barStyle="dark-content" />
+          <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content" />
           {/* IMAGE */}
           <View style={{ alignItems: "center" }}>
             <Image
-              source={require("../../../assets/pngs/appImg.png")}
-              style={{ width: 300, height: 300 }}
+              // source={require("../../../assets/pngs/appImg.png")}
+              source={require("../../assets/pngs/appImg.png")}
+              // style={{ width: 300, height: 300 }}
+              style={{ width: 310, height: 200,marginLeft:-50,}}
             />
           </View>
 
@@ -182,6 +197,7 @@ const OTPForm = () => {
               color="#FFFFFF"
               paddingVertical={8}
               fontWeight="600"
+              fontSize={14}
               onPress={handleTimerFunction}
             />
           </View>
@@ -192,12 +208,12 @@ const OTPForm = () => {
                 <Text
                   style={{
                     textAlign: "center",
-                    marginTop: 10,
-                    fontSize: 16,
-                    color: "red",
+                    marginTop: 30,
+                    fontSize: 12,
+                    color: "#5D5D5D",
                   }}
                 >
-                  {timer} sec
+                  0.{timer} sec
                 </Text>
               ) : (
                 <Text
@@ -238,6 +254,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
     paddingHorizontal: 20,
+    // borderWidth:1,
+    gap:3,
   },
   enterOtpContainer: {
     // borderWidth:1,
@@ -245,10 +263,11 @@ const styles = StyleSheet.create({
   },
   enterOtp: {
     fontSize: 18,
+    fontWeight:500,
   },
   text: {
-    fontSize: 25,
-    fontWeight: "500",
+    fontSize: 28,
+    fontWeight: "600",
   },
   otpContainer: {
     flex: 1,
@@ -259,13 +278,14 @@ const styles = StyleSheet.create({
   otpText: {
     marginLeft: 20,
     marginBottom: 30,
+    marginTop:20,
   },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 8,
-    width: 50,
-    height: 50,
+    width: 49,
+    height: 49,
     textAlign: "center",
     fontSize: 18,
     // backgroundColor: "#fff",
@@ -275,6 +295,8 @@ const styles = StyleSheet.create({
   },
   enterOtpText: {
     color: "#b6b5b5ff",
+    fontSize:12,
+    fontWeight:400,
   },
   bottonContainer: {
     marginTop: 50,

@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router'
 import { Pressable, StyleSheet, View } from 'react-native'
-import PersonIcon from "../../../../assets/icons/PersonIcon"
-import BellIcon from "../../../../assets/svgs/SVGIcons/BellIcon"
+import PersonIcon from "../../../assets/svgIcons/icons/PersonIcon"
+import BellIcon from "../../../assets/svgIcons/BellIcon"
 import { Platform } from 'react-native'
 
 

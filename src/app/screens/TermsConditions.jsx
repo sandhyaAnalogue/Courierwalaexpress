@@ -1,18 +1,72 @@
-import { Stack } from 'expo-router'
-import { View,TouchableOpacity,Text } from 'react-native'
-import {useRouter} from "expo-router"
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import BackArrow from "../../../assets/svgs/SVGIcons/BackArrow";
+import { StyleSheet, Text, View, TouchableOpacity,StatusBar } from "react-native";
+import { Stack, useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+// import BackArrow from "../../../assets/svgs/SVGIcons/BackArrow";
+import BackArrow from "../../assets/svgIcons/BackArrow";
+import WebView from "react-native-webview";
 
-import WebView from 'react-native-webview'
-const TermsConditions = () => {
+const htmlContent = `
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f8f8ff;
+          padding: 20px;
+          line-height: 1.6;
+          color: #333;
+        }
+        h2 {
+          text-align: center;
+          margin-bottom: 20px;
+        }
+        p {
+          font-size: 12px;
+          margin-bottom: 15px;
+          text-align: justify;
+        }
+        .highlight {
+          color: blue;
+          text-decoration: underline;
+        }
+      </style>
+    </head>
+    <body>
+      <p>
+        Lörëm ipsum trasang pladade. Seliga vesa etnovision bure.
+        Buvak planade dinade betese om makronas. Köfgöt artdöden.
+        Tregåvis intrang völedes antide.
+      </p>
+      <p>
+        Lörëm ipsum trasang pladade. Seliga vesa etnovision bure.
+        Buvak planade dinade betese om makronas. Köfgöt artdöden.
+        Tregåvis intrang völedes antide.
+      </p>
+      <p>
+        Lörëm ipsum trasang pladade. Seliga vesa etnovision bure.
+        Buvak planade dinade betese om makronas. Köfgöt artdöden.
+        Tregåvis intrang völedes antide.
+      </p>
+      <p>
+        Lörëm ipsum trasang pladade. Seliga vesa etnovision bure.
+        Buvak planade dinade betese om makronas. Köfgöt artdöden.
+        Tregåvis intrang völedes antide.
+      </p>
+    </body>
+  </html>
+`;
+
+const CancellationPolicy = () => {
   const router = useRouter();
-            const inserts = useSafeAreaInsets();
+  const inserts = useSafeAreaInsets();
+
   return (
-    <View style={{flex:1,}}>
-
-
-    <Stack.Screen options={{
+    <View style={{ flex: 1 }}>
+      <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content"/>
+      <Stack.Screen
+        options={{
           header: () => {
             return (
               <View
@@ -26,8 +80,8 @@ const TermsConditions = () => {
                 <TouchableOpacity
                   onPress={() => router.replace("/(profile)")}
                   style={{
-                    backgroundColor: "#d7d7dcff",
-                    padding: 6,
+                    backgroundColor: "#E7E7E7",
+                    padding: 8,
                     borderRadius: 16,
                     marginLeft: 15,
                   }}
@@ -36,23 +90,29 @@ const TermsConditions = () => {
                 </TouchableOpacity>
                 <Text
                   style={{
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: "500",
                     marginLeft: 14,
                     color: "#252525",
                   }}
                 >
-                  
-                 Terms & conditions
+                  Terms and Conditions
                 </Text>
               </View>
             );
           },
-        }} />
+        }}
+      />
 
-      <WebView source={require("./HTMLContent/Terms.html")} style={{flex:1}}/>
+      <WebView
+        originWhitelist={["*"]}
+        source={{ html: htmlContent }}
+        style={{ flex: 1, }}
+      />
     </View>
-  )
-}
+  );
+};
 
-export default TermsConditions
+export default CancellationPolicy;
+
+const styles = StyleSheet.create({});

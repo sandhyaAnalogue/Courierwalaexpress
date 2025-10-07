@@ -4,8 +4,8 @@ import Svg, { G, Path, Defs, ClipPath } from "react-native-svg"
 function ManageCard(props) {
   return (
     <Svg
-      width={21}
-      height={22}
+      width={18}
+      height={18}
       viewBox="0 0 21 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

@@ -6,33 +6,36 @@ import {
   Text,
   View,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import PlusIcon from "../../../../assets/svgs/SVGIcons/PlusIcon";
+// import PlusIcon from "../../../../assets/svgs/SVGIcons/PlusIcon";
+import PlusIcon from "../../../assets/svgIcons/PlusIcon";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import HomeAddress from "../../../../assets/svgs/SVGIcons/HomeAddress";
-import WorkAddress from "../../../../assets/svgs/SVGIcons/WorkAddress";
+// import HomeAddress from "../../../../assets/svgs/SVGIcons/HomeAddress";
+import HomeAddress from "../../../assets/svgIcons/HomeAddress";
+
+// import WorkAddress from "../../../../assets/svgs/SVGIcons/WorkAddress";
+import WorkAddress from "../../../assets/svgIcons/WorkAddress";
+
 import { Entypo } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { Stack, useRouter } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import BackArrow from "../../../../assets/svgs/SVGIcons/BackArrow";
-
-
-
+// import BackArrow from "../../../../assets/svgs/SVGIcons/BackArrow";
+import BackArrow from "../../../assets/svgIcons/BackArrow";
 
 const ManageAddress = () => {
   const router = useRouter();
-      const inserts = useSafeAreaInsets();
+  const inserts = useSafeAreaInsets();
   const isFocused = useIsFocused();
   const [addressData, setAddressData] = useState();
   const [selectedAddress, setSelectedAddress] = useState();
   const [dropDown, setDropDown] = useState(null);
 
   const userAddressData = async () => {
-    
     try {
       const addressDataFromStorage = await AsyncStorage.getItem(
         "userAddresses"
@@ -57,7 +60,7 @@ const ManageAddress = () => {
   const handleAddAddress = () => {
     console.log("moved to add address");
     // navigation.navigate("AddAddress");///////////////
-    router.push("/screens/AddAddressDetails")
+    router.push("/screens/AddAddressDetails");
   };
 
   // DROPDOWN:
@@ -74,11 +77,14 @@ const ManageAddress = () => {
   const handleAddressEdit = (item) => {
     console.log(item.label, "edit details");
     // navigation.navigate("AddAddress", { address: item });
-    router.push({pathname:"/screens/AddAddressDetails", params: { address: JSON.stringify(item) },})
+    router.push({
+      pathname: "/screens/AddAddressDetails",
+      params: { address: JSON.stringify(item) },
+    });
   };
 
   // DELETE
-   const handleDelete = async (item) => {
+  const handleDelete = async (item) => {
     try {
       Alert.alert(
         "Delete Address",
@@ -101,7 +107,7 @@ const ManageAddress = () => {
                 "userAddresses",
                 JSON.stringify(updated)
               );
-              setAddressData(updated);// ✅ refresh UI
+              setAddressData(updated); // ✅ refresh UI
             },
           },
         ]
@@ -114,7 +120,14 @@ const ManageAddress = () => {
   const renderItem = ({ item, index }) => (
     <Pressable
       style={styles.addressCard}
-      onPress={() => setSelectedAddress(index)}
+      // onPress={() => setSelectedAddress(index)}////testing change
+      onPress={() => {
+        if (selectedAddress === index) {
+          setSelectedAddress(null);
+        } else {
+          setSelectedAddress(index);
+        }
+      }}
     >
       <View style={{ flexDirection: "row" }}>
         {/* Radio Button */}
@@ -130,17 +143,17 @@ const ManageAddress = () => {
         {/* Icon + Details */}
         <View style={{ flex: 1, marginLeft: 10, flexDirection: "row" }}>
           {item.label === "home" ? (
-            <HomeAddress width={26} height={26} />
+            <HomeAddress width={24} height={24} />
           ) : item.label === "work" ? (
-            <WorkAddress width={26} height={26} />
+            <WorkAddress width={24} height={24} />
           ) : null}
           <View>
-            <Text style={styles.label}>{item.label}</Text>
-            <Text style={styles.addressLine}>
+            <Text style={[styles.label,{fontSize:12,fontWeight:500}]}>{item.label.charAt(0).toUpperCase() + item.label.slice(1)}</Text>
+            <Text style={[styles.addressLine,{fontSize:10,fontWeight:400}]}>
               {item.houseNo}, {item.building}, {item.landmark}
             </Text>
-            <Text style={styles.receiverName}>Name: {item.receiverName}</Text>
-            <Text style={styles.receiverPhNum}>
+            <Text style={[styles.receiverName,{fontSize:10,fontWeight:400}]}>Name: {item.receiverName}</Text>
+            <Text style={[styles.receiverPhNum,{fontSize:10,fontWeight:400}]}>
               Phone: {item.receiverPhNum}
             </Text>
           </View>
@@ -154,7 +167,7 @@ const ManageAddress = () => {
               handleSelectAddressDropDown(index);
             }}
           >
-            <Entypo name="dots-three-vertical" size={18} color="#333" />
+            <Entypo name="dots-three-vertical" size={14} color="#333" />
             {dropDown === index && (
               <View style={styles.dropdown}>
                 <Pressable
@@ -177,7 +190,10 @@ const ManageAddress = () => {
                 </Pressable>
                 <Pressable
                   style={styles.SingledropDown}
-                  onPress={(e) => {e.stopPropagation();handleDelete(item)}}
+                  onPress={(e) => {
+                    e.stopPropagation();
+                    handleDelete(item);
+                  }}
                 >
                   <Text style={styles.dropdownItem}>Delete</Text>
                 </Pressable>
@@ -190,93 +206,83 @@ const ManageAddress = () => {
   );
 
   return (
-    <View style={{flex:1,backgroundColor:"#f8f8ff"}}>
-    <ScrollView>
-
-    <Stack.Screen options={{
-          header: () => {
-            return (
-              <View
-                style={{
-                  backgroundColor: "#f8f8ff",
-                  paddingTop: inserts.top + 20,
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => router.replace("/(profile)")}
+    <View style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
+      {/* <ScrollView nestedScrollEnabled={true} contentContainerStyle={{paddingBottom:10}}> */}
+        <Stack.Screen
+          options={{
+            header: () => {
+              return (
+                <View
                   style={{
-                    backgroundColor: "#d7d7dcff",
-                    padding: 6,
-                    borderRadius: 16,
-                    marginLeft: 15,
+                    backgroundColor: "#f8f8ff",
+                    paddingTop: inserts.top + 20,
+                    flexDirection: "row",
+                    alignItems: "center",
                   }}
                 >
-                  <BackArrow width={16} height={16} />
-                </TouchableOpacity>
-                <Text
-                  style={{
-                    fontSize: 18,
-                    fontWeight: "500",
-                    marginLeft: 14,
-                    color: "#252525",
-                  }}
-                >
-                  
-                  Manage Address
-                </Text>
-              </View>
-            );
-          },
-        }} />
+                  <TouchableOpacity
+                    onPress={() => router.replace("/(profile)")}
+                    style={{
+                      backgroundColor: "#E7E7E7",
+                      padding: 6,
+                      borderRadius: 16,
+                      marginLeft: 15,
+                    }}
+                  >
+                    <BackArrow width={16} height={16} />
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: "500",
+                      marginLeft: 14,
+                      color: "#252525",
+                    }}
+                  >
+                    Manage Address
+                  </Text>
+                </View>
+              );
+            },
+          }}
+        />
 
-
-
-
-
-
-
-
-
-
-
-    <Pressable
-      style={{ flex: 1 }}
-      onPress={() => setDropDown(null)} // Close dropdown when pressing outside
-    >
-      <View style={{marginTop:12}}>
         <Pressable
-          style={styles.addnewAddressContainer}
-          onPress={handleAddAddress}
+          style={{ flex: 1 }}
+          onPress={() => setDropDown(null)} // Close dropdown when pressing outside
         >
-          <View style={styles.PlusIcon}>
-            <PlusIcon width={20} height={20} color="black" />
-          </View>
-          <View style={styles.txtContainer}>
-            <Text style={styles.headertxt}>Add new address</Text>
-            <Text style={styles.txt}>You can add up-to 5 addresses</Text>
+          <View style={{ marginTop: 12 }}>
+            <Pressable
+              style={styles.addnewAddressContainer}
+              onPress={handleAddAddress}
+            >
+              <View style={styles.PlusIcon}>
+                <PlusIcon width={18} height={18} color="#252525" />
+              </View>
+              <View style={styles.txtContainer}>
+                <Text style={styles.headertxt}>Add new address</Text>
+                <Text style={styles.txt}>You can add up-to 5 addresses</Text>
+              </View>
+            </Pressable>
+            <View style={styles.savedadsContainer}>
+              <Text style={styles.savedAdsTitle}>Your saved addresses</Text>
+              <View>
+                {Array.isArray(addressData) && addressData.length > 0 ? (
+                  <FlatList
+                    data={addressData}
+                    keyExtractor={(_, index) => index.toString()}
+                    renderItem={renderItem}
+                  />
+                ) : (
+                  <Text style={{ color: "gray", marginTop: 10 }}>
+                    No address added
+                  </Text>
+                )}
+              </View>
+            </View>
           </View>
         </Pressable>
-        <View style={styles.savedadsContainer}>
-          <Text style={styles.savedAdsTitle}>Your saved addresses</Text>
-          <View>
-            {Array.isArray(addressData) && addressData.length > 0 ? (
-              <FlatList
-                data={addressData}
-                keyExtractor={(_, index) => index.toString()}
-                renderItem={renderItem}
-              />
-            ) : (
-              <Text style={{ color: "gray", marginTop: 10 }}>
-                No address added
-              </Text>
-            )}
-          </View>
-        </View>
-      </View>
-    </Pressable>
-    </ScrollView>
+      {/* </ScrollView> */}
     </View>
   );
 };
@@ -300,12 +306,12 @@ const styles = StyleSheet.create({
   },
   txtContainer: {},
   headertxt: {
-    fontSize: 18,
-    fontWeight: "600",
+    fontSize: 14,
+    fontWeight: "500",
   },
   txt: {
     color: "#4F4F4F",
-    fontSize: 11,
+    fontSize: 10,
   },
   savedadsContainer: {
     // borderWidth:1,
@@ -336,6 +342,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#333",
     marginBottom: 6,
+    
   },
   addressLine: {
     fontSize: 13,
@@ -408,6 +415,7 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   dropdown: {
+    // borderWidth:1,
     position: "absolute",
     right: 0,
     top: 25,
@@ -418,14 +426,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 5,
-    width: 120,
+    width: 150,
     zIndex: 1000,
     borderWidth: 1,
     borderColor: "#E0E0E0",
   },
 
   SingledropDown: {
-    paddingVertical: 4,
+    // borderWidth:1,
+    paddingVertical: 5,
     paddingHorizontal: 12,
     borderBottomWidth: 1,
     borderBottomColor: "#F0F0F0",

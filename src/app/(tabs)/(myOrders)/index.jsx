@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import BookingIcon from "../../../../BookingIcon/BooingIcon";
-import Rebook from "../../../../Rebook/Rebook";
+import BookingIcon from "../../../assets/svgIcons/BooingIcon";
+import Rebook from "../../../assets/svgIcons/Rebook";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Feather from "@expo/vector-icons/Feather";
 import TextStyles from "../../TextStyles/TextStyles";
@@ -32,12 +32,12 @@ const orders = [
     date: "13-05-2025",
     type: "Electronics",
   },
-  {
-    id: "CW254617",
-    status: "Delivered",
-    date: "13-05-2025",
-    type: "Electronics",
-  },
+  // {
+  //   id: "CW254617",
+  //   status: "Delivered",
+  //   date: "13-05-2025",
+  //   type: "Electronics",
+  // },
 ];
 //dynamic colors getStatusStyle
 // const getStatusStyle = (status) => {
@@ -95,18 +95,18 @@ export default function MyOrders() {
               <View
                 style={{
                   backgroundColor: "#f8f8ff",
-                  paddingTop: inserts.top + 30,
+                  paddingTop: inserts.top + 20,
                   flexDirection: "row",
                   alignItems: "center",
                 }}
               >
                 <TouchableOpacity
-                  onPress={() => router.replace("/Home")}
+                  onPress={() => router.replace("/(homeScreen)")}
                   style={{
-                    backgroundColor: "#d7d7dcff",
+                    backgroundColor: "#E7E7E7",
                     padding: 6,
                     borderRadius: 16,
-                    marginLeft: 15,
+                    marginLeft: 20,
                   }}
                 >
                   <Feather name="chevron-left" size={20} color="black" />
@@ -144,23 +144,21 @@ export default function MyOrders() {
               <Text
                 style={{
                   maxWidth: 100,
-                  fontSize: 14,
+                  fontSize: 10,
                   paddingHorizontal: 15,
                   paddingVertical: 6,
-                  borderRadius: 20,
+                  borderRadius: 25,
                   borderWidth:
                     order.status === "Cancelled"
-                      ? 0
-                      : order.status === "Delivered"
-                      ? 0
-                      : 1,
+                      ? 0:1,
+                      
                   borderColor: "#000000",
                   color:
                     order.status === "Cancelled"
-                      ? "#FFFFFF"
-                      : order.status === "Delivered"
-                      ? "#FFFFFF"
-                      : "#252525",
+                      ? "#FFFFFF":'#252525',
+                      // : order.status === "Delivered"
+                      // ? "#FFFFFF"
+                      // : "#252525",
 
                   fontWeight: "500",
                   flexWrap: "wrap",
@@ -169,7 +167,7 @@ export default function MyOrders() {
                     order.status === "Cancelled"
                       ? "#FF0000"
                       : order.status === "Delivered"
-                      ? "#3ea340"
+                      ? "#FFFFFF"
                       : "#e5ecf0ff",
                 }}
               >
@@ -185,7 +183,7 @@ export default function MyOrders() {
           </View>
 
           {/* Middle Row: Date + Type */}
-          <View style={[styles.rowBetween, { marginTop: 12 }]}>
+          <View style={[styles.rowBetween2, { marginTop: 12 }]}>
             <View>
               <Text style={styles.labels}>Booking Date</Text>
               <Text style={styles.value}>{order.date}</Text>
@@ -199,7 +197,7 @@ export default function MyOrders() {
           {/* Bottom Row: Actions */}
           <View style={styles.actionsRow}>
             <TouchableOpacity style={styles.rebookButton}>
-              <Rebook width={24} height={24} />
+              <Rebook width={20} height={20} />
               <Text style={styles.rebookText}>Rebook</Text>
             </TouchableOpacity>
 
@@ -242,25 +240,39 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   rowBetween: {
+    // borderWidth:1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginHorizontal: 4,
+    // marginRight:20,
+  },
+  rowBetween2: {
+    // borderWidth:1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginHorizontal: 15,
+    // marginRight:20,
   },
   label: {
     fontSize: 14,
     color: "#252525",
     fontWeight: "500",
   },
+  
   labels: {
+    // borderWidth:1,
     fontSize: 14,
     color: "#252525",
     fontWeight: "500",
   },
   value: {
-    fontSize: 14,
+    // borderWidth:1,
+    fontSize: 10,
     color: "#6D6D6D",
     fontWeight: "500",
+    marginLeft:2,
   },
   //  status: {
   //   fontSize: 14,
@@ -298,9 +310,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   rebookText: {
+    // borderWidth:1,
+
     fontSize: 14,
     color: "#6D6D6D",
-    marginLeft: 6,
+    // marginLeft: ,
     paddingHorizontal: 10,
   },
   linkText: {
@@ -314,14 +328,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   insuredTag: {
+    // borderWidth:1,
     position: "absolute",
-    top: -18,
-    left: -46,
+    top: -22,
+    left: -40,
     backgroundColor: "#EBFEED",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
-    transform: [{ rotate: "-34.6deg" }],
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 14,
+    transform: [{ rotate: "-24.6deg" }],
     shadowColor: "#000",
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 0.1,

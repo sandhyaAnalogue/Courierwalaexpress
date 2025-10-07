@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
-import DownArrow from "../assets/svgs/SVGIcons/DownArrow"
+// import DownArrow from "../assets/svgs/SVGIcons/DownArrow"
+import DownArrow from "../assets/svgIcons/DownArrow"
+
 
 const GenderDropDown = ({ options = [], value, onSelect, label,hasError }) => {
   const [open, setOpen] = useState(false);
@@ -56,6 +58,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
+    fontWeight:"500",
     color: "#252525",
     marginBottom: 5,
   },
@@ -68,7 +71,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: "#E0E0E0",
     backgroundColor: "#fff",
-    paddingVertical: 14,
+    paddingVertical: 12,
     paddingHorizontal: 12,
   },
   valueText: {
@@ -76,7 +79,9 @@ const styles = StyleSheet.create({
     color: "#252525",
   },
   placeholder: {
-    color: "#A9A9A9",
+    color: "#888888",
+    fontSize:12,
+    fontWeight:400,
   },
   dropdownList: {
     marginTop: 2,

@@ -1,13 +1,16 @@
-import { StyleSheet, Text, View,TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View,TouchableOpacity,StatusBar } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Stack, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import BackArrow from "../../../assets/svgs/SVGIcons/BackArrow";
+// import BackArrow from "../../../assets/svgs/SVGIcons/BackArrow";
+import BackArrow from "../../assets/svgIcons/BackArrow";
 
 const CustomerSupport = () => {
   const router = useRouter();
   const inserts = useSafeAreaInsets();
   return (
+    <>
+    <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content"/>
     <SafeAreaView style={{flex:1,backgroundColor:"#f8f8ff"}}>
 
       <Stack.Screen options={{
@@ -24,8 +27,8 @@ const CustomerSupport = () => {
                 <TouchableOpacity
                   onPress={() => router.replace("/(profile)")}
                   style={{
-                    backgroundColor: "#d7d7dcff",
-                    padding: 6,
+                    backgroundColor: "#E7E7E7",
+                    padding: 8,
                     borderRadius: 16,
                     marginLeft: 15,
                   }}
@@ -34,7 +37,7 @@ const CustomerSupport = () => {
                 </TouchableOpacity>
                 <Text
                   style={{
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: "500",
                     marginLeft: 14,
                     color: "#252525",
@@ -60,6 +63,7 @@ const CustomerSupport = () => {
       </View>
     </View>
     </SafeAreaView>
+    </>
   );
 };
 
@@ -68,7 +72,9 @@ export default CustomerSupport;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    backgroundColor:"#f8f8ff"
+    backgroundColor:"#F8F8F8",
+    // marginTop:25,
+
 
   },
   card: {
@@ -80,16 +86,20 @@ const styles = StyleSheet.create({
     // shadowRadius: 2,
     borderRadius: 10,
     padding: 15,
-    marginBottom: 15,
+
+    // marginBottom: 2,
+    marginTop:20,
   },
   cardTitle: {
-    color: "black",
-    fontSize: 15,
+    color: "#252525",
+    fontSize: 14,
     fontWeight: "500",
     marginBottom: 5,
   },
   txt: {
     color: "#5D5D5D",
     marginBottom: 3,
+    fontSize:12,
+    fontWeight:400
   },
 });

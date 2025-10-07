@@ -3,26 +3,30 @@ import { Platform } from "react-native";
 
 const InputField = ({
   placeholder,
-  keyboardType="default",
+  keyboardType = "default",
   style,
   label,
   iconComponent,
   iconStyle,
   iconPosition,
-  editable=true,
+  editable = true,
   onPressIn,
   value,
   onChangeText,
   onBlur,
   hasError = false,
   ...props
-
 }) => {
   return (
     <View style={styles.inputFieldContainer}>
       <Text style={[styles.text, style]}>{label}</Text>
 
-      <View style={[styles.inputWrapper,{ borderColor: hasError ? "red" : "#E0E0E0" },]}>
+      <View
+        style={[
+          styles.inputWrapper,
+          { borderColor: hasError ? "red" : "#E0E0E0" },
+        ]}
+      >
         {iconComponent && iconPosition === "left" && (
           <View style={[styles.iconLeft, iconStyle]}>{iconComponent}</View>
         )}
@@ -30,11 +34,18 @@ const InputField = ({
         <TextInput
           keyboardType={keyboardType}
           placeholder={placeholder}
+          placeholderTextColor={888888}
           editable={editable}
           onPressIn={onPressIn}
           value={value}
-          style={[styles.inputField, style,Platform.OS === "web" && { outline: "none" }]}
-          placeholderTextColor="#999"
+          style={[
+            styles.inputField,
+            style,
+            { fontWeight: "400", fontSize: 12 },
+            Platform.OS === "web" && { outline: "none" },
+          ]}
+          // placeholderTextColor="#999"
+           
           onChangeText={onChangeText}
           onBlur={onBlur}
           {...props}
@@ -63,6 +74,8 @@ const styles = StyleSheet.create({
   },
   text: {
     marginBottom: 5,
+    fontWeight: "500", ////testing change
+    fontSize: 14,
   },
   inputWrapper: {
     flexDirection: "row",
@@ -72,7 +85,7 @@ const styles = StyleSheet.create({
     borderColor: "#E0E0E0",
     backgroundColor: "#fff",
     paddingHorizontal: 10,
-    height: 50,
+    height: 45,
   },
   inputField: {
     // borderWidth: 1,

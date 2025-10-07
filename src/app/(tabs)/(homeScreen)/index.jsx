@@ -1,18 +1,20 @@
 import { Pressable, ScrollView, StyleSheet, Text, View,TouchableOpacity, } from "react-native";
-import Arrow2 from "../../../../assets/svgs/SVGIcons/Arrow2";
-import ArrowIcon from "../../../../assets/svgs/SVGIcons/ArrowIcon";
-import DeliveredIcon from "../../../../assets/svgs/SVGIcons/DeliveredIcon";
-import OrderIcon from "../../../../assets/svgs/SVGIcons/OrderIcon";
-import PlusIcon from "../../../../assets/svgs/SVGIcons/PlusIcon";
-import RiderIcon from "../../../../assets/svgs/SVGIcons/RiderIcon";
-import TransitIcon from "../../../../assets/svgs/SVGIcons/TransitIcon";
-import Curousel from "../../../../customComponents/Curousel";
+
+import Arrow2 from "../../../assets/svgIcons/Arrow2";
+import ArrowIcon from "../../../assets/svgIcons/ArrowIcon";
+import DeliveredIcon from "../../../assets/svgIcons/DeliveredIcon";
+import OrderIcon from "../../../assets/svgIcons/OrderIcon";
+import PlusIcon from "../../../assets/svgIcons/PlusIcon";
+import RiderIcon from "../../../assets/svgIcons/RiderIcon";
+import TransitIcon from "../../../assets/svgIcons/TransitIcon";
+import Curousel from "../../../customComponents/Curousel";
+
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Stack, useRouter } from "expo-router";
 import { StatusBar } from "react-native";
 import { Platform } from "react-native";
-import PersonIcon from "../../../../assets/icons/PersonIcon"
-import BellIcon from "../../../../assets/svgs/SVGIcons/BellIcon"
+import PersonIcon from "../../../assets/svgIcons/icons/PersonIcon"
+import BellIcon from "../../../assets/svgIcons/BellIcon"
 
 const Home = () => {
   const router = useRouter();
@@ -76,9 +78,10 @@ const Home = () => {
   ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 15 }}>
-      <StatusBar backgroundColor="white" barStyle="dark-content" />
-      <ScrollView>
+    <View style={{ flex: 1, backgroundColor: "#f8f8ff", paddingHorizontal: 15 }}>
+      <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content" />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        
         <Stack.Screen
           options={{
             header: () => {
@@ -95,10 +98,11 @@ const Home = () => {
                   <View style={{flexDirection:"row",alignItems:"center"}}>
                   <TouchableOpacity
                     style={{
-                      backgroundColor: "#d7d7dcff",
+                      backgroundColor: "#252525",
                       padding: 6,
-                      borderRadius: 16,
+                      borderRadius: 20,
                       marginLeft: 15,
+                      borderWidth:1,
                     }}
                   >
                     <PersonIcon width={24} height={24} fill="white" />
@@ -115,7 +119,7 @@ const Home = () => {
                     Sandhya
                   </Text>
                   </View>
-                  <View style={{marginRight:20}}>
+                  <View style={{marginRight:30}}>
                   <BellIcon width={22} height={22} />
                   </View>
                 </View>
@@ -176,8 +180,8 @@ const Home = () => {
               <Pressable style={styles.bookCard} onPress={handleBookings}>
                 <View style={styles.plusicons}>
                   <PlusIcon
-                    width={Platform.select({ web: 28, default: 24 })}
-                    height={Platform.select({ web: 28, default: 24 })}
+                    width={Platform.select({ web: 28, default: 20 })}
+                    height={Platform.select({ web: 28, default: 20 })}
                   />
                 </View>
 
@@ -192,7 +196,7 @@ const Home = () => {
                 >
                   <Text style={styles.cardText}>Book Courier</Text>
                   <View style={styles.arrow}>
-                    <ArrowIcon />
+                    <ArrowIcon width={20} height={20} />
                   </View>
                 </View>
               </Pressable>
@@ -203,8 +207,8 @@ const Home = () => {
               >
                 <View style={{ marginVertical: 25 }}>
                   <RiderIcon
-                    width={Platform.select({ web: 38, default: 30 })}
-                    height={Platform.select({ web: 38, default: 30 })}
+                    width={Platform.select({ web: 38, default: 28 })}
+                    height={Platform.select({ web: 38, default: 28 })}
                   />
                 </View>
 
@@ -249,7 +253,7 @@ const Home = () => {
           >
             <Text
               style={{
-                fontSize: Platform.select({ web: 20, default: 18 }),
+                fontSize: Platform.select({ web: 20, default: 16 }),
                 fontWeight: "500",
                 textAlign: Platform.select({ web: "center", default: "left" }),
               }}
@@ -316,13 +320,14 @@ const styles = StyleSheet.create({
     // borderWidth:1,
     marginTop: Platform.select({
       web: 30,
+      android:30,
     }),
   },
   bookingtext: {
     textAlign: Platform.select({
       web: "center",
     }),
-    fontSize: Platform.select({ web: 20, default: 18 }),
+    fontSize: Platform.select({ web: 20, default: 16 }),
     fontWeight: "500",
     marginTop: 10, //android
     marginTop: 20, // iOS tweak: more spacing
@@ -333,7 +338,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: Platform.select({
       web: 20,
-      android: 10,
+      android: 20,/////testing change before 12
     }),
     // gap:10,
     // justifyContent: "space-between",//android
@@ -349,7 +354,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: Platform.select({
       web: 100,
-      android: 30,
+      android: 22,
     }),
     // paddingHorizontal:22,
     paddingVertical: 18,
@@ -397,20 +402,22 @@ const styles = StyleSheet.create({
     marginVertical: Platform.select({
       web: 15,
     }),
-    fontSize: Platform.select({ web: 20, default: 18 }),
+    fontSize: Platform.select({ web: 20, default: 16 }),
     fontWeight: "500",
   },
   totalOrderGridContainer: {
     // borderWidth:1,
+    paddingHorizontal:10,
     flexDirection: "row",
     justifyContent: "space-between",
     gap: Platform.select({
       web: 10,
-      android: 6,
+      android: 18,///testing change before 6
     }),
     marginTop: 10,
-    paddingLeft: 5,
-    paddingRight: 5,
+    
+    // paddingLeft: 5,
+    // paddingRight: 5,
   },
   gridCard: {
     //  borderWidth:1,
@@ -419,16 +426,19 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingVertical: Platform.select({
       web: 35,
-      android: 15,
+      android: 12,
     }),
 
     backgroundColor: "#E7E7E7",
     elevation: 5,
     borderRadius: 8,
-    minWidth: 100,
+    // minWidth: 100,
   },
   title: {
     color: "#5D5D5D",
+    // borderWidth:1,
+    fontWeight:400,
+    fontSize:12,
     marginTop: Platform.select({
       web: 20,
       android: 10,
@@ -440,9 +450,11 @@ const styles = StyleSheet.create({
   count: {
     fontSize: Platform.select({
       web: 18,
-      default: 16,
+      default: 12,
     }),
     fontWeight: "500",
+    // fontSize:12,
+    color:"#000000",
     marginTop: 5,
   },
   bookingsGrid: {
@@ -479,46 +491,54 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 13,
     marginLeft: -8,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "#E7E7E7",
   },
   bookingId: {
+    // borderWidth:1,
+    fontSize:14,
     marginLeft: Platform.select({
       web: 15,
+      android:2,
     }),
     fontWeight: "500",
     fontSize: 15,
     color: "#252525",
   },
   bookingValue: {
+    // borderWidth:1,
+    fontSize:12,
     marginLeft: Platform.select({
       web: 15,
+      android:2
     }),
     color: "#6D6D6D",
-    fontWeight: "400",
+    fontWeight: "500",
   },
   bookingId1: {
     fontWeight: "500",
-    fontSize: 15,
+    fontSize: 14,
     color: "#252525",
   },
   bookingValue1: {
     color: "#6D6D6D",
     fontWeight: "400",
+    fontSize:12,
   },
   detailsBtn: {
     borderWidth: 1,
     backgroundColor: "#252525",
     borderRadius: 5,
-    padding: 8,
+    paddingHorizontal:15,
+    paddingVertical:9,
   },
   detailsBtnText: {
     color: "#FFFFFF",
-    fontWeight: "500",
-    fontSize: 14,
+    fontWeight: "700",
+    fontSize: 12,///////////once ask 10 or 12
   },
   CourierInfo: {
     // borderWidth:1,
-    marginTop: -7,
+    marginTop: -12,
     marginHorizontal: 5,
   },
 });

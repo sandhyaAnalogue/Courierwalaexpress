@@ -1,12 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-
-import stepperIcon1 from "../Stepper/stepperIcon1";
-import stepperIcon2 from "../Stepper/stepperIcon2";
-import stepperIcon3 from "../Stepper/stepperIcon3";
-import stepperIcon4 from "../Stepper/stepperIcon4";
-import stepperIcon5 from "../Stepper/stepperIcon5";
-
+import { View, Text, StyleSheet } from "react-native";
+ 
+import stepperIcon1 from "../assets/svgIcons/stepperIcon1";
+import stepperIcon2 from "../assets/svgIcons/stepperIcon2";
+import stepperIcon3 from "../assets/svgIcons/stepperIcon3";
+import stepperIcon4 from "../assets/svgIcons/stepperIcon4";
+import stepperIcon5 from "../assets/svgIcons/stepperIcon5";
+ 
 const ICONS = [
   stepperIcon1,
   stepperIcon2,
@@ -14,16 +14,14 @@ const ICONS = [
   stepperIcon4,
   stepperIcon5,
 ];
-
+ 
 export default function MultiStepProgressBar({ currentStep, steps }) {
   return (
     <View style={styles.container}>
       {steps.map((step, index) => {
         const IconComponent = ICONS[index];
-        const isCompletedOrCurrent = index <= currentStep;
-        const isLineShow = index < currentStep;
         const isCurrentStep = index === currentStep;
-
+ 
         return (
           <View key={index} style={styles.stepItem}>
             {/* Date and Time above icon */}
@@ -31,7 +29,7 @@ export default function MultiStepProgressBar({ currentStep, steps }) {
               <Text
                 style={[
                   styles.dateText,
-                  index === currentStep ? styles.dateActive : { opacity: 0 },
+                  isCurrentStep ? styles.dateActive : { opacity: 0 },
                 ]}
               >
                 {step.date}
@@ -39,13 +37,13 @@ export default function MultiStepProgressBar({ currentStep, steps }) {
               <Text
                 style={[
                   styles.timeText,
-                  index === currentStep ? styles.timeActive : { opacity: 0 },
+                  isCurrentStep ? styles.timeActive : { opacity: 0 },
                 ]}
               >
                 {step.time}
               </Text>
             </View>
-
+ 
             {/* Icon and connecting line */}
             <View style={styles.iconAndLineContainer}>
               <View
@@ -58,20 +56,22 @@ export default function MultiStepProgressBar({ currentStep, steps }) {
                   width={24}
                   height={24}
                   isActive={isCurrentStep}
-                  fill={isCompletedOrCurrent ? "#252525" : "#B0B0B0"}
+                  fill={isCurrentStep ? "#252525" : "#999999"} // inactive icon color changed here
                 />
               </View>
-
+ 
               {index < steps.length - 1 && (
                 <View
                   style={[
                     styles.horizontalLine,
-                    isLineShow ? styles.lineCompleted : styles.lineInactive,
+                    index < currentStep
+                      ? styles.lineCompleted
+                      : styles.lineInactive,
                   ]}
                 />
               )}
             </View>
-
+ 
             {/* Step title below icon */}
             <Text
               style={[
@@ -92,7 +92,7 @@ export default function MultiStepProgressBar({ currentStep, steps }) {
     </View>
   );
 }
-
+ 
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
@@ -114,17 +114,11 @@ const styles = StyleSheet.create({
   dateActive: {
     color: "#000",
   },
-  // dateInactive: {
-  //   color: "#999", 
-  // },
   timeText: {
     fontSize: 9,
   },
-  // timeActive: {
-  //   color: "#666",
-  // },
-  timeInactive: {
-    color: "#ccc",
+  timeActive: {
+    color: "#000",
   },
   iconAndLineContainer: {
     flexDirection: "row",
@@ -140,11 +134,8 @@ const styles = StyleSheet.create({
     marginRight: 0,
   },
   currentStepIconContainer: {
-    // borderWidth: 2,
     borderColor: "#252525",
-    // padding: 4,
     borderRadius: 25,
-    // backgroundColor: "#e6e6e6", // subtle highlight
   },
   horizontalLine: {
     height: 2,
@@ -172,5 +163,5 @@ const styles = StyleSheet.create({
   },
   labelInactive: {
     color: "#ccc",
-  },
+  },
 });

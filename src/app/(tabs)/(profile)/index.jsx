@@ -13,24 +13,44 @@ import {
   TouchableOpacity
 } from "react-native";
 
-import Person from "../../../../assets/svgs/SVGIcons/Person";
+
+import Person from "../../../assets/svgIcons/Person";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState, useEffect } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import Pen from "../../../../assets/svgs/SVGIcons/Pen";
-import ProfileOptions from "../../../../customComponents/ProfileOptions";
-import ManageCard from "../../../../assets/svgs/SVGIcons/ManageCard";
-import Condition from "../../../../assets/svgs/SVGIcons/Condition";
-import Question from "../../../../assets/svgs/SVGIcons/Question";
-import Cancellation from "../../../../assets/svgs/SVGIcons/Cancellation";
-import Refund from "../../../../assets/svgs/SVGIcons/Refund";
-import Delete from "../../../../assets/svgs/SVGIcons/Delete";
-import Policies from "../../../../assets/svgs/SVGIcons/Policies";
+// import Pen from "../../../../assets/svgs/SVGIcons/Pen";
+import Pen from "../../../assets/svgIcons/Pen";
+
+// import ProfileOptions from "../../../../customComponents/ProfileOptions";
+import ProfileOptions from "../../../customComponents/ProfileOptions";
+
+// import ManageCard from "../../../../assets/svgs/SVGIcons/ManageCard";
+import ManageCard from "../../../assets/svgIcons/ManageCard";
+
+// import Condition from "../../../../assets/svgs/SVGIcons/Condition";
+import Condition from "../../../assets/svgIcons/Condition";
+
+// import Question from "../../../../assets/svgs/SVGIcons/Question";
+import Question from "../../../assets/svgIcons/Question";
+// import Cancellation from "../../../../assets/svgs/SVGIcons/Cancellation";
+import Cancellation from "../../../assets/svgIcons/Cancellation";
+// import Refund from "../../../../assets/svgs/SVGIcons/Refund";
+import Refund from "../../../assets/svgIcons/Refund";
+// import Delete from "../../../../assets/svgs/SVGIcons/Delete";
+import Delete from "../../../assets/svgIcons/Delete";
+
+// import Policies from "../../../../assets/svgs/SVGIcons/Policies";
+import Policies from "../../../assets/svgIcons/Policies";
+
 import Profile from "../../(authScreen)/AuthProfile";
 import { useRouter, Stack } from "expo-router";
-import Footer from "../../../../customComponents/Footer";
-import BackArrow from "../../../../assets/svgs/SVGIcons/BackArrow";
+// import Footer from "../../../../customComponents/Footer";
+import Footer from "../../../customComponents/Footer";
+
+// import BackArrow from "../../../../assets/svgs/SVGIcons/BackArrow";
+import BackArrow from "../../../assets/svgIcons/BackArrow";
+
 
 const { height } = Dimensions.get("window");
 
@@ -104,7 +124,8 @@ const MyProfile = () => {
                 <TouchableOpacity
                   onPress={() => router.replace("/(homeScreen)")}
                   style={{
-                    backgroundColor: "#d7d7dcff",
+                    // backgroundColor: "#d7d7dcff",
+                    backgroundColor:"#E7E7E7",
                     padding: 6,
                     borderRadius: 16,
                     marginLeft: 15,
@@ -114,7 +135,7 @@ const MyProfile = () => {
                 </TouchableOpacity>
                 <Text
                   style={{
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: "500",
                     marginLeft: 14,
                     color: "#252525",
@@ -184,17 +205,17 @@ const MyProfile = () => {
             <View
               style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
             >
-              <Person width={24} height={24} fill="#252525" />
-              <Text style={{ fontSize: 16 }}>Sandhya</Text>
+              <Person width={22} height={22} fill="#252525" />
+              <Text style={{ fontSize: 14,fontWeight:500 }}>Sandhya</Text>
             </View>
 
             <Pressable
               style={styles.editBtnContainer}
               onPress={handleProfileEdit}
             >
-              <View style={{ flexDirection: "row", gap: 7 }}>
-                <Pen width={18} height={18} fill="#FFFFFF" />
-                <Text style={{ color: "white" }}>Edit profile</Text>
+              <View style={{ flexDirection: "row", gap: 7,alignItems:"center" }}>
+                <Pen width={14} height={14} fill="#F6F6F6" />
+                <Text style={{ color: "#F6F6F6",fontWeight:400,fontSize:12 }}>Edit profile</Text>
               </View>
             </Pressable>
           </View>
@@ -373,15 +394,15 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   modalTitle: {
-    fontSize: 16,
-    fontWeight: "600",
+    fontSize: 14,
+    fontWeight: "500",
     marginBottom: 10,
     textAlign: "center",
     color: "#252525",
   },
   modalDesc: {
-    fontSize: 14,
-    color: "#555",
+    fontSize: 11,
+    color: "#5d5d5d",
     textAlign: "center",
     marginBottom: 20,
   },
@@ -405,6 +426,7 @@ const styles = StyleSheet.create({
   noBtnText: {
     color: "#fff",
     fontWeight: "500",
+    fontSize:12,
   },
   yesBtn: {
     backgroundColor: "#fff",
@@ -413,6 +435,7 @@ const styles = StyleSheet.create({
   yesBtnText: {
     color: "#252525",
     fontWeight: "500",
+    fontSize:12,
   },
   scrollContainer: {
     flexGrow: 1,

@@ -1,4 +1,5 @@
 import { useContext } from "react";
+// import { AuthContext } from "../utils/AuthProvider";
 import { AuthContext } from "../utils/AuthProvider";
 import { Stack } from "expo-router";
 import { Redirect } from "expo-router";
@@ -14,10 +15,11 @@ const index = () => {
   })
 
   // if (isLoggedIn) {
-    return <Redirect href="/(homeScreen)" />;
+    // return <Redirect href="/(homeScreen)" />;
   // }
 
-  // return <Redirect href="(authScreen)" />;
+  return <Redirect href="(authScreen)" />;
+  // return <Redirect href="/(homeScreen)" />;
 };
 
 

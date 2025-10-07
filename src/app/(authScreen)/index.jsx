@@ -9,14 +9,13 @@ import {
   KeyboardAvoidingView,Platform
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import PhNumInput from "../../../customComponents/PhNum";
-import Button from "../../../customComponents/Button";
+import PhNumInput from "../../customComponents/PhNum"
+import Button from "../../customComponents/Button";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { router } from "expo-router";
 
-// import GradientColors from "../Styling/GradientColors";
-// import { useIsFocused } from "@react-navigation/native";
+
 
 const Login = () => {
   // const isFocused = useIsFocused();
@@ -30,7 +29,7 @@ const Login = () => {
   const handleOtp = (values, { resetForm }) => {
     console.log(values.userPhNum, "userNumber");
     resetForm();
-    Alert.alert("OTP", `OTP sent to your Mobile ${values.userPhNum}`);
+    // Alert.alert("OTP", `OTP sent to your Mobile ${values.userPhNum}`);
     router.push("/OTPscreen");
   };
 
@@ -56,11 +55,12 @@ const Login = () => {
           contentContainerStyle={styles.scrollContainer}
         >
           <View style={styles.loginContainer}>
-            <StatusBar backgroundColor="white" barStyle="dark-content" />
-            <View style={{ alignItems: "center" }}>
+            <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content" />
+            <View style={{ alignItems: "center",marginTop:35, }}>
               <Image
-                source={require("../../../assets/pngs/appImg.png")}
-                style={{ width: 300, height: 300 }}
+                // source={require("../../../assets/pngs/appImg.png")}
+                source={require("../../assets/pngs/appImg.png")}
+                style={{ width: 310, height: 200,marginLeft:-50,}}
               />
             </View>
             <>
@@ -106,6 +106,8 @@ const Login = () => {
                             color: "red",
                             borderColor: "red",
                             marginLeft: 20,
+                            marginTop:-10,
+                            // borderWidth:1,
                           }}
                         >
                           {errors.userPhNum}
@@ -117,6 +119,7 @@ const Login = () => {
                       <Button
                         ButtonName="Send OTP"
                         color="white"
+                        fontSize={14}
                         paddingVertical={9}
                         fontWeight={600}
                         onPress={handleSubmit}
@@ -128,7 +131,8 @@ const Login = () => {
 
               <View style={styles.GooglebuttonContainer}>
                 <Image
-                  source={require("../../../assets/pngs/google.png")}
+                  // source={require("../../../assets/pngs/google.png")}
+                  source={require("../../assets/pngs/google.png")}
                   style={styles.googleIcon}
                 />
                 <Button
@@ -171,13 +175,13 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   loginText: {
-    fontSize: 25,
-    fontWeight: "500",
+    fontSize: 28,
+    fontWeight: "600",
   },
   buttonContainer: {
     marginLeft: 20,
     marginRight: 30,
-    marginTop: 50,
+    marginTop: 40,
     backgroundColor: "#252525",
     borderRadius: 8,
   },
