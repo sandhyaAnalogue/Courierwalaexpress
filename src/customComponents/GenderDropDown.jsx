@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   placeholder: {
     color: "#888888",
-    fontSize:12,
+    fontSize:11.5,
     fontWeight:400,
   },
   dropdownList: {

@@ -18,8 +18,8 @@ const index = () => {
     // return <Redirect href="/(homeScreen)" />;
   // }
 
-  return <Redirect href="(authScreen)" />;
-  // return <Redirect href="/(homeScreen)" />;
+  // return <Redirect href="(authScreen)" />;
+  return <Redirect href="/(homeScreen)" />;
 };
 
 

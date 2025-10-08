@@ -1,261 +1,261 @@
-// import {
-//   Dimensions,
-//   Pressable,
-//   StatusBar,
-//   StyleSheet,
-//   Text,
-//   View,
-// } from "react-native";
-// import React, { useState } from "react";
-// import StepIndicator from "react-native-step-indicator";
-// import AwaitIcon from "../assets/svgs/AwaitIcon";
-// import Location from "../assets/svgs/Location";
-// import PickUp from "../assets/svgs/PickUp";
-// import Success from "../assets/svgs/Success";
-// import Van from "../assets/svgs/Van";
+import {
+  Dimensions,
+  Pressable,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import React, { useState } from "react";
+import StepIndicator from "react-native-step-indicator";
+import AwaitIcon from "../assets/svgIcons/AwaitIcon";
+import Location from "../assets/svgIcons/Location";
+import PickUp from "../assets/svgIcons/PickUp";
+import Success from "../assets/svgIcons/Success";
+import Van from "../assets/svgIcons/Van";
 
-// const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
-// const Stepper = () => {
-//   const [currentPosition, setCurrentPosition] = useState(0);
-//   const icons = [AwaitIcon, PickUp, Location, Van, Success];
+const Stepper = () => {
+  const [currentPosition, setCurrentPosition] = useState(0);
+  const icons = [AwaitIcon, PickUp, Location, Van, Success];
 
-//   const data = [
-//     {
-//       label: "Cart",
-//       status: "Items added to cart",
-//       dateTime: "08-09-2025 09:15 AM",
-//     },
-//     {
-//       label: "Delivery Address",
-//       status: "Address selected",
-//       dateTime: "08-09-2025 09:20 AM",
-//     },
-//     {
-//       label: "Order Summary",
-//       status: "Order confirmed",
-//       dateTime: "08-09-2025 09:25 AM",
-//     },
-//     {
-//       label: "Payment Method",
-//       status: "Paid via UPI",
-//       dateTime: "08-09-2025 09:30 AM",
-//     },
-//     {
-//       label: "Track",
-//       status: "Out for delivery",
-//       dateTime: "08-09-2025 09:45 AM",
-//     },
-//   ];
+  const data = [
+    {
+      label: "Cart",
+      status: "Items added to cart",
+      dateTime: "08-09-2025 09:15 AM",
+    },
+    {
+      label: "Delivery Address",
+      status: "Address selected",
+      dateTime: "08-09-2025 09:20 AM",
+    },
+    {
+      label: "Order Summary",
+      status: "Order confirmed",
+      dateTime: "08-09-2025 09:25 AM",
+    },
+    {
+      label: "Payment Method",
+      status: "Paid via UPI",
+      dateTime: "08-09-2025 09:30 AM",
+    },
+    {
+      label: "Track",
+      status: "Out for delivery",
+      dateTime: "08-09-2025 09:45 AM",
+    },
+  ];
 
-//   const customStyles = {
-//     stepIndicatorSize: 30, 
-//     currentStepIndicatorSize: 35,
-//     separatorStrokeWidth: 2,
-//     currentStepStrokeWidth: 0,
-//     stepStrokeWidth: 0,
-//     stepStrokeCurrentColor: "transparent",
-//     stepStrokeFinishedColor: "transparent",
-//     stepStrokeUnFinishedColor: "trasparent",
-//     separatorFinishedColor: "black",
-//     separatorUnFinishedColor: "#c0c4c1ff",
-//     stepIndicatorFinishedColor: "transparent",
-//     stepIndicatorUnFinishedColor: "#ffffff",
-//     stepIndicatorCurrentColor: "#ffffff",
-//     stepIndicatorLabelFontSize: 0, // Hide default labels
-//     currentStepIndicatorLabelFontSize: 0,
-//     stepIndicatorLabelCurrentColor: "transparent",
-//     stepIndicatorLabelFinishedColor: "transparent",
-//     stepIndicatorLabelUnFinishedColor: "transparent",
-//     labelColor: "transparent",
-//     labelSize: 0,
-//     currentStepLabelColor: "transparent",
-//     labelAlign: "flex-start",
-//   };
+  const customStyles = {
+    stepIndicatorSize: 30, 
+    currentStepIndicatorSize: 35,
+    separatorStrokeWidth: 2,
+    currentStepStrokeWidth: 0,
+    stepStrokeWidth: 0,
+    stepStrokeCurrentColor: "transparent",
+    stepStrokeFinishedColor: "transparent",
+    stepStrokeUnFinishedColor: "trasparent",
+    separatorFinishedColor: "black",
+    separatorUnFinishedColor: "#c0c4c1ff",
+    stepIndicatorFinishedColor: "transparent",
+    stepIndicatorUnFinishedColor: "#ffffff",
+    stepIndicatorCurrentColor: "#ffffff",
+    stepIndicatorLabelFontSize: 0, // Hide default labels
+    currentStepIndicatorLabelFontSize: 0,
+    stepIndicatorLabelCurrentColor: "transparent",
+    stepIndicatorLabelFinishedColor: "transparent",
+    stepIndicatorLabelUnFinishedColor: "transparent",
+    labelColor: "transparent",
+    labelSize: 0,
+    currentStepLabelColor: "transparent",
+    labelAlign: "flex-start",
+  };
 
-//   const handleNext = () => {
-//     setCurrentPosition((prev) => {
-//       if (prev < data.length - 1) return prev + 1;
-//       return prev;
-//     });
-//   };
+  const handleNext = () => {
+    setCurrentPosition((prev) => {
+      if (prev < data.length - 1) return prev + 1;
+      return prev;
+    });
+  };
 
-//   const handlePrevious = () => {
-//     setCurrentPosition((prev) => {
-//       if (prev > 0) return prev - 1;
-//       return prev;
-//     });
-//   };
+  const handlePrevious = () => {
+    setCurrentPosition((prev) => {
+      if (prev > 0) return prev - 1;
+      return prev;
+    });
+  };
 
-//   return (
-//     <View style={styles.mainContainer}>
-//       <View style={styles.container}>
-//         <StepIndicator
-//           customStyles={customStyles}
-//           currentPosition={currentPosition}
-//           labels={data.map(item => item.label)}
-//           direction="vertical"
-//           stepCount={data.length}
-//           renderStepIndicator={({ position, stepStatus }) => {
-//             const Icon = icons[position];
-//             const isCurrent = position === currentPosition;
-//             const isCompleted = position <= currentPosition;
+  return (
+    <View style={styles.mainContainer}>
+      <View style={styles.container}>
+        <StepIndicator
+          customStyles={customStyles}
+          currentPosition={currentPosition}
+          labels={data.map(item => item.label)}
+          direction="vertical"
+          stepCount={data.length}
+          renderStepIndicator={({ position, stepStatus }) => {
+            const Icon = icons[position];
+            const isCurrent = position === currentPosition;
+            const isCompleted = position <= currentPosition;
             
-//             let iconColor = "#aaaaaa"; // Default/uncompleted color
+            let iconColor = "#aaaaaa"; // Default/uncompleted color
             
             
-//             return (
-//               <View style={[
-//                 styles.iconContainer,
-//                 isCompleted && styles.completedIconContainer,
-//                 isCurrent && styles.currentIconContainer
-//               ]}>
-//                 <Icon
-//                   width={25}
-//                   height={25}
-//                   fill={isCompleted ? "black" : iconColor}
-//                 />
-//               </View>
-//             );
-//           }}
-//           renderLabel={({ position, stepStatus, label, currentPosition }) => {
-//             const isCompleted = position <= currentPosition;
-//             const isCurrent = position === currentPosition;
+            return (
+              <View style={[
+                styles.iconContainer,
+                isCompleted && styles.completedIconContainer,
+                isCurrent && styles.currentIconContainer
+              ]}>
+                <Icon
+                  width={25}
+                  height={25}
+                  fill={isCompleted ? "black" : iconColor}
+                />
+              </View>
+            );
+          }}
+          renderLabel={({ position, stepStatus, label, currentPosition }) => {
+            const isCompleted = position <= currentPosition;
+            const isCurrent = position === currentPosition;
 
-//             return (
-//               <View style={styles.statusContainer}>
-//                 <Text style={[
-//                   styles.label, 
-//                   isCompleted && styles.completedLabel,
-//                   isCurrent && styles.currentLabel
-//                 ]}>
-//                   {data[position].label}
-//                 </Text>
-//                 {(isCompleted || isCurrent) && (
-//                   <>
-//                     <Text style={styles.statusText}>
-//                       {data[position].status}
-//                     </Text>
-//                     <Text style={styles.dateText}>
-//                       {data[position].dateTime}
-//                     </Text>
-//                   </>
-//                 )}
-//               </View>
-//             );
-//           }}
-//         />
-//       </View>
+            return (
+              <View style={styles.statusContainer}>
+                <Text style={[
+                  styles.label, 
+                  isCompleted && styles.completedLabel,
+                  isCurrent && styles.currentLabel
+                ]}>
+                  {data[position].label}
+                </Text>
+                {(isCompleted || isCurrent) && (
+                  <>
+                    <Text style={styles.statusText}>
+                      {data[position].status}
+                    </Text>
+                    <Text style={styles.dateText}>
+                      {data[position].dateTime}
+                    </Text>
+                  </>
+                )}
+              </View>
+            );
+          }}
+        />
+      </View>
       
-//       <View style={styles.buttonContainer}>
-//         <Pressable 
-//           style={[styles.button, styles.prevButton]} 
-//           onPress={handlePrevious}
-//           disabled={currentPosition === 0}
-//         >
-//           <Text style={styles.buttonText}>Previous</Text>
-//         </Pressable>
+      <View style={styles.buttonContainer}>
+        <Pressable 
+          style={[styles.button, styles.prevButton]} 
+          onPress={handlePrevious}
+          disabled={currentPosition === 0}
+        >
+          <Text style={styles.buttonText}>Previous</Text>
+        </Pressable>
         
-//         <Pressable 
-//           style={[styles.button, styles.nextButton]} 
-//           onPress={handleNext}
-//           disabled={currentPosition === data.length - 1}
-//         >
-//           <Text style={styles.buttonText}>Next</Text>
-//         </Pressable>
-//       </View>
-//     </View>
-//   );
-// };
+        <Pressable 
+          style={[styles.button, styles.nextButton]} 
+          onPress={handleNext}
+          disabled={currentPosition === data.length - 1}
+        >
+          <Text style={styles.buttonText}>Next</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+};
 
-// export default Stepper;
+export default Stepper;
 
-// const styles = StyleSheet.create({
-//   mainContainer: {
-//     backgroundColor: "white", 
-//     padding: 15, 
-//     borderRadius: 10,
-//     marginHorizontal: 15,
-//     marginVertical: 20,
-//     shadowColor: "#000",
-//     shadowOffset: {
-//       width: 0,
-//       height: 2,
-//     },
-//     shadowOpacity: 0.1,
-//     shadowRadius: 3.84,
-//     elevation: 5,
-//   },
-//   container: {
-//     width: width - 60,
-//     minHeight: 500,
-//   },
-//   iconContainer: {
-//     width: 30,
-//     height: 30,
-//     borderRadius: 15,
-//     backgroundColor: 'white',
-//     justifyContent: 'center',
-//     alignItems: 'center',
+const styles = StyleSheet.create({
+  mainContainer: {
+    backgroundColor: "white", 
+    padding: 15, 
+    borderRadius: 10,
+    marginHorizontal: 15,
+    marginVertical: 20,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  container: {
+    width: width - 60,
+    minHeight: 500,
+  },
+  iconContainer: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
     
     
-//   },
-//   completedIconContainer: {
-//     backgroundColor: 'white',
-//     color:"black",
-//     borderColor: '#191b1aff',
-//   },
-//   currentIconContainer: {
-//     // backgroundColor: '#e8f8eb',
-//     // borderColor: '#101111ff',
-//     // borderWidth: 2,
-//   },
-//   statusContainer: {
-//     paddingLeft: 15,
-//     marginBottom: 25,
-//   },
-//   label: {
-//     fontSize: 16,
-//     fontWeight: '600',
-//     color: '#333',
-//     marginBottom: 4,
-//   },
-//   completedLabel: {
-//     color: '#29df53ff',
-//   },
-//   currentLabel: {
-//     color: '#29df53ff',
-//   },
-//   statusText: {
-//     color: "#7e7c7cff",
-//     fontSize: 14,
-//     marginBottom: 2,
-//   },
-//   dateText: {
-//     color: "#7e7c7cff",
-//     fontSize: 12,
-//   },
-//   buttonContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-between',
-//     marginTop: 20,
-//     paddingHorizontal: 10,
-//   },
-//   button: {
-//     paddingVertical: 10,
-//     paddingHorizontal: 20,
-//     borderRadius: 5,
-//     minWidth: 100,
-//     alignItems: 'center',
-//   },
-//   nextButton: {
-//     backgroundColor: '#29df53ff',
-//   },
-//   prevButton: {
-//     backgroundColor: '#e0e0e0',
-//   },
-//   buttonText: {
-//     color: 'white',
-//     fontWeight: '600',
-//   },
-// });
+  },
+  completedIconContainer: {
+    backgroundColor: 'white',
+    color:"black",
+    borderColor: '#191b1aff',
+  },
+  currentIconContainer: {
+    // backgroundColor: '#e8f8eb',
+    // borderColor: '#101111ff',
+    // borderWidth: 2,
+  },
+  statusContainer: {
+    paddingLeft: 15,
+    marginBottom: 25,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 4,
+  },
+  completedLabel: {
+    color: '#29df53ff',
+  },
+  currentLabel: {
+    color: '#29df53ff',
+  },
+  statusText: {
+    color: "#7e7c7cff",
+    fontSize: 14,
+    marginBottom: 2,
+  },
+  dateText: {
+    color: "#7e7c7cff",
+    fontSize: 12,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    paddingHorizontal: 10,
+  },
+  button: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    minWidth: 100,
+    alignItems: 'center',
+  },
+  nextButton: {
+    backgroundColor: '#29df53ff',
+  },
+  prevButton: {
+    backgroundColor: '#e0e0e0',
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: '600',
+  },
+});

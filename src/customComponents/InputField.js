@@ -9,16 +9,23 @@ const InputField = ({
   iconComponent,
   iconStyle,
   iconPosition,
+  stylebottomText,
   editable = true,
   onPressIn,
   value,
   onChangeText,
+  placeholderStyle,
   onBlur,
+  labelIconStyle,
+  fontStyle,
+  inpContainer,
+  bottomText,
+  labelIcon,
   hasError = false,
   ...props
 }) => {
   return (
-    <View style={styles.inputFieldContainer}>
+    <View style={[styles.inputFieldContainer, inpContainer]}>
       <Text style={[styles.text, style]}>{label}</Text>
 
       <View
@@ -34,18 +41,17 @@ const InputField = ({
         <TextInput
           keyboardType={keyboardType}
           placeholder={placeholder}
-          placeholderTextColor={888888}
+          placeholderTextColor="#888888"
           editable={editable}
           onPressIn={onPressIn}
           value={value}
           style={[
             styles.inputField,
-            style,
-            { fontWeight: "400", fontSize: 12 },
+            // style,
+            placeholderStyle,
+            { fontWeight: "400", fontSize: 12.5 },
             Platform.OS === "web" && { outline: "none" },
           ]}
-          // placeholderTextColor="#999"
-           
           onChangeText={onChangeText}
           onBlur={onBlur}
           {...props}
@@ -65,6 +71,7 @@ const styles = StyleSheet.create({
   inputFieldContainer: {
     width: "90%",
     display: "flex",
+    // backgroundColor:"pink",
     // justifyContent:"center",
     // alignItems:"center",
     // backgroundColor:"pink"
@@ -88,10 +95,6 @@ const styles = StyleSheet.create({
     height: 45,
   },
   inputField: {
-    // borderWidth: 1,
-    // borderRadius: 8,
-    // borderColor: "#ddd",
-    // backgroundColor:"#fff",
     flex: 1,
   },
   iconLeft: {

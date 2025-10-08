@@ -49,7 +49,7 @@ const ProfileScreen = () => {
   };
   const isWeb = Platform.OS === "web";
   return (
-    <View style={{flex:1,backgroundColor:"#f8f8ff"}}>
+    <View style={{flex:1,}}>
       <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content"/>
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}

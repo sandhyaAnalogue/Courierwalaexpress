@@ -20,6 +20,13 @@ npm start -- --reset-cache
 
 npm install react-native-safe-area-context
 
+npx expo install expo-image-picker
+
+npx expo install expo-checkbox
+
+npm install react-native-step-indicator
+
+
 
 
 

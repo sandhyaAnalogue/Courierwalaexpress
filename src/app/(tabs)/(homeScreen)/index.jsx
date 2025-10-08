@@ -463,8 +463,8 @@ const styles = StyleSheet.create({
   },
   bookingCard: {
     // borderWidth:1,
-    marginLeft: Platform.select({ web: 200 }),
-    marginRight: Platform.select({ web: 200 }),
+    marginLeft: Platform.select({ web: 200,android:5 }),
+    marginRight: Platform.select({ web: 200,android:5 }),
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -482,12 +482,12 @@ const styles = StyleSheet.create({
     // shadowRadius: 3,h
 
     // Android shadow
-    elevation: 5,
+    elevation: 3,
     // overflow: "hidden",
   },
   Bookingordericon: {
     // borderWidth: 1,
-    padding: 10,
+    padding: 8,
     borderRadius: 20,
     marginBottom: 13,
     marginLeft: -8,
@@ -501,7 +501,6 @@ const styles = StyleSheet.create({
       android:2,
     }),
     fontWeight: "500",
-    fontSize: 15,
     color: "#252525",
   },
   bookingValue: {
@@ -521,14 +520,14 @@ const styles = StyleSheet.create({
   },
   bookingValue1: {
     color: "#6D6D6D",
-    fontWeight: "400",
+    fontWeight: "500",
     fontSize:12,
   },
   detailsBtn: {
     borderWidth: 1,
     backgroundColor: "#252525",
     borderRadius: 5,
-    paddingHorizontal:15,
+    paddingHorizontal:11,
     paddingVertical:9,
   },
   detailsBtnText: {
@@ -538,7 +537,7 @@ const styles = StyleSheet.create({
   },
   CourierInfo: {
     // borderWidth:1,
-    marginTop: -12,
+    marginTop: -10,
     marginHorizontal: 5,
   },
 });
