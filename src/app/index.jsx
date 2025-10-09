@@ -6,7 +6,7 @@ import { Redirect } from "expo-router";
 import { useFonts } from 'expo-font'
 
 const index = () => {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext) || {};
 
   const [fontsLoaded] = useFonts({
     'Insured-Tag': require('../../assets/fonts/InsuredTag.ttf'),

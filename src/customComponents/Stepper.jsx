@@ -22,28 +22,23 @@ const Stepper = () => {
 
   const data = [
     {
-      label: "Cart",
-      status: "Items added to cart",
+      label: "Awaiting captain for pick up",
       dateTime: "08-09-2025 09:15 AM",
     },
     {
-      label: "Delivery Address",
-      status: "Address selected",
+      label: "Picked up",
       dateTime: "08-09-2025 09:20 AM",
     },
     {
-      label: "Order Summary",
-      status: "Order confirmed",
+      label: "In Transit",
       dateTime: "08-09-2025 09:25 AM",
     },
     {
-      label: "Payment Method",
-      status: "Paid via UPI",
+      label: "Out of delivery",
       dateTime: "08-09-2025 09:30 AM",
     },
     {
-      label: "Track",
-      status: "Out for delivery",
+      label: "Delivered",
       dateTime: "08-09-2025 09:45 AM",
     },
   ];
@@ -57,11 +52,14 @@ const Stepper = () => {
     stepStrokeCurrentColor: "transparent",
     stepStrokeFinishedColor: "transparent",
     stepStrokeUnFinishedColor: "trasparent",
-    separatorFinishedColor: "black",
-    separatorUnFinishedColor: "#c0c4c1ff",
+
+    separatorFinishedColor: "#000000",
+    separatorUnFinishedColor: "#B0B0B0",
+
     stepIndicatorFinishedColor: "transparent",
     stepIndicatorUnFinishedColor: "#ffffff",
     stepIndicatorCurrentColor: "#ffffff",
+
     stepIndicatorLabelFontSize: 0, // Hide default labels
     currentStepIndicatorLabelFontSize: 0,
     stepIndicatorLabelCurrentColor: "transparent",
@@ -101,12 +99,14 @@ const Stepper = () => {
             const isCurrent = position === currentPosition;
             const isCompleted = position <= currentPosition;
             
+            
             let iconColor = "#aaaaaa"; // Default/uncompleted color
             
             
             return (
               <View style={[
                 styles.iconContainer,
+                { color: isCompleted ? "#000000" : "#B0B0B0" },
                 isCompleted && styles.completedIconContainer,
                 isCurrent && styles.currentIconContainer
               ]}>
@@ -126,20 +126,18 @@ const Stepper = () => {
               <View style={styles.statusContainer}>
                 <Text style={[
                   styles.label, 
+                  { color: isCompleted ? "#000000" : "#B0B0B0" },
                   isCompleted && styles.completedLabel,
                   isCurrent && styles.currentLabel
                 ]}>
                   {data[position].label}
                 </Text>
                 {(isCompleted || isCurrent) && (
-                  <>
-                    <Text style={styles.statusText}>
-                      {data[position].status}
-                    </Text>
-                    <Text style={styles.dateText}>
+                  <View style={styles.dateCard}>
+                    <Text style={[styles.dateText,{ color: isCompleted ? "#000000" : "#B0B0B0" },]}>
                       {data[position].dateTime}
                     </Text>
-                  </>
+                  </View>
                 )}
               </View>
             );
@@ -149,11 +147,11 @@ const Stepper = () => {
       
       <View style={styles.buttonContainer}>
         <Pressable 
-          style={[styles.button, styles.prevButton]} 
-          onPress={handlePrevious}
+           style={[styles.button, styles.prevButton]}
+          onPress={handlePrevious} 
           disabled={currentPosition === 0}
-        >
-          <Text style={styles.buttonText}>Previous</Text>
+         > 
+           <Text style={styles.buttonText}>Previous</Text> 
         </Pressable>
         
         <Pressable 
@@ -162,8 +160,8 @@ const Stepper = () => {
           disabled={currentPosition === data.length - 1}
         >
           <Text style={styles.buttonText}>Next</Text>
-        </Pressable>
-      </View>
+        </Pressable> 
+      </View> 
     </View>
   );
 };
@@ -172,10 +170,12 @@ export default Stepper;
 
 const styles = StyleSheet.create({
   mainContainer: {
+    // borderWidth:1,
+    height:470,
     backgroundColor: "white", 
     padding: 15, 
     borderRadius: 10,
-    marginHorizontal: 15,
+    marginHorizontal: 20,
     marginVertical: 20,
     shadowColor: "#000",
     shadowOffset: {
@@ -187,10 +187,13 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   container: {
+    // borderWidth:1,
     width: width - 60,
-    minHeight: 500,
+    paddingLeft:13,
+    minHeight: 400,
   },
   iconContainer: {
+    // borderWidth:1,
     width: 30,
     height: 30,
     borderRadius: 15,
@@ -201,6 +204,7 @@ const styles = StyleSheet.create({
     
   },
   completedIconContainer: {
+    // borderWidth:1,
     backgroundColor: 'white',
     color:"black",
     borderColor: '#191b1aff',
@@ -211,20 +215,28 @@ const styles = StyleSheet.create({
     // borderWidth: 2,
   },
   statusContainer: {
-    paddingLeft: 15,
-    marginBottom: 25,
+    flexDirection:"row",
+    alignItems:"center",
+    gap:25,
+    // borderWidth:1,
+    // paddingVertical:9,
+    marginBottom: 30,
+    marginLeft:10,
   },
   label: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 12,
+    // borderWidth:1,
+    width:"40%",
+    fontWeight: '500',
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 2,
+    marginTop:20,
   },
   completedLabel: {
-    color: '#29df53ff',
+    
   },
   currentLabel: {
-    color: '#29df53ff',
+    
   },
   statusText: {
     color: "#7e7c7cff",
@@ -233,29 +245,16 @@ const styles = StyleSheet.create({
   },
   dateText: {
     color: "#7e7c7cff",
+    width:"60%",
     fontSize: 12,
+    fontWeight:"500",
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    paddingHorizontal: 10,
-  },
-  button: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    minWidth: 100,
-    alignItems: 'center',
-  },
-  nextButton: {
-    backgroundColor: '#29df53ff',
-  },
-  prevButton: {
-    backgroundColor: '#e0e0e0',
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: '600',
-  },
+  
+  
+  
+  
+  dateCard:{
+    // borderWidth:1,
+    marginTop:20,
+  }
 });

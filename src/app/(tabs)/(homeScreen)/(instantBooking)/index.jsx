@@ -17,6 +17,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 
+
 import Feather from "@expo/vector-icons/Feather";
 import { ScrollView } from "react-native";
 import InputField from "../../../../customComponents/InputField";
@@ -25,10 +26,16 @@ import UploadIcon from "../../../../assets/svgIcons/uploadIcon";
 import RemoveImgIcon from "../../../../assets/svgIcons/removeImgIcon";
 // import MultiStepProgressBar from "../../../../customComponents/MultiStepProgressBar";
 import Stepper from "../../../../customComponents/Stepper";
+import CourierTypeDropDown from "../../../../customComponents/courierTypeDropDown";
+import { InputDropdown } from "../../../../customComponents/bookForOthers";
+import CalculatorIcon from "../../../../assets/svgIcons/calculatorIcon";
+import CalculatorIconBlack from "../../../../assets/svgIcons/calculatorIconBlack";
+import RightArrowIcon from "../../../../assets/svgIcons/rightArrowIcon";
 
 import * as ImagePicker from "expo-image-picker";
 import Checkbox from "expo-checkbox";
 import { useState } from "react";
+import QrScan from "../../../screens/qrScan";
 
 const screenHeight = Dimensions.get("window").height;
 
@@ -37,16 +44,21 @@ const index = () => {
   const [images, setImages] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const [currentStep, setCurrentStep] = useState(0)
-
+  const [currentStep, setCurrentStep] = useState(0);
+  const [selectedType, setSelectedType] = useState(null); ///courierType
+  const [selectedSize, setSelectedSize] = useState(null);
+  const [selectedPrice, setSelectedPrice] = useState(null);
+  const [isAcceptTerms, setIsAcceptTerms] = useState(false);
+  const [showEstimateOptions, setShowEstimateOptions] = useState(false);
+  
   //MULTISTEPPER
   const steps = [
-  { title: "Order Placed", date: "08-10-2025", time: "10:30 AM" },
-  { title: "Picked Up", date: "08-10-2025", time: "12:00 PM" },
-  { title: "In Transit", date: "08-10-2025", time: "03:00 PM" },
-  { title: "Out for Delivery", date: "08-10-2025", time: "05:00 PM" },
-  { title: "Delivered", date: "08-10-2025", time: "07:00 PM" },
-];
+    { title: "Order Placed", date: "08-10-2025", time: "10:30 AM" },
+    { title: "Picked Up", date: "08-10-2025", time: "12:00 PM" },
+    { title: "In Transit", date: "08-10-2025", time: "03:00 PM" },
+    { title: "Out for Delivery", date: "08-10-2025", time: "05:00 PM" },
+    { title: "Delivered", date: "08-10-2025", time: "07:00 PM" },
+  ];
 
   //UPLOADIMG
   const handleuploadImg = () => {
@@ -111,6 +123,24 @@ const index = () => {
     }
   };
 
+  const courierTypes = [
+    { label: "Documents", value: "documents" },
+    { label: "Electronics", value: "electronics" },
+    { label: "Clothing", value: "clothing" },
+    { label: "Books", value: "books" },
+    { label: "Fragile Items", value: "fragile items" },
+    { label: "Food Items", value: "food items" },
+    { label: "Others", value: "others" },
+  ];
+
+  const courierSizes = [
+    { label: "Premiuim", value: "premium" },
+    { label: "Express", value: "express" },
+    { label: "Economy", value: "economy" },
+  ];
+
+  const packedvalues = ["10,000/-", "20,000/-", "30,000/-", "Above  30,000/-"];
+
   return (
     <SafeAreaView style={{ backgroundColor: "#f8f8ff" }}>
       <ScrollView>
@@ -125,7 +155,7 @@ const index = () => {
                   <View
                     style={{
                       backgroundColor: "#f8f8ff",
-                      paddingTop: inserts.top + 20,
+                      paddingTop: inserts.top +20,
                       flexDirection: "row",
                       alignItems: "center",
                     }}
@@ -158,11 +188,18 @@ const index = () => {
             }}
           />
           {/* STACK-SCREEN-END */}
+
           <View style={styles.courierTypecard}>
-            <InputField
-              inpContainer={{ width: "45%" }}
-              label="Courier Type *"
-            />
+            <View style={{ width: "45%", paddingTop: 14, marginLeft: 6 }}>
+              <Text style={{ fontSize: 14, fontWeight: 500, marginBottom: 5 }}>
+                Courier Type *
+              </Text>
+              <CourierTypeDropDown
+                data={courierTypes}
+                placeholder="Select type"
+                onSelect={(item) => setSelectedType(item)}
+              />
+            </View>
 
             <InputField
               inpContainer={{ width: "45%" }}
@@ -221,6 +258,30 @@ const index = () => {
               keyboardType="default"
             />
           </View>
+
+          {/* CHOOSE-SERVICE-START */}
+          <View style={{ marginHorizontal: 20 }}>
+            <Text
+              style={[
+                styles.label,
+                {
+                  marginBottom: 4,
+                  fontSize: 14,
+                  fontWeight: 500,
+                  color: "#252525",
+                },
+              ]}
+            >
+              Choose Services
+            </Text>
+            <CourierTypeDropDown
+              data={courierSizes}
+              placeholder="Select type"
+              onSelect={(item) => setSelectedSize(item)}
+            />
+          </View>
+
+          {/* CHOOSE-SERVICE-END */}
 
           <View style={styles.addressContainer}>
             <Text style={styles.labelText1}>
@@ -315,30 +376,129 @@ const index = () => {
             </View>
           </Modal>
 
-          {/* INSURED */}
+          {/* BEHALF-OF-SOMEONE-STARTED */}
+          <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
+            <InputDropdown
+              placeholder="Book on Behalf someone else"
+              placeholderTextColor=""
+              style={styles.textInputDropdown}
+            />
+          </View>
+          {/* BEHALF-OF-SOMEONE-ENDED */}
+
+          {/* INSURED START */}
           <View style={styles.checkboxContainer}>
             <Checkbox
               value={isChecked}
               onValueChange={setIsChecked}
               color={isChecked ? "#252525" : undefined}
-              style={ { borderColor: "#000000",width:16,height:16 }}
+              style={{ borderColor: "#000000", width: 16, height: 16 }}
             />
-            <Text style={{fontSize:11,fontWeight:"500",color:"#252525"}}>Insure my parcel</Text>
-          </View>
-          
-          {/* INSURANCE-FEE */}
-          <View style={styles.insuranceFeeCard}>
-            <Text style={{fontSize:14,fontWeight:500,color:"#252525"}}>Insurance Fee:50</Text>
-            <Text style={{fontSize:11,fontWeight:500,color:"#6D6D6D",paddingVertical:3,}}>This adds protection against loss or damage during transit</Text>
-
+            <Text style={{ fontSize: 11, fontWeight: "500", color: "#252525" }}>
+              Insure my parcel
+            </Text>
           </View>
 
+          {isChecked && (
+            <>
+              <View style={styles.slotsContainer}>
+                {packedvalues.map((price, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={[
+                      styles.priceButton2,
+                      selectedPrice === price && styles.selectedPiceButton2,
+                    ]}
+                    onPress={() => setSelectedPrice(price)} // Make sure this setter exists
+                  >
+                    <Text
+                      numberOfLines={1}
+                      style={[
+                        styles.slotText2,
+                        selectedPrice === price && styles.selectedPiceText,
+                      ]}
+                    >
+                      {price}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              {/* ACCEPT-CHECKBOX-START */}
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginTop: 10,
+                  marginHorizontal: 20,
+                }}
+              >
+                <Checkbox
+                  value={isAcceptTerms}
+                  onValueChange={setIsAcceptTerms}
+                  color={isAcceptTerms ? "#252525" : undefined}
+                  style={{ borderColor: "#000000", width: 16, height: 16 }}
+                />
+                <Text
+                  style={{ marginLeft: 10, fontSize: 10, fontWeight: "500" }}
+                >
+                  I accept the insurance Terms & Conditions
+                </Text>
+              </View>
+              {/* ACCEPT-CHECKBOX-END */}
+
+              {/* INSURANCE-FEE */}
+              <View style={styles.insuranceFeeCard}>
+                <Text
+                  style={{ fontSize: 14, fontWeight: 500, color: "#252525" }}
+                >
+                  Insurance Fee:50
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 500,
+                    color: "#6D6D6D",
+                    paddingVertical: 3,
+                  }}
+                >
+                  This adds protection against loss or damage during transit
+                </Text>
+              </View>
+              {/* INSURANCE-FEE-END */}
+            </>
+          )}
+          {/* INSURED-END */}
+
+          <View style={styles.containers}>
+            {!showEstimateOptions && (
+              <TouchableOpacity
+                style={styles.buttonContainers}
+                onPress={() => setShowEstimateOptions(true)}
+              >
+                <View style={{flexDirection:"row",alignItems:"center",marginLeft:70}}>
+                <CalculatorIcon style={styles.iconLeft} />
+                <Text style={styles.buttonText}>Estimate Price</Text>
+                </View>
+                <RightArrowIcon style={styles.iconRight} />
+              </TouchableOpacity>
+            )}
+
+            {showEstimateOptions && (
+              <View style={styles.estimateContainer}>
+                <TouchableOpacity style={styles.estimateButton}>
+                  <CalculatorIconBlack />
+                  <Text style={styles.estimateText}>Estimated Price</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.priceButtons}>
+                  <Text style={styles.priceText}>₹ 256</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
           <View>
-                  {/* <MultiStepProgressBar currentStep={currentStep} steps={steps} /> */}
-                  <Stepper />
-
+            <QrScan/>
           </View>
-
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -423,14 +583,14 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     height: 100,
   },
-  
+
   imgUploadContainer: {
     marginHorizontal: 20,
     // borderWidth:1,
   },
   imguploader: {
     borderWidth: 1,
-    borderStyle:"dashed",
+    borderStyle: "dashed",
     borderColor: "#E0E0E0",
     backgroundColor: "#FFFFFF",
     paddingHorizontal: 30,
@@ -444,6 +604,7 @@ const styles = StyleSheet.create({
     paddingLeft: 2,
     gap: 15,
     marginTop: 8,
+    marginBottom: 20,
   },
   imageWrapper: {
     position: "relative",
@@ -510,20 +671,112 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
     // borderWidth: 1,
-    backgroundColor:"#FFFFFF",
+    backgroundColor: "#FFFFFF",
     marginHorizontal: 20,
     marginBottom: 10,
     paddingHorizontal: 10,
-    paddingVertical:10,
+    paddingVertical: 10,
   },
-  insuranceFeeCard:{
+  insuranceFeeCard: {
     // borderWidth:1,
-    marginTop:15,
-    marginHorizontal:20,
-    borderRadius:5,
-    backgroundColor:"#E7E7E7",
-    paddingHorizontal:10,
-    paddingVertical:20,
+    width: "90%",
+    marginTop: 15,
+    marginHorizontal: 20,
+    borderRadius: 5,
+    backgroundColor: "#E7E7E7",
+    paddingHorizontal: 10,
+    paddingVertical: 20,
+  },
 
-  }
+  slotsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    marginHorizontal: 20,
+  },
+
+  priceButton2: {
+    width: "30%", // 3 buttons per row
+    paddingVertical: 10,
+    borderRadius: 4,
+    backgroundColor: "#E7E7E7",
+    marginBottom: 12,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  selectedPiceButton2: {
+    backgroundColor: "#252525",
+    borderColor: "#252525",
+  },
+
+  selectedPiceText: {
+    color: "#F6F6F6",
+    fontWeight: "600",
+  },
+
+  slotText2: {
+    color: "#252525",
+    fontWeight: "500",
+    fontSize: 12,
+  },
+  containers: {
+    alignItems: "center",
+    marginTop: 40,
+  },
+  buttonContainers: {
+    flexDirection: "row",
+    width:"90%",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#252525",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    // paddingLeft: 100,
+    paddingRight: 40,
+    borderRadius: 10,
+    marginBottom: 12,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "600",
+    fontSize: 14,
+    marginHorizontal: 8,
+  },
+  iconLeft: {
+    marginRight: 6,
+  },
+  iconRight: {
+    marginLeft: 6,
+  },
+  estimateContainer: {
+    flexDirection: "row",
+    gap: 12,
+  },
+  estimateButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    paddingHorizontal: 40,
+    paddingVertical: 10,
+    borderRadius: 6,
+  },
+  estimateText: {
+    marginLeft: 8,
+    color: "#000",
+    fontSize: 12,
+    fontWeight: "500",
+  },
+  priceButtons: {
+    backgroundColor: "#252525",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 6,
+  },
+  priceText: {
+    color: "#F6F6F6",
+    fontWeight: "600",
+    fontSize: 14,
+  },
 });
