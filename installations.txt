@@ -25,8 +25,9 @@ npx expo install expo-image-picker
 npx expo install expo-checkbox
 
 npm install react-native-step-indicator
+npm i --legacy-peer-deps npx expo install react-native-reanimated   npm install react-native-worklets@0.5.0
 
-
+npx expo install expo-camera
 
 
 

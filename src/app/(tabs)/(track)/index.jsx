@@ -23,7 +23,7 @@ import Feather from "@expo/vector-icons/Feather"
 const orderStatuses = [
   { label: "Awaiting pickup", value: "Awaiting pickup" },
   { label: "Picked up", value: "Picked up" },
-  { label: "Cancelled", value: "Cancelled" },
+ 
   { label: "In Transit", value: "In Transit" },
   { label: "Out of delivery", value: "Out of delivery" },
   { label: "Delivered", value: "Delivered" }

@@ -9,7 +9,7 @@ const _layout = () => {
     alert("Notifications clicked!");
   };
   return (
-    <Stack initialRouteName="(instantBooking)">
+    <Stack>
       <Stack.Screen name="index" />
       <Stack.Screen name="BookCourier" options={{ headerShown: false }} />
       <Stack.Screen name="(instantBooking)" options={{ headerShown: false }} />

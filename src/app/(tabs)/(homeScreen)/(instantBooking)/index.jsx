@@ -11,12 +11,11 @@ import {
   Modal,
   Dimensions,
 } from "react-native";
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-
 
 import Feather from "@expo/vector-icons/Feather";
 import { ScrollView } from "react-native";
@@ -35,7 +34,7 @@ import RightArrowIcon from "../../../../assets/svgIcons/rightArrowIcon";
 import * as ImagePicker from "expo-image-picker";
 import Checkbox from "expo-checkbox";
 import { useState } from "react";
-import QrScan from "../../../screens/qrScan";
+// import {qrCode} from "../../../screens/qrCode";
 
 const screenHeight = Dimensions.get("window").height;
 
@@ -50,7 +49,7 @@ const index = () => {
   const [selectedPrice, setSelectedPrice] = useState(null);
   const [isAcceptTerms, setIsAcceptTerms] = useState(false);
   const [showEstimateOptions, setShowEstimateOptions] = useState(false);
-  
+
   //MULTISTEPPER
   const steps = [
     { title: "Order Placed", date: "08-10-2025", time: "10:30 AM" },
@@ -155,7 +154,7 @@ const index = () => {
                   <View
                     style={{
                       backgroundColor: "#f8f8ff",
-                      paddingTop: inserts.top +20,
+                      paddingTop: inserts.top + 20,
                       flexDirection: "row",
                       alignItems: "center",
                     }}
@@ -475,29 +474,78 @@ const index = () => {
                 style={styles.buttonContainers}
                 onPress={() => setShowEstimateOptions(true)}
               >
-                <View style={{flexDirection:"row",alignItems:"center",marginLeft:70}}>
-                <CalculatorIcon style={styles.iconLeft} />
-                <Text style={styles.buttonText}>Estimate Price</Text>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginLeft: 70,
+                  }}
+                >
+                  <CalculatorIcon style={styles.iconLeft} />
+                  <Text style={styles.buttonText}>Estimate Price</Text>
                 </View>
                 <RightArrowIcon style={styles.iconRight} />
               </TouchableOpacity>
             )}
 
             {showEstimateOptions && (
-              <View style={styles.estimateContainer}>
-                <TouchableOpacity style={styles.estimateButton}>
-                  <CalculatorIconBlack />
-                  <Text style={styles.estimateText}>Estimated Price</Text>
-                </TouchableOpacity>
+              <>
+                <View style={styles.estimateContainer}>
+                  <TouchableOpacity style={styles.estimateButton}>
+                    <CalculatorIconBlack />
+                    <Text style={styles.estimateText}>Estimated Price</Text>
+                  </TouchableOpacity>
 
-                <TouchableOpacity style={styles.priceButtons}>
-                  <Text style={styles.priceText}>₹ 256</Text>
-                </TouchableOpacity>
-              </View>
+                  <TouchableOpacity style={styles.priceButtons}>
+                    <Text style={styles.priceText}>₹ 256</Text>
+                  </TouchableOpacity>
+                </View>
+
+              {/* BUTTONS-START */}
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginTop: 10,
+                    width:"90%",
+                    // borderWidth:1,
+                    marginTop:40,
+                  }}
+                >
+                  <TouchableOpacity>
+                    <Text
+                      style={{
+                        borderWidth: 1,
+                        paddingHorizontal: 65,
+                        paddingVertical: 10,
+                        borderRadius: 6,
+                        color: "#252525",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Back
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={()=>router.navigate("/bookingSummary")}>
+                    <Text
+                      style={{
+                        borderWidth: 1,
+                        paddingHorizontal: 55,
+                        paddingVertical: 10,
+                        borderRadius: 6,
+                        backgroundColor: "#252525",
+                        color: "#FFFFFF",
+                        fontWeight: 400,
+                      }}
+                    >
+                      Continue
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                              {/* BUTTONS-END */}
+              </>
             )}
-          </View>
-          <View>
-            <QrScan/>
           </View>
         </View>
       </ScrollView>
@@ -726,7 +774,7 @@ const styles = StyleSheet.create({
   },
   buttonContainers: {
     flexDirection: "row",
-    width:"90%",
+    width: "90%",
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: "#252525",
@@ -752,12 +800,14 @@ const styles = StyleSheet.create({
   estimateContainer: {
     flexDirection: "row",
     gap: 12,
+    width:"80%",
+    // borderWidth:1,
   },
   estimateButton: {
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#000000",
     paddingHorizontal: 40,
     paddingVertical: 10,
     borderRadius: 6,
