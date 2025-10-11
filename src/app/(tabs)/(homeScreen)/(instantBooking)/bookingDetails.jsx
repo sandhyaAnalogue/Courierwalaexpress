@@ -1,6 +1,5 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,29 +7,36 @@ import {
   View,
 } from "react-native";
 
-import BooingIcon from "../../../../assets/svgIcons/BooingIcon";
-import DownLoadIcon from "../../../../assets/svgIcons/DownLoadIcon"
+import DownLoadIcon from "../../../../assets/svgIcons/DownLoadIcon";
 
 // import RaiseIssue from '../../../assets/svgIcons/RaiseIssueIcon';
 // import Rebook from '../../../assets/svgIcons/Rebook';
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Feather from "@expo/vector-icons/Feather";
 import { Stack } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import { PDFDocument, Page, rgb } from "react-native-pdf-lib";
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
+import * as Print from "expo-print";
+import { useRouter } from "expo-router";
 
 // import TextStyles from '../../TextStyles/TextStyles';
 // import dummyData from '../../../../src/dummyData';
+import ChatIcon from "../../../../assets/svgIcons/ChatIcon";
 import img1 from "../../../../assets/svgIcons/img1";
 import img2 from "../../../../assets/svgIcons/img2";
 import img3 from "../../../../assets/svgIcons/img3";
 import img4 from "../../../../assets/svgIcons/img4";
 import img5 from "../../../../assets/svgIcons/img5";
-import { Download } from "react-feather";
-import CourierTypeDropDown from "../../../../customComponents/courierTypeDropDown";
-import ChatIcon from "../../../../assets/svgIcons/ChatIcon";
 import PhCallIcon from "../../../../assets/svgIcons/PhCallIcon";
+import CourierTypeDropDown from "../../../../customComponents/courierTypeDropDown";
 import Stepper from "../../../../customComponents/Stepper";
+import BooingIcon from "../../../../assets/svgIcons/BooingIcon";
+import CancelOrderDropDown from "../../../../customComponents/cancelOrderDropDown"
 
 const orders = [
   {
@@ -147,8 +153,7 @@ export default function ordersDetailsScreen() {
   const { id } = useLocalSearchParams();
   const inserts = useSafeAreaInsets();
   const [selectedSize, setSelectedSize] = useState(null);
-  // const inserts = useSafeAreaInsets();
-  // const router = useRouter();
+  const router = useRouter();
   // const orders = orders[0].find(o => o.bookingId === id);
 
   // if (!orders) {
@@ -166,10 +171,89 @@ export default function ordersDetailsScreen() {
 
   const showParcel = isInTransit || isAwaitingPickup;
 
+  // DOWNLOAD-INVOICE START
+  const handleDownload = async () => {
+    try {
+      const order = orders[0];
+
+      const htmlContent = `
+      <html>
+        <head>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              padding: 40px;
+              line-height: 1.6;
+              color: #333;
+            }
+            h2 {
+              text-align: center;
+              margin-bottom: 30px;
+            }
+            .row {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 10px;
+            }
+            .label {
+              font-weight: bold;
+              width: 150px; /* adjust width for alignment */
+            }
+            .value {
+              flex: 1; /* value takes remaining space */
+              text-align: left;
+            }
+          </style>
+        </head>
+        <body>
+          <h2>Invoice - ${order.bookingId}</h2>
+
+          <div class="row">
+            <div class="label">Item Name:</div>
+            <div class="value">${order.itemName}</div>
+          </div>
+          <div class="row">
+            <div class="label">Courier Type:</div>
+            <div class="value">${order.courierType}</div>
+          </div>
+          <div class="row">
+            <div class="label">Total Amount:</div>
+            <div class="value">₹${order.totalAmount}</div>
+          </div>
+          <div class="row">
+            <div class="label">Pickup Address:</div>
+            <div class="value">${order.pickupAddress}</div>
+          </div>
+          <div class="row">
+            <div class="label">Drop Address:</div>
+            <div class="value">${order.dropAddress}</div>
+          </div>
+          <div class="row">
+            <div class="label">Booking Date:</div>
+            <div class="value">${order.date}</div>
+          </div>
+          <div class="row">
+            <div class="label">Booking Time:</div>
+            <div class="value">${order.bookingTime}</div>
+          </div>
+
+        </body>
+      </html>
+    `;
+
+      const { uri } = await Print.printToFileAsync({ html: htmlContent });
+      await Sharing.shareAsync(uri);
+    } catch (error) {
+      console.log("Error generating PDF: ", error);
+    }
+  };
+
+  // DOWNLOAD-INVOICE END
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
       <ScrollView>
-        <View>
+        <View style={{paddingBottom:10,}}>
           <View style={styles.container}>
             {/* STACK-SCREEN */}
             <Stack.Screen
@@ -214,7 +298,7 @@ export default function ordersDetailsScreen() {
             {/* STACK-SCREEN-END */}
 
             <View style={styles.rowBetween}>
-              <View style={styles.row}>
+              <View style={[styles.row]}>
                 <View style={styles.iconWrapper}>
                   <BooingIcon width={18} height={18} />
                 </View>
@@ -227,11 +311,11 @@ export default function ordersDetailsScreen() {
                 <Text
                   style={{
                     maxWidth: 100,
-                    //   bordersWidth:1,
+                    // bordersWidth:1,
                     fontSize: 10,
                     paddingHorizontal: 20,
                     paddingVertical: 11,
-                    backgroundColor: "#D1D1D1",
+                    backgroundColor: "#E7E7E7",
                     borderRadius: 25,
                     borderWidth: orders[0].status === "Cancelled" ? 0 : 1,
                     borderColor: "#000000",
@@ -263,7 +347,7 @@ export default function ordersDetailsScreen() {
                 <Text style={styles.value}>{orders[0].date}</Text>
               </View>
               <View style={styles.detailBox}>
-                <Text style={styles.labeldata1}>Booking Time</Text>
+                <Text style={styles.labeldata}>Booking Time</Text>
                 <Text style={styles.value}>{orders[0].bookingTime}</Text>
               </View>
             </View>
@@ -275,7 +359,7 @@ export default function ordersDetailsScreen() {
                 <Text style={styles.value}>{orders[0].dimensions}</Text>
               </View>
               <View style={styles.detailBox}>
-                <Text style={styles.labeldata2}>Booking Mode</Text>
+                <Text style={styles.labeldata}>Booking Mode</Text>
                 <Text style={styles.value}>{orders[0].bookingMode}</Text>
               </View>
             </View>
@@ -287,7 +371,7 @@ export default function ordersDetailsScreen() {
                 <Text style={styles.value}>{orders[0].courierType}</Text>
               </View>
               <View style={styles.detailBox}>
-                <Text style={styles.labeldata3}>Item Name</Text>
+                <Text style={styles.labeldata}>Item Name</Text>
                 <Text style={styles.value}>{orders[0].itemName}</Text>
               </View>
             </View>
@@ -299,7 +383,7 @@ export default function ordersDetailsScreen() {
                 <Text style={styles.value}>{orders[0].pickupdate}</Text>
               </View>
               <View style={styles.detailBox}>
-                <Text style={styles.labeldata4}>Pickup Time</Text>
+                <Text style={styles.labeldata}>Pickup Time</Text>
                 <Text style={styles.value}>{orders[0].pickupTime}</Text>
               </View>
             </View>
@@ -311,7 +395,7 @@ export default function ordersDetailsScreen() {
                 <Text style={styles.value}>{orders[0].reciepientName}</Text>
               </View>
               <View style={styles.detailBox}>
-                <Text style={styles.labeldata5}>Recipient Number</Text>
+                <Text style={styles.labeldata}>Recipient Number</Text>
                 <Text style={styles.value}>{orders[0].reciepientNumber}</Text>
               </View>
             </View>
@@ -320,54 +404,105 @@ export default function ordersDetailsScreen() {
               {/* Pickup Address & Drop Address */}
               <View style={styles.detailBox}>
                 <Text style={styles.labeldata}>Pickup Address</Text>
-                <Text style={[styles.value1, { flexShrink: 1 }]}>
-                  {orders[0].pickupAddress}
-                </Text>
+                <Text style={styles.value1}>{orders[0].pickupAddress}</Text>
               </View>
               <View style={styles.detailBox}>
-                <Text style={styles.labeldata6}>Drop Address</Text>
-                <Text style={[styles.value1, { flexShrink: 1 }]}>
-                  {orders[0].dropAddress}
-                </Text>
+                <Text style={styles.labeldata}>Drop Address</Text>
+                <Text style={styles.value1}>{orders[0].dropAddress}</Text>
               </View>
             </View>
 
-            <View>
+            {/* <View>
+        <Text style={styles.imagedata}>Package images</Text>
+        <View><TouchableOpacity>
+          <View><Download /></View>
+          <Text>DownloadText</Text>
+          </TouchableOpacity></View>
+      </View> */}
+            {/*         
+    <View style={styles.packageImagesContainer}>
+  {Array.isArray(orders[0].packageImages) && orders[0].packageImages.map((imgObj, i) => {
+    const SvgComponent = imgObj.SvgComponent;
+    return (
+      <View key={i} style={{ alignItems: 'center', marginRight: 1 }}>
+        <SvgComponent width={20} height={20} />
+        <Text style={{ fontSize: 10, color: '#444' }}>{imgObj.title}</Text>
+      </View>
+    );
+  })}
+</View> */}
+
+            {/* {(isCancelled || isAwaitingPickup) && (
               <View>
-                <Text style={styles.imagedata}>Package images</Text>
-                <View style={styles.packageImagesContainer}>
-                  {Array.isArray(orders[0].packageImages) &&
-                    orders[0].packageImages.map((imgObj, i) => {
-                      const SvgComponent = imgObj.SvgComponent;
-                      return (
-                        <View
-                          key={i}
-                          style={{ alignItems: "center", marginRight: 1 }}
-                        >
-                          <SvgComponent width={20} height={20} />
-                          <Text style={{ fontSize: 10, color: "#444" }}>
-                            {imgObj.title}
-                          </Text>
-                        </View>
-                      );
-                    })}
+                <Text style={styles.para} numberOfLines={2}>
+                  *Final Price may vary after physical {"\n"}
+                  verification during pickup
+                </Text>
+              </View>
+            )} */}
+
+            {/* <View style={styles.detailRow}>
+              <View style={styles.price}>
+                <Text style={styles.amount}>Total Amount</Text>
+              </View>
+              <View style={styles.price}>
+                <Text style={styles.amount}>₹{orders[0].totalAmount}</Text>
+              </View>
+                      
+            </View> */}
+
+            <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View style={{}}>
+                  <Text style={styles.imagedata}>Package images</Text>
+                  <View style={styles.packageImagesContainer}>
+                    {Array.isArray(orders[0].packageImages) &&
+                      orders[0].packageImages.map((imgObj, i) => {
+                        const SvgComponent = imgObj.SvgComponent;
+                        return (
+                          <View
+                            key={i}
+                            style={{ alignItems: "center", marginRight: 1 }}
+                          >
+                            <SvgComponent width={20} height={20} />
+                            <Text style={{ fontSize: 10, color: "#444" }}>
+                              {imgObj.title}
+                            </Text>
+                          </View>
+                        );
+                      })}
+                  </View>
                 </View>
-                <View>
-                  <TouchableOpacity>
-                    <DownLoadIcon/>
-                    <Text
+                <View style={styles.downloadContainer}>
+                  <TouchableOpacity onPress={handleDownload}>
+                    <View
                       style={{
-                        borderWidth: 1,
-                        paddingHorizontal: 50,
-                        paddingVertical: 10,
-                        borderRadius: 8,
-                        backgroundColor: "#252525",
-                        color: "#FFFFFF",
-                        fontWeight: 400,
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        paddingHorizontal: 10,
+                        paddingVertical: 13,
+                        gap: 3,
                       }}
                     >
-                      Download Invoice
-                    </Text>
+                      <DownLoadIcon />
+
+                      <Text
+                        style={{
+                          color: "#FFFFFF",
+                          fontSize: 12,
+                          fontWeight: "500",
+                        }}
+                      >
+                        Download Invoice
+                      </Text>
+                    </View>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -401,7 +536,7 @@ export default function ordersDetailsScreen() {
 
           {/* CANCEL-ORDER-START */}
           <View style={{ flex: 1, marginHorizontal: 20 }}>
-            <CourierTypeDropDown
+            <CancelOrderDropDown
               data={cancelReasons}
               placeholder="Cancel Orders"
               onSelect={(item) => setSelectedSize(item)}
@@ -483,86 +618,150 @@ const styles = StyleSheet.create({
     // borderWidth:1,
     // marginBottom:12,
   },
-  detailRow: {
-    // flexDirection: 'row',
+  rowBetween: {
+    flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
   },
+
+  detailRow: {
+    // borderWidth:1,
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "flex-start", // Align text boxes from top
+    justifyContent: "space-between",
+    marginTop: 20,
+    gap: 10,
+    flex: "wrap", // ✅ correct way to allow wrapping
+  },
+
   detailBox: {
     flex: 1,
+    // borderWidth:1,
+    minWidth: 100, // Ensures both columns take roughly half width
     paddingHorizontal: 10,
+    // backgroundColor:"pink",
   },
+
+  label: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#252525",
+  },
+
   labeldata: {
     fontSize: 14,
     color: "#000000",
     fontWeight: "500",
     marginBottom: 4,
   },
-  labeldata1: {
-    fontSize: 14,
-    color: "#000000",
-    fontWeight: "500",
-    marginBottom: 4,
-    marginRight: 26,
-  },
-  labeldata2: {
-    fontSize: 14,
-    color: "#000000",
-    fontWeight: "500",
-    marginBottom: 4,
-    marginRight: 22,
-  },
-  labeldata3: {
-    fontSize: 14,
-    color: "#000000",
-    fontWeight: "500",
-    marginBottom: 4,
-    marginRight: 44,
-  },
-  labeldata4: {
-    fontSize: 14,
-    color: "#000000",
-    fontWeight: "500",
-    marginBottom: 4,
-    marginRight: 34,
-  },
-  labeldata5: {
-    fontSize: 14,
-    color: "#000000",
-    fontWeight: "500",
-    marginBottom: 4,
-    // marginRight:30
-  },
-  labeldata6: {
-    fontSize: 14,
-    color: "#000000",
-    fontWeight: "500",
-    marginBottom: 4,
-    // marginRight:27
-  },
 
   value: {
     fontSize: 12,
     color: "#6D6D6D",
-    fontWeight: 400,
+    fontWeight: "400",
     flexWrap: "wrap",
-    // flexDirection: 'row',
-    // justifyContent: 'space-between',
   },
+
   value1: {
     fontSize: 12,
     color: "#6D6D6D",
-    fontWeight: 400,
-    // flexWrap: 'wrap',
-    width: "70%",
-    // borderWidth:1,
-    // marginHorizontal:5
+    fontWeight: "400",
+    flexShrink: 1, // Prevents text overflow
+    flexWrap: "wrap", // Allows wrapping
   },
+
+  iconWrapper: {
+    backgroundColor: "#E7E7E7",
+    borderRadius: 16,
+    padding: 6,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  // packageImagesContainer: {
+  //   flexDirection: "row",
+  //   marginTop: 20,
+  //   flexWrap: "wrap",
+  //   gap: 10,
+  // },
+
   packageImage: {
     width: 40,
     height: 40,
     backgroundColor: "#7e7575ff",
   },
-  row: { flexDirection: "row", alignItems: "center" },
+
+  // imagedata: {
+  //   marginTop: 10,
+  //   fontSize: 14,
+  //   color: "#000000",
+  //   fontWeight: "500",
+  // },
+
+  amount: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: "#000000",
+    marginVertical: 10,
+  },
+
+  parcel: {
+    color: "#16A263",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+
+  packedparcel: {
+    marginVertical: 15,
+    backgroundColor: "#E7F5EC",
+    padding: 15,
+  },
+
+  para: {
+    fontSize: 12,
+    color: "#6D6D6D",
+    marginTop: 10,
+    marginHorizontal: 10,
+  },
+
+  line: {
+    borderBottomWidth: 0.2,
+    marginTop: 10,
+  },
+
+  title: {
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+
+  price: {
+    flex: 1,
+    alignItems: "flex-start",
+  },
+
+  img: {
+    marginTop: 32,
+    marginLeft: -1,
+  },
+
+  addressContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 70,
+  },
+
+  addressBox: {
+    flex: 1,
+    marginHorizontal: -2,
+  },
+
+  packageImage: {
+    width: 40,
+    height: 40,
+    backgroundColor: "#7e7575ff",
+  },
+
   iconWrapper: {
     backgroundColor: "#E7E7E7",
     borderRadius: 16,
@@ -571,13 +770,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   imagedata: {
-    marginTop: 10,
+    marginTop: 20,
     fontSize: 14,
     color: "#000000",
     fontWeight: "500",
+    // borderWidth:1,
   },
   label: { fontSize: 14, fontWeight: "500", color: "#252525" },
-  // labeldata: { fontSize: 14, fontWeight: '500', color: '#252525' },
   amount: {
     fontSize: 16,
     fontWeight: "700",
@@ -589,25 +788,8 @@ const styles = StyleSheet.create({
   // value: { fontSize: 10, color: '#5D5D5D', fontWeight: '500',paddingLeft:2, },
   para: { fontSize: 12, color: "#6D6D6D", marginTop: 10, marginHorizontal: 10 },
 
-  line: { borderBottomWidth: 0.2 },
+  // line: { borderBottomWidth: 0.2 },
   title: { fontSize: 22, fontWeight: "bold" },
-  detailRow: {
-    // bordersWidth:1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    // gap: 35,
-    // marginRight:16
-    marginTop: 20,
-  },
-
-  detailBox: {
-    // backgroundColor:"pink",
-    //  bordersWidth:1,
-    paddingHorizontal: 1,
-    // flex: 1,
-
-    // gap: 10
-  },
 
   addressContainer: {
     flexDirection: "row",
@@ -703,6 +885,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "flex-start",
+    alignItems: "center",
+    // borderWidth:1,
   },
   name: {
     fontSize: 14,
@@ -752,5 +936,13 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     marginLeft: 8,
     fontWeight: 500,
+  },
+  downloadContainer: {
+    flexDirection: "row",
+    backgroundColor: "#000000",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "42%",
+    borderRadius: 6,
   },
 });

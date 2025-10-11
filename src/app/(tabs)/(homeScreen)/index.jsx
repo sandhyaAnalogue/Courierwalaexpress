@@ -78,7 +78,7 @@ const Home = () => {
   ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#f8f8ff", paddingHorizontal: 15 }}>
+    <View style={{ flex: 1, backgroundColor: "#f8f8ff", paddingHorizontal: 15, }}>
       <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content" />
       <ScrollView showsVerticalScrollIndicator={false}>
         
@@ -249,6 +249,7 @@ const Home = () => {
             style={{
               marginTop: Platform.select({ web: 50, default: 20 }),
               alignContent: Platform.select({ web: "center" }),
+              marginBottom:10,
             }}
           >
             <Text

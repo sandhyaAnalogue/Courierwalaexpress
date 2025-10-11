@@ -38,6 +38,7 @@ import BackArrow from "../../assets/svgIcons/BackArrow";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from "formik";
+// import { StatusBar } from "expo-status-bar";
 
 const ProfileScreen = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -49,8 +50,10 @@ const ProfileScreen = () => {
   };
   const isWeb = Platform.OS === "web";
   return (
-    <View style={{flex:1,}}>
-      <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content"/>
+    <>
+
+    <View style={{flex:1,backgroundColor:"#f8f8ff"}}>
+      
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={{ flex: 1 }}
@@ -76,6 +79,8 @@ const ProfileScreen = () => {
                   alignItems: "center",
                 }}
               >
+                {/* <StatusBar backgroundColor="#F8F8FF" style="dark"/> */}
+                <StatusBar backgroundColor="#F8F8FF" barStyle="dark-content" />
                 <TouchableOpacity
                   onPress={() => router.replace("/(profile)")}
                   style={{
@@ -310,6 +315,7 @@ const ProfileScreen = () => {
       </ScrollView>
     </KeyboardAvoidingView>
     </View>
+    </>
   );
 };
 
@@ -318,6 +324,8 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
   profileScreenContainer: {
     marginTop: 15,
+    // borderWidth:1,
+    backgroundColor:"f8f8ff"
   },
   calenderIcon: {
     marginRight: 20,

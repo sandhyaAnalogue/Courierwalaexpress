@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
   loginContainer: {
     flex: 1,
     // marginTop: 40,
+    backgroundColor:"#f8f8ff",
     paddingBottom: 40,
   },
   inputContainer: {

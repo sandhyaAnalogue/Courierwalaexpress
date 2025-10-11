@@ -272,6 +272,7 @@ const styles = StyleSheet.create({
   otpContainer: {
     flex: 1,
     marginTop: 30,
+    backgroundColor:"#f8f8ff",
     // alignItems:"center",
     // justifyContent:"center",
   },

@@ -16,6 +16,7 @@ import img2 from '../../../assets/svgIcons/img2'
 import img3 from '../../../assets/svgIcons/img3'
 import img4 from '../../../assets/svgIcons/img4'
 import img5 from '../../../assets/svgIcons/img5'
+import { useState } from 'react';
 
 // // Use the correct image paths from your assets folder
 // const img1 = require('../../../../image/img1');
@@ -35,8 +36,8 @@ const orders = [
     dimensions: '16×10cm, 5kg',
     bookingTime: '11:30 PM',
     bookingMode: 'Instant',
-    pickupAddress: 'Jaya Vijaya Plaza, Vital Rao Nagar',
-    dropAddress: 'Durgam Cheruvu, Madhapur',
+    pickupAddress: 'Jaya Vijaya Plaza, Vital Rao Nagar  Jaya Vijaya Plaza, Vital Rao Nagar',
+    dropAddress: 'Durgam Cheruvu, Madhapur Durgam Cheruve',
     totalAmount: 326,
     packageImages:[ { SvgComponent: img1, title: 'img1' },
       { SvgComponent: img2, title: 'img2' },
@@ -55,8 +56,8 @@ const orders = [
     dimensions: '20×15cm, 1kg',
     bookingTime: '10:00 AM',
     bookingMode: 'Instant',
-    pickupAddress: 'Jaya Vijaya Plaza, Vital Rao Nagar',
-    dropAddress: 'Durgam Cheruvu, Madhapur',
+    pickupAddress: 'Jaya Vijaya Plaza, Vital Rao Nagar Jaya Vijaya Plaza, Vital Rao Nagar',
+    dropAddress: 'Durgam Cheruvu, Madhapur Durgam Cheruve',
     totalAmount: 150,
     packageImages: [
       { SvgComponent: img1, title: 'img1' },
@@ -77,8 +78,8 @@ const orders = [
     dimensions: '20×15cm, 1kg',
     bookingTime: '10:00 AM',
     bookingMode: 'Instant',
-    pickupAddress: 'Jaya Vijaya Plaza, Vital Rao Nagar',
-    dropAddress: 'Durgam Cheruvu, Madhapur',
+    pickupAddress: 'Jaya Vijaya Plaza, Vital Rao Nagar Jaya Vijaya Plaza, Vital Rao Nagar',
+    dropAddress: 'Durgam Cheruvu, Madhapur Durgam Cheruve',
     totalAmount: 325,
     packageImages: [
       { SvgComponent: img1, title: 'img1' },
@@ -99,8 +100,8 @@ const orders = [
     dimensions: '20×15cm, 1kg',
     bookingTime: '10:00 AM',
     bookingMode: 'Instant',
-    pickupAddress: 'Jaya Vijaya Plaza, Vital Rao Nagar',
-    dropAddress: 'Durgam Cheruvu, Madhapur',
+    pickupAddress: 'Jaya Vijaya Plaza, Vital Rao Nagar Jaya Vijaya Plaza, Vital Rao Nagar',
+    dropAddress: 'Durgam Cheruvu, Madhapur Durgam Cheruve',
     totalAmount: 200,
     packageImages: [
        { SvgComponent: img1, title: 'img1' },
@@ -132,6 +133,9 @@ export default function OrderDetailsScreen() {
   const isCancelled = statusLower === 'cancelled';
   const isAwaitingPickup = statusLower === 'awaiting pickup';
   const showParcel = isAwaitingPickup && order.insured;
+  const [showFullPickup, setShowFullPickup] = useState(false);
+const [showFullDrop, setShowFullDrop] = useState(false);
+
 
   return (
     <ScrollView style={styles.main}>
@@ -166,8 +170,8 @@ export default function OrderDetailsScreen() {
               maxWidth: 100, 
               // borderWidth:1,
               fontSize: 10,
-              paddingHorizontal: 20,
-              paddingVertical: 11,
+              paddingHorizontal: 14,
+              paddingVertical: 7,
               backgroundColor: '#E7E7E7',
               borderRadius: 25,
               borderWidth: order.status === 'Cancelled' ? 0 : 1,
@@ -188,63 +192,107 @@ export default function OrderDetailsScreen() {
             </View>
           )}
         </View>
-        
         <View style={styles.detailRow}>
-          <View style={styles.detailBox}>
-            <View style={styles.labelValuePair}>
-              <Text style={styles.labeldata}>Booking Date</Text>
-              <Text style={styles.value}>{order.date}</Text>
-            </View>
+  {/* Left Side Details */}
+  <View style={styles.detailBoxLeft}>
+    <View style={styles.labelValuePair}>
+      <Text style={styles.labeldata}>Booking Date</Text>
+      <Text style={styles.value}>{order.date}</Text>
+    </View>
 
-            <View style={styles.labelValuePair}>
-              <Text style={styles.labeldata}>Courier Type</Text>
-              <Text style={styles.value}>{order.courierType}</Text>
-            </View>
+    <View style={styles.labelValuePair}>
+      <Text style={styles.labeldata}>Courier Type</Text>
+      <Text style={styles.value}>{order.courierType}</Text>
+    </View>
 
-            <View style={styles.labelValuePair}>
-              <Text style={styles.labeldata}>Dimensions</Text>
-              <Text style={styles.value}>{order.dimensions}</Text>
-            </View>
-          </View>
+    <View style={styles.labelValuePair}>
+      <Text style={styles.labeldata}>Dimensions</Text>
+      <Text style={styles.value}>{order.dimensions}</Text>
+    </View>
 
-          <View style={styles.detailBox}>
-            <View style={styles.labelValuePair}>
-              <Text style={styles.labeldata}>Booking Time</Text>
-              <Text style={styles.value}>{order.bookingTime}</Text>
-            </View>
+    {/* <View style={styles.labelValuePair}>
+      <Text style={styles.labeldata}>Pickup Address</Text>
+      <Text style={styles.value} numberOfLines={2}>{order.pickupAddress}</Text>
+    </View> */}
+  </View>
 
-            <View style={styles.labelValuePair}>
-              <Text style={styles.labeldata}>Item Name</Text>
-              <Text style={styles.value}>{order.itemName}</Text>
-            </View>
+  {/* Right Side Details */}
+  <View style={styles.detailBoxRight}>
+    <View style={styles.labelValuePair}>
+      <Text style={styles.labeldata}>Booking Time</Text>
+      <Text style={styles.value}>{order.bookingTime}</Text>
+    </View>
 
-            <View style={styles.labelValuePair}>
-              <Text style={styles.labeldata}>Booking Mode</Text>
-              <Text style={styles.value}>{order.bookingMode}</Text>
-            </View>
-          </View>
-        </View>
+    <View style={styles.labelValuePair}>
+      <Text style={styles.labeldata}>Item Name</Text>
+      <Text style={styles.value}>{order.itemName}</Text>
+    </View>
 
-        <View
-          style={[
-            styles.addressContainer,
-            order.status === "awaiting pickup" ? styles.row : styles.column,
-          ]}
+    <View style={styles.labelValuePair}>
+      <Text style={styles.labeldata}>Booking Mode</Text>
+      <Text style={styles.value}>{order.bookingMode}</Text>
+    </View>
+
+    {/* <View style={styles.labelValuePair}>
+      <Text style={styles.labeldata}>Drop Address</Text>
+      <Text style={styles.value} numberOfLines={2}>{order.dropAddress}</Text>
+    </View> */}
+  </View>
+</View>
+
+<View
+  style={[
+    styles.addressContainer,
+    { flexDirection: isAwaitingPickup ? "row" : "column", width:'100%' },
+  ]}
+>
+  {/* Pickup Address */}
+  <View style={[styles.addressBoxLeft, isAwaitingPickup && { flex: 1 }]}>
+    <View style={styles.labelValuePair}>
+      <Text style={styles.labeldata}>Pickup Address</Text>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => setShowFullPickup(!showFullPickup)}
+      >
+        <Text
+          style={styles.value1}
+          numberOfLines={showFullPickup ? undefined : 1}
+          ellipsizeMode="tail"
         >
-          <View style={[styles.addressBox, order.status === "awaiting pickup" && { marginRight: 2 }]}>
-            <Text style={styles.labeldata}>Pickup Address</Text>
-            <Text style={styles.value} numberOfLines={2}>
-              {order.pickupAddress}
-            </Text>
-          </View>
+          {order.pickupAddress}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  </View>
 
-          <View style={styles.addressBox}>
-            <Text style={styles.labeldata}>Drop Address</Text>
-            <Text style={styles.value} numberOfLines={2}>
-              {order.dropAddress}
-            </Text>
-          </View>
-        </View>
+ 
+
+  {/* Drop Address */}
+  <View style={[styles.addressBoxRight, isAwaitingPickup && { flex: 1 }]}>
+    <View style={styles.labelValuePair}>
+      <Text style={styles.labeldata}>Drop Address</Text>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => setShowFullDrop(!showFullDrop)}
+      >
+        <Text
+          style={styles.value1}
+          numberOfLines={showFullDrop ? undefined : 1}
+          ellipsizeMode="tail"
+        >
+          {order.dropAddress}
+        </Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</View>
+
+
+
+  
+
+  
+
 
         <View style={styles.img}>
           <Text style={styles.labeldata}>Package images</Text>
@@ -269,9 +317,9 @@ export default function OrderDetailsScreen() {
           </View>
         )}
         
-        <View style={styles.border}></View>
+        <View style={styles.line}></View>
         
-        <View style={styles.detailRow}>
+        <View style={styles.TotalPrice}>
           <View style={styles.price}>
             <Text style={styles.amount}>Total Amount</Text>
           </View>
@@ -346,7 +394,7 @@ export default function OrderDetailsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#fff', marginTop: 20, marginHorizontal: 6 },
+  container: { flex: 1, padding: 20, backgroundColor: '#fff', marginTop: 20, marginHorizontal: 2,borderRadius:10 },
   rowBetween: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -384,7 +432,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     backgroundColor: '#252525',
     borderRadius: 4,
-    marginBottom: 30
+    marginBottom: 30,
+    marginHorizontal:10,
+    marginTop:10
   },
   packageImage: {
     width: 40,
@@ -401,11 +451,11 @@ const styles = StyleSheet.create({
   },
   label: { fontSize: 14, fontWeight: '500', color: '#252525' },
   labeldata: { fontSize: 14, fontWeight: '500', color: '#252525' },
-  amount: { fontSize: 16, fontWeight: '700', color: '#000000', marginVertical: 10 },
+  amount: { fontSize: 16, fontWeight: '700', color: '#000000', marginVertical: 10,marginHorizontal:10 },
   parcel: { color: '#16A263', fontWeight: 'bold', fontSize: 16, },
-  packedparcel: { marginVertical: 20, backgroundColor: '#E7F5EC', padding: 15 },
-  value: { fontSize: 10, color: '#5D5D5D', fontWeight: '500',paddingLeft:2, },
-  para: { fontSize: 12, color: '#6D6D6D' },
+  packedparcel: { marginVertical: 20, backgroundColor: '#E7F5EC', padding: 15,marginHorizontal:10 },
+  value:{fontSize:12,fontWeight:'400',color:'#5D5D5D'},
+  para: { fontSize: 12, color: '#6D6D6D',marginHorizontal:10 },
   actionsRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -477,42 +527,98 @@ const styles = StyleSheet.create({
     elevation: 4,
     zIndex: 1,
   },
-  border: { borderWidth: 0.3, marginTop: 10 },
+  line: { borderWidth: 0.3, marginTop: 10,marginHorizontal:10 },
   title: { fontSize: 22, fontWeight: 'bold' },
-  detailRow: {
-    // borderWidth:1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 10,
-    marginRight:16
-
-  },
-  detailBox: {
-    // backgroundColor:"pink",
-    // borderWidth:1,
-    paddingHorizontal:1,
-    // flex: 1,
-    paddingVertical: 20,
-    gap: 10
-  },
-  
-  addressContainer: {
+  // detailRow: {
+  //   // borderWidth:1,
+  //   flexDirection: 'row',
+  //   justifyContent: 'space-between',
+  //   gap: 10,
+  //   marginRight:16,
     
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: -13,
-    // marginHorizontal:1,
-    gap: 70
-  },
-  addressBox: {
-    flex: 1,
-    marginHorizontal: -2,
-  },
+
+  // },
+  // detailBox: {
+  //   // backgroundColor:"pink",
+  //   // borderWidth:1,
+  //   paddingHorizontal:1,
+  //   // flex: 1,
+  //   paddingVertical: 20,
+  //   gap: 10
+  // },
+  
+
+   detailRow: {
+  flexDirection: "row",
+  alignItems: "flex-start", 
+  justifyContent: "space-between",
+  marginTop: 20,
+    
+  flex: "wrap",
+  // borderWidth:1 
+},
+TotalPrice:{
+   flexDirection: "row",
+ 
+  justifyContent: "space-between",
+  marginTop: 20,
+    width:'100%',
+  flex: "wrap",
+ 
+
+},
+
+
+  detailBoxLeft: {
+  flex: 1,
+  minWidth: "50%", 
+  paddingHorizontal: 10,
+  // backgroundColor:"pink",
+  // color: "#bf1616ff",20
+},
+detailBoxLeft: {
+  flex: 1,
+  minWidth: "50%", 
+  paddingHorizontal: 10,
+  // backgroundColor:"pink",
+  // color: "#bf1616ff",20
+},
+ value1: {
+  fontSize: 12,
+  color: "#5D5D5D",
+  fontWeight: "400",
+  flexShrink: 1,
+  flexWrap: "wrap",
+},
+
+ addressContainer: {
+  flexDirection: "row", 
+  alignItems: "flex-start",
+  // justifyContent: "space-between",
+  flexWrap: "wrap", 
+  //  width: "100%",   in thsi line Pickup Address and drop Address same line 
+  marginHorizontal: 10,
+  columnGap:10,
+  // borderWidth:1
+  // gap:20
+},
+
+  addressBoxLeft: {
+  flex: 1, 
+  // minWidth: "70%",   in thsi line Pickup Address and drop Address same line 
+  flexWrap: "wrap",
+},
+addressBoxRight: {
+  flex: 1, 
+  // minWidth: "50%", 
+  // flexWrap: "wrap",   in thsi line Pickup Address and drop Address same line 
+  // borderWidth:1
+},
+
   img: {
-    marginTop: 32,
-    marginLeft: -1
+    marginHorizontal:10
   },
-  price: {
-    
-  }
+  price: {
+    
+  }
 });

@@ -29,6 +29,11 @@ npm i --legacy-peer-deps npx expo install react-native-reanimated   npm install 
 
 npx expo install expo-camera
 
+npx expo install expo-file-system expo-sharing
+npm install react-native-pdf-lib
+
+
+
 
 
 

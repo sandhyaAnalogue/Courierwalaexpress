@@ -151,7 +151,7 @@ const Stepper = () => {
           onPress={handlePrevious} 
           disabled={currentPosition === 0}
          > 
-           <Text style={styles.buttonText}>Previous</Text> 
+           <Text style={{color:"white"}}>Previous</Text> 
         </Pressable>
         
         <Pressable 
@@ -159,7 +159,7 @@ const Stepper = () => {
           onPress={handleNext}
           disabled={currentPosition === data.length - 1}
         >
-          <Text style={styles.buttonText}>Next</Text>
+          <Text style={{color:"white"}}>Next</Text>
         </Pressable> 
       </View> 
     </View>
@@ -256,5 +256,19 @@ const styles = StyleSheet.create({
   dateCard:{
     // borderWidth:1,
     marginTop:20,
-  }
+  },
+  buttonContainer:{
+// borderWidth:1,
+flexDirection:"row",
+justifyContent:"space-between",
+alignItems:"center"
+  },
+  button:{
+    // borderWidth:1,
+    paddingHorizontal:50,
+    paddingVertical:10,
+    borderRadius:6,
+    backgroundColor:"#000000"
+  },
+ 
 });

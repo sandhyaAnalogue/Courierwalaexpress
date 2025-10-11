@@ -9,9 +9,10 @@ const CustomerSupport = () => {
   const router = useRouter();
   const inserts = useSafeAreaInsets();
   return (
-    <>
-    <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content"/>
+    <View style={{flex:1}}>
+    
     <SafeAreaView style={{flex:1,backgroundColor:"#f8f8ff"}}>
+      <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content"/>
 
       <Stack.Screen options={{
           header: () => {
@@ -63,7 +64,7 @@ const CustomerSupport = () => {
       </View>
     </View>
     </SafeAreaView>
-    </>
+    </View>
   );
 };
 
@@ -72,7 +73,7 @@ export default CustomerSupport;
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    backgroundColor:"#F8F8F8",
+    backgroundColor:"#f8f8ff",
     // marginTop:25,
 
 

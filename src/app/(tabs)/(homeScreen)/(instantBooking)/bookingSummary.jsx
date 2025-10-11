@@ -140,7 +140,7 @@ const bookingSummary = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
       <ScrollView>
-        <View style={{ backgroundColor: "#f8f8ff" }}>
+        <View style={{ backgroundColor: "#f8f8ff" ,paddingBottom:20}}>
           <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content" />
 
           {/* STACK-SCREEN */}
@@ -416,6 +416,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
+    marginTop:20,
     backgroundColor: "#FFFFFF",
     // marginTop: 5,
     marginHorizontal: 20,

@@ -160,7 +160,7 @@ const index = () => {
                     }}
                   >
                     <TouchableOpacity
-                      onPress={() => router.replace("/(homeScreen)")}
+                      onPress={() => router.back()}
                       style={{
                         backgroundColor: "#E7E7E7",
                         padding: 6,
@@ -511,6 +511,7 @@ const index = () => {
                     width:"90%",
                     // borderWidth:1,
                     marginTop:40,
+                    paddingBottom:30,
                   }}
                 >
                   <TouchableOpacity>
@@ -561,6 +562,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 20,
     marginBottom: 50,
+    paddingBottom:10,
   },
   courierTypecard: {
     // borderWidth:1,
@@ -801,7 +803,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 12,
     width:"80%",
-    // borderWidth:1,
   },
   estimateButton: {
     flexDirection: "row",
