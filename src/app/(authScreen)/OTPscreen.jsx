@@ -10,10 +10,10 @@ import {
 import React, { useEffect, useState, useRef } from "react";
 import { TextInput } from "react-native";
 // import Button from "../../../customComponents/Button";
-import Button from "../../customComponents/Button";
+import Button from "../../components/Button";
 import { useIsFocused } from "@react-navigation/native";
 import { StatusBar } from "react-native";
-import AlertModel from "../../customComponents/AlertModel";
+import AlertModel from "../../components/AlertModel";
 // import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { router } from "expo-router";
 // import { Keyboard } from "react-native";

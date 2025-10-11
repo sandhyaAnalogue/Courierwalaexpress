@@ -7,7 +7,7 @@ import OrderIcon from "../../../assets/svgIcons/OrderIcon";
 import PlusIcon from "../../../assets/svgIcons/PlusIcon";
 import RiderIcon from "../../../assets/svgIcons/RiderIcon";
 import TransitIcon from "../../../assets/svgIcons/TransitIcon";
-import Curousel from "../../../customComponents/Curousel";
+import Curousel from "../../../components/Curousel";
 
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Stack, useRouter } from "expo-router";
@@ -20,7 +20,7 @@ const Home = () => {
   const router = useRouter();
   const inserts = useSafeAreaInsets();
   const handleBookings = () => {
-    router.push("(tabs)/(homeScreen)/BookCourier");
+    router.push("(tabs)/(homeScreen)/bookCourier");
   };
 
   const ordersData = [

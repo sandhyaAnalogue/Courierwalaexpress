@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 // import InputField from "../../../customComponents/InputField";
-import InputField from "../../customComponents/InputField";
+import InputField from "../../components/InputField";
 // import PersonIcon from "../../../assets/svgs/SVGIcons/PersonIcon";
 import PersonIcon from "../../assets/svgIcons/PersonIcon";
 
@@ -28,9 +28,9 @@ import LocationIcon from "../../assets/svgIcons/LocationIcon";
 import DownArrow from "../../assets/svgIcons/DownArrow";
 import DateTimePicker from "@react-native-community/datetimepicker";
 // import DropDownInputfield from "../../../customComponents/DropDownInputfield";
-import DropDownInputfield from "../../customComponents/DropDownInputfield";
+import DropDownInputfield from "../../components/DropDownInputfield";
 import { ProfileValidationSchema } from "../../validations/ProfileValidation";
-import GenderDropDown from "../../customComponents/GenderDropDown";
+import GenderDropDown from "../../components/GenderDropDown";
 import { Stack, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import BackArrow from "../../assets/svgIcons/BackArrow";

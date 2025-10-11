@@ -9,8 +9,8 @@ import {
   KeyboardAvoidingView,Platform
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import PhNumInput from "../../customComponents/PhNum"
-import Button from "../../customComponents/Button";
+import PhNumInput from "../../components/PhNum";
+import Button from "../../components/Button";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { router } from "expo-router";

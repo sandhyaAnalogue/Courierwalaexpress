@@ -11,7 +11,7 @@ const _layout = () => {
   return (
     <Stack>
       <Stack.Screen name="index" />
-      <Stack.Screen name="BookCourier" options={{ headerShown: false }} />
+      <Stack.Screen name="bookCourier" options={{ headerShown: false }} />
       <Stack.Screen name="(instantBooking)" options={{ headerShown: false }} />
     </Stack>
   );

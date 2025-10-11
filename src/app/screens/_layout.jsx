@@ -18,7 +18,7 @@ const _layout = () => {
       }}
     >
       <Stack.Screen
-        name="AddAddressDetails"
+        name="addAddressDetails"
         // options={{
         //   headerTitle: "Add address details",
         //   headerLeft: () => (
@@ -31,7 +31,7 @@ const _layout = () => {
         //   ),
         // }}
       />
-      <Stack.Screen name="CancellationPolicy" 
+      <Stack.Screen name="cancellationPolicy" 
       // options={{
       //     headerTitle: "Cancellation Policy",
       //     headerLeft: () => (
@@ -45,7 +45,7 @@ const _layout = () => {
       //   }}
         />
       <Stack.Screen
-        name="HelpSupport"
+        name="helpSupport"
         // options={{
         //   headerTitle: "Help & support",
         //   headerLeft: () => (
@@ -58,7 +58,7 @@ const _layout = () => {
         //   ),
         // }}
       />
-      <Stack.Screen name="PrivacyPolicies" 
+      <Stack.Screen name="privacyPolicies" 
       // options={{
       //     headerTitle: "Privacy policies",
       //     headerLeft: () => (
@@ -71,7 +71,7 @@ const _layout = () => {
       //     ),
       //   }}
          />
-      <Stack.Screen name="RefundPolicy" 
+      <Stack.Screen name="refundPolicy" 
       // options={{
       //     headerTitle: "Help & support",
       //     headerLeft: () => (
@@ -85,7 +85,7 @@ const _layout = () => {
       //   }}
         />
       <Stack.Screen
-        name="TermsConditions"
+        name="termsConditions"
         // options={{
         //   headerTitle: "Terms & conditions",
         //   headerStyle: {
@@ -106,7 +106,7 @@ const _layout = () => {
         // }}
       />
       <Stack.Screen
-        name="EditProfile"
+        name="editProfile"
         // options={{
         //   headerTitle: "My Profile",
         //   headerLeft: () => (

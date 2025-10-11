@@ -8,7 +8,7 @@ import Rebook from '../../../assets/svgIcons/Rebook';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Feather from '@expo/vector-icons/Feather';
 import { Stack } from 'expo-router';
-import TextStyles from '../../TextStyles/TextStyles';
+import TextStyles from '../../textStyles/textStyles';
 // import img1 from '../../../assets/svgIcons/img1'
 import img1 from '../../../assets/svgIcons/img1'
 

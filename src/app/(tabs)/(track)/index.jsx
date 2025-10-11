@@ -11,7 +11,7 @@ import {
 import { Dropdown } from "react-native-element-dropdown";
 import DropDownIcon from "../../../assets/svgIcons/orderIcon/DropDownIcon";
 import BookingIcon from "../../../assets/svgIcons/BooingIcon";
-import MultiStepProgressBar from "../../../customComponents/MultiStepProgressBar";
+import MultiStepProgressBar from "../../../components/MultiStepProgressBar";
 import { useRouter, Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Feather from "@expo/vector-icons/Feather";

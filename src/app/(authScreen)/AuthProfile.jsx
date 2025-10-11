@@ -13,7 +13,7 @@ import {
 } from "react-native";
 import React, { useContext, useState } from "react";
 // import InputField from "../../../customComponents/InputField";
-import InputField from "../../customComponents/InputField"
+import InputField from "../../components/InputField"
 // import PersonIcon from "../../../assets/icons/PersonIcon";
 import PersonIcon from "../../assets/svgIcons/icons/PersonIcon"
 // import MailIcon from "../../../assets/icons/MailIcon";
@@ -26,11 +26,11 @@ import CalenderIcon from "../../assets/svgIcons/CalenderIcon"
 import DownArrow from "../../assets/svgIcons/icons/DownArrow";
 import DateTimePicker from "@react-native-community/datetimepicker";
 // import DropDownInputfield from "../../../customComponents/DropDownInputfield";
-import DropDownInputfield from "../../customComponents/DropDownInputfield";
+import DropDownInputfield from "../../components/DropDownInputfield";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 // import GenderDropDown from "../../../customComponents/GenderDropDown";
-import GenderDropDown from "../../customComponents/GenderDropDown"
+import GenderDropDown from "../../components/GenderDropDown"
 import { Formik } from "formik";
 // import { ProfileValidationSchema } from "../../../validations/ProfileValidation";
 import { ProfileValidationSchema } from "../../validations/ProfileValidation"
@@ -352,7 +352,7 @@ import { AuthContext } from "../../utils/AuthProvider"
 const ProfileScreen = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const router = useRouter();
-          const inserts = useSafeAreaInsets();
+  const inserts = useSafeAreaInsets();
 
   const showDatePickerHandler = () => {
     setShowDatePicker(true);

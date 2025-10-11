@@ -23,7 +23,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Pen from "../../../assets/svgIcons/Pen";
 
 // import ProfileOptions from "../../../../customComponents/ProfileOptions";
-import ProfileOptions from "../../../customComponents/ProfileOptions";
+import ProfileOptions from "../../../components/ProfileOptions";
 
 // import ManageCard from "../../../../assets/svgs/SVGIcons/ManageCard";
 import ManageCard from "../../../assets/svgIcons/ManageCard";
@@ -46,7 +46,7 @@ import Policies from "../../../assets/svgIcons/Policies";
 import Profile from "../../(authScreen)/AuthProfile";
 import { useRouter, Stack } from "expo-router";
 // import Footer from "../../../../customComponents/Footer";
-import Footer from "../../../customComponents/Footer";
+import Footer from "../../../components/Footer";
 
 // import BackArrow from "../../../../assets/svgs/SVGIcons/BackArrow";
 import BackArrow from "../../../assets/svgIcons/BackArrow";
@@ -81,27 +81,27 @@ const MyProfile = () => {
   }, []);
 
   const handleProfileEdit = () => {
-    router.push("/screens/EditProfile");
+    router.push("/screens/editProfile");
   };
 
   const handleManageAddress = () => {
-    router.push("/(tabs)/(profile)/ManageAddress");
+    router.push("/(tabs)/(profile)/manageAddress");
   };
 
   const handleCustomerSupport = () => {
-    router.push("/screens/HelpSupport");
+    router.push("/screens/helpSupport");
   };
   const handleTermsConditions = () => {
-    router.push("/screens/TermsConditions");
+    router.push("/screens/termsConditions");
   };
   const handlePrivacyPolicy = () => {
-    router.push("/screens/PrivacyPolicies");
+    router.push("/screens/privacyPolicies");
   };
   const handleCancellationPolicy = () => {
-    router.push("/screens/CancellationPolicy");
+    router.push("/screens/cancellationPolicy");
   };
   const handleRefundPolicy = () => {
-    router.push("/screens/RefundPolicy");
+    router.push("/screens/refundPolicy");
   };
   const handleDeleteAccount = () => {
     setShowDeleteModal(true);

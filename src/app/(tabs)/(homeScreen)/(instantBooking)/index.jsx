@@ -19,14 +19,14 @@ import {
 
 import Feather from "@expo/vector-icons/Feather";
 import { ScrollView } from "react-native";
-import InputField from "../../../../customComponents/InputField";
+import InputField from "../../../../components/InputField";
 import Location from "../../../../assets/svgIcons/Location";
 import UploadIcon from "../../../../assets/svgIcons/uploadIcon";
 import RemoveImgIcon from "../../../../assets/svgIcons/removeImgIcon";
-// import MultiStepProgressBar from "../../../../customComponents/MultiStepProgressBar";
-import Stepper from "../../../../customComponents/Stepper";
-import CourierTypeDropDown from "../../../../customComponents/courierTypeDropDown";
-import { InputDropdown } from "../../../../customComponents/bookForOthers";
+// import MultiStepProgressBar from "../../../../components/MultiStepProgressBar";
+import Stepper from "../../../../components/Stepper";
+import CourierTypeDropDown from "../../../../components/courierTypeDropDown";
+import { InputDropdown } from "../../../../components/bookForOthers";
 import CalculatorIcon from "../../../../assets/svgIcons/calculatorIcon";
 import CalculatorIconBlack from "../../../../assets/svgIcons/calculatorIconBlack";
 import RightArrowIcon from "../../../../assets/svgIcons/rightArrowIcon";

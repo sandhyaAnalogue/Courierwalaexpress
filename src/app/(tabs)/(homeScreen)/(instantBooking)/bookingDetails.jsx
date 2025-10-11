@@ -33,10 +33,10 @@ import img3 from "../../../../assets/svgIcons/img3";
 import img4 from "../../../../assets/svgIcons/img4";
 import img5 from "../../../../assets/svgIcons/img5";
 import PhCallIcon from "../../../../assets/svgIcons/PhCallIcon";
-import CourierTypeDropDown from "../../../../customComponents/courierTypeDropDown";
-import Stepper from "../../../../customComponents/Stepper";
+import CourierTypeDropDown from "../../../../components/courierTypeDropDown";
+import Stepper from "../../../../components/Stepper";
 import BooingIcon from "../../../../assets/svgIcons/BooingIcon";
-import CancelOrderDropDown from "../../../../customComponents/cancelOrderDropDown"
+import CancelOrderDropDown from "../../../../components/cancelOrderDropDown"
 
 const orders = [
   {

@@ -60,7 +60,7 @@ const ManageAddress = () => {
   const handleAddAddress = () => {
     console.log("moved to add address");
     // navigation.navigate("AddAddress");///////////////
-    router.push("/screens/AddAddressDetails");
+    router.push("/screens/addAddressDetails");
   };
 
   // DROPDOWN:
