@@ -105,7 +105,7 @@ const AddAddress = () => {
                     >
                       <TouchableOpacity
                         onPress={() =>
-                          router.replace("/(profile)/ManageAddress")
+                          router.navigate("/(tabs)/(profile)/manageAddress")
                         }
                         style={{
                           backgroundColor: "#E7E7E7",
@@ -195,7 +195,7 @@ const AddAddress = () => {
                           ]}
                           onPress={() => setFieldValue("label", lbl)}
                         >
-                          <Text style={{ fontWeight: "500",fontSize:12, }}>
+                          <Text style={[{ fontWeight: "500",fontSize:12, },values.label === lbl && styles.activeLabeltxt,]}>
                             {lbl.charAt(0).toUpperCase() + lbl.slice(1)}
                           </Text>
                         </Pressable>
@@ -369,7 +369,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   activeLabel: {
-    backgroundColor: "#87ef38ff",
+    backgroundColor: "#093C31",
+    // color:"#FFFFFF"
   },
   receiverDetailsContainer: {
     marginTop: 35,
@@ -377,7 +378,7 @@ const styles = StyleSheet.create({
   btnStyling: {
     width: "100%",
     marginTop: 12,
-    backgroundColor: "#252525",
+    backgroundColor: "#093C31",
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingVertical: 15,
@@ -403,4 +404,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginLeft: 4,
   },
+  activeLabeltxt:{
+    color:"#FFFFFF"
+  }
 });

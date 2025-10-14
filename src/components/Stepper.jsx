@@ -268,7 +268,7 @@ alignItems:"center"
     paddingHorizontal:50,
     paddingVertical:10,
     borderRadius:6,
-    backgroundColor:"#000000"
+    backgroundColor:"#093C31"
   },
  
 });

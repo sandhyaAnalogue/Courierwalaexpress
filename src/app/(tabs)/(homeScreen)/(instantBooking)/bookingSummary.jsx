@@ -138,7 +138,7 @@ const bookingSummary = () => {
   const showParcel = isInTransit || isAwaitingPickup;
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
+    // <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
       <ScrollView>
         <View style={{ backgroundColor: "#f8f8ff" ,paddingBottom:20}}>
           <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content" />
@@ -370,7 +370,9 @@ const bookingSummary = () => {
               justifyContent: "space-between",
               alignItems: "center",
               marginTop: 40,
+              // borderWidth:1,
               marginBottom:5,
+              gap:10,
               marginHorizontal:20,
             }}
           >
@@ -392,10 +394,10 @@ const bookingSummary = () => {
               <Text
                 style={{
                   borderWidth: 1,
-                  paddingHorizontal: 25,
+                  paddingHorizontal: 22,
                   paddingVertical: 10,
                   borderRadius: 5,
-                  backgroundColor: "#252525",
+                  backgroundColor: "#093C31",
                   color: "#FFFFFF",
                   fontWeight: 400,
                 }}
@@ -406,7 +408,7 @@ const bookingSummary = () => {
           </View>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    // </SafeAreaView>
   );
 };
 

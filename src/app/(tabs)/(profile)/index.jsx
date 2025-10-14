@@ -263,7 +263,7 @@ const MyProfile = () => {
           </View>
 
           <View style={styles.logoutContainer}>
-            <Text style={{ fontSize: 16 }}>Logout</Text>
+            <Text style={{ fontSize: 16,color:"#FFFFFF" }}>Logout</Text>
           </View>
           <Modal
             visible={showDeleteModal}
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 10,
-    backgroundColor: "#252525",
+    backgroundColor: "#093C31",
     borderRadius: 5,
     paddingHorizontal: 12,
     paddingVertical: 10,
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     marginTop: 30,
     borderRadius: 7,
-    backgroundColor: "#D1D1D1",
+    backgroundColor: "#093C31",
   },
   logoutContainer1: {
     width: "100%",
@@ -420,8 +420,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   noBtn: {
-    backgroundColor: "#252525",
-    borderColor: "#252525",
+    backgroundColor: "#093C31",
+    borderColor: "#093C31",
   },
   noBtnText: {
     color: "#fff",

@@ -1,4 +1,11 @@
-import { Pressable, ScrollView, StyleSheet, Text, View,TouchableOpacity, } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from "react-native";
 
 import Arrow2 from "../../../assets/svgIcons/Arrow2";
 import ArrowIcon from "../../../assets/svgIcons/ArrowIcon";
@@ -13,15 +20,25 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Stack, useRouter } from "expo-router";
 import { StatusBar } from "react-native";
 import { Platform } from "react-native";
-import PersonIcon from "../../../assets/svgIcons/icons/PersonIcon"
-import BellIcon from "../../../assets/svgIcons/BellIcon"
+import { useState } from "react";
+import PersonIcon from "../../../assets/svgIcons/icons/PersonIcon";
+import BellIcon from "../../../assets/svgIcons/BellIcon";
+import CustomModal from "../../../components/CustomModal";
 
 const Home = () => {
   const router = useRouter();
   const inserts = useSafeAreaInsets();
+  const [rideModalVisible, setRideModalVisible] = useState(false);
+
   const handleBookings = () => {
     router.push("(tabs)/(homeScreen)/bookCourier");
   };
+
+  const handleRide = () => {
+    setRideModalVisible(true);
+  };
+
+  
 
   const ordersData = [
     {
@@ -78,10 +95,11 @@ const Home = () => {
   ];
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#f8f8ff", paddingHorizontal: 15, }}>
+    <View
+      style={{ flex: 1, backgroundColor: "#f8f8ff", paddingHorizontal: 15 }}
+    >
       <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content" />
       <ScrollView showsVerticalScrollIndicator={false}>
-        
         <Stack.Screen
           options={{
             header: () => {
@@ -92,81 +110,41 @@ const Home = () => {
                     paddingTop: inserts.top + 20,
                     flexDirection: "row",
                     alignItems: "center",
-                    justifyContent:"space-between"
+                    justifyContent: "space-between",
                   }}
                 >
-                  <View style={{flexDirection:"row",alignItems:"center"}}>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: "#252525",
-                      padding: 6,
-                      borderRadius: 20,
-                      marginLeft: 15,
-                      borderWidth:1,
-                    }}
-                  >
-                    <PersonIcon width={24} height={24} fill="white" />
-                  </TouchableOpacity>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: "500",
-                      marginLeft: 10,
-                      color: "#252525",
-                    }}
-                  >
-                    {" "}
-                    Sandhya
-                  </Text>
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <TouchableOpacity
+                      style={{
+                        backgroundColor: "#252525",
+                        padding: 6,
+                        borderRadius: 20,
+                        marginLeft: 15,
+                        borderWidth: 1,
+                      }}
+                    >
+                      <PersonIcon width={24} height={24} fill="white" />
+                    </TouchableOpacity>
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontWeight: "500",
+                        marginLeft: 10,
+                        color: "#252525",
+                      }}
+                    >
+                      {" "}
+                      Sandhya
+                    </Text>
                   </View>
-                  <View style={{marginRight:30}}>
-                  <BellIcon width={22} height={22} />
+                  <View style={{ marginRight: 30 }}>
+                    <BellIcon width={22} height={22} />
                   </View>
                 </View>
               );
             },
           }}
         />
-
-        {/* <Stack.Screen
-        options={{
-          header: () => {
-            return (
-              <View
-                style={{
-                  backgroundColor: "#f8f8ff",
-                  paddingTop: inserts.top + 30,
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => router.replace("/Home")}
-                  style={{
-                    backgroundColor: "#d7d7dcff",
-                    padding: 6,
-                    borderRadius: 16,
-                    marginLeft: 15,
-                  }}
-                >
-                  <Feather name="chevron-left" size={20} color="black" />
-                </TouchableOpacity>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: "500",
-                    marginLeft: 10,
-                    color: "#252525",
-                  }}
-                >
-                  {" "}
-                  My Orders
-                </Text>
-              </View>
-            );
-          },
-        }}
-      /> */}
 
         <View style={styles.container}>
           <View style={styles.slider}>
@@ -203,7 +181,7 @@ const Home = () => {
 
               <Pressable
                 style={[styles.bookCard, styles.lightCard]}
-                onPress={handleBookings}
+                onPress={handleRide}
               >
                 <View style={{ marginVertical: 25 }}>
                   <RiderIcon
@@ -249,7 +227,7 @@ const Home = () => {
             style={{
               marginTop: Platform.select({ web: 50, default: 20 }),
               alignContent: Platform.select({ web: "center" }),
-              marginBottom:10,
+              marginBottom: 10,
             }}
           >
             <Text
@@ -288,6 +266,13 @@ const Home = () => {
               </View>
             ))}
           </View>
+
+          <CustomModal
+            visible={rideModalVisible}
+            onClose={() => setRideModalVisible(false)}
+            title="Select Ride Type"
+            text="sdfghjrtyucvb"
+          />
         </View>
       </ScrollView>
     </View>
@@ -304,7 +289,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: "100%",
     // borderWidth:1,
-    marginTop:15,
+    marginTop: 15,
   },
   slider: {
     marginTop: Platform.select({
@@ -321,7 +306,7 @@ const styles = StyleSheet.create({
     // borderWidth:1,
     marginTop: Platform.select({
       web: 30,
-      android:30,
+      android: 30,
     }),
   },
   bookingtext: {
@@ -339,7 +324,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: Platform.select({
       web: 20,
-      android: 20,/////testing change before 12
+      android: 20, /////testing change before 12
     }),
     // gap:10,
     // justifyContent: "space-between",//android
@@ -408,15 +393,15 @@ const styles = StyleSheet.create({
   },
   totalOrderGridContainer: {
     // borderWidth:1,
-    paddingHorizontal:10,
+    paddingHorizontal: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     gap: Platform.select({
       web: 10,
-      android: 18,///testing change before 6
+      android: 18, ///testing change before 6
     }),
     marginTop: 10,
-    
+
     // paddingLeft: 5,
     // paddingRight: 5,
   },
@@ -438,8 +423,8 @@ const styles = StyleSheet.create({
   title: {
     color: "#5D5D5D",
     // borderWidth:1,
-    fontWeight:400,
-    fontSize:12,
+    fontWeight: 400,
+    fontSize: 12,
     marginTop: Platform.select({
       web: 20,
       android: 10,
@@ -455,7 +440,7 @@ const styles = StyleSheet.create({
     }),
     fontWeight: "500",
     // fontSize:12,
-    color:"#000000",
+    color: "#000000",
     marginTop: 5,
   },
   bookingsGrid: {
@@ -464,8 +449,8 @@ const styles = StyleSheet.create({
   },
   bookingCard: {
     // borderWidth:1,
-    marginLeft: Platform.select({ web: 200,android:5 }),
-    marginRight: Platform.select({ web: 200,android:5 }),
+    marginLeft: Platform.select({ web: 200, android: 5 }),
+    marginRight: Platform.select({ web: 200, android: 5 }),
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -496,20 +481,20 @@ const styles = StyleSheet.create({
   },
   bookingId: {
     // borderWidth:1,
-    fontSize:14,
+    fontSize: 14,
     marginLeft: Platform.select({
       web: 15,
-      android:2,
+      android: 2,
     }),
     fontWeight: "500",
     color: "#252525",
   },
   bookingValue: {
     // borderWidth:1,
-    fontSize:12,
+    fontSize: 12,
     marginLeft: Platform.select({
       web: 15,
-      android:2
+      android: 2,
     }),
     color: "#6D6D6D",
     fontWeight: "500",
@@ -522,19 +507,19 @@ const styles = StyleSheet.create({
   bookingValue1: {
     color: "#6D6D6D",
     fontWeight: "500",
-    fontSize:12,
+    fontSize: 12,
   },
   detailsBtn: {
-    borderWidth: 1,
-    backgroundColor: "#252525",
+    // borderWidth: 1,
+    backgroundColor: "#093C31",
     borderRadius: 5,
-    paddingHorizontal:11,
-    paddingVertical:9,
+    paddingHorizontal: 11,
+    paddingVertical: 9,
   },
   detailsBtnText: {
     color: "#FFFFFF",
     fontWeight: "700",
-    fontSize: 12,///////////once ask 10 or 12
+    fontSize: 12, ///////////once ask 10 or 12
   },
   CourierInfo: {
     // borderWidth:1,

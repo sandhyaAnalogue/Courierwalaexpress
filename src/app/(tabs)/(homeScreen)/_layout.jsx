@@ -13,6 +13,7 @@ const _layout = () => {
       <Stack.Screen name="index" />
       <Stack.Screen name="bookCourier" options={{ headerShown: false }} />
       <Stack.Screen name="(instantBooking)" options={{ headerShown: false }} />
+      <Stack.Screen name="(scheduleBooking)" options={{ headerShown: false }} />
     </Stack>
   );
 };

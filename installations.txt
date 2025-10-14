@@ -32,6 +32,21 @@ npx expo install expo-camera
 npx expo install expo-file-system expo-sharing
 npm install react-native-pdf-lib
 
+npm install @pdf-lib/fontkit
+
+npm install react-native-pdf react-native-blob-util --save
+
+npm install react-native-razorpay
+npx pod-install
+
+expo install expo-application
+
+npm i react-native-loading-spinner-overlay
+
+
+
+
+
 
 
 

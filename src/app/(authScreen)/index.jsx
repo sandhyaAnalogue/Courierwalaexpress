@@ -6,19 +6,28 @@ import {
   Alert,
   ScrollView,
   StatusBar,
-  KeyboardAvoidingView,Platform
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import PhNumInput from "../../components/PhNum";
 import Button from "../../components/Button";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { router } from "expo-router";
+// import { router } from "expo-router";
+import { useRouter } from "expo-router";
 
+import { useContext } from "react";
+import { AuthContext } from "../../utils/AuthProvider";
 
+import { loginApi } from "../../services/apiCalls";
+import Loading from "../../components/Loading";
 
 const Login = () => {
   // const isFocused = useIsFocused();
+  const { login } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const phoneValidationSchema = Yup.object().shape({
     userPhNum: Yup.string()
@@ -26,11 +35,44 @@ const Login = () => {
       .matches(/^[6-9]\d{9}$/, "Enter a valid 10 digit mobile number"),
   });
 
-  const handleOtp = (values, { resetForm }) => {
-    console.log(values.userPhNum, "userNumber");
-    resetForm();
-    // Alert.alert("OTP", `OTP sent to your Mobile ${values.userPhNum}`);
-    router.push("/OTPscreen");
+  const handleOtp = async (values, { resetForm }) => {
+    setLoading(true);
+    try {
+      const formdata = new FormData();
+      formdata.append("phoneNumber", values.userPhNum);
+
+      const phNumRes = await loginApi(formdata);
+      // console.log("sucess", phNumRes);
+
+      if (phNumRes?.data?.token) {
+     
+        console.log(values.userPhNum, "userNumber");
+        console.log(phNumRes.data.otp, "otp");
+
+        login(phNumRes.data.token);
+        resetForm();
+        router.push("/OTPscreen");
+      } else {
+        Alert.alert(
+          "Error",
+          phNumRes.data?.message || "Unknown server response"
+        );
+      }
+    } catch (error) {
+      if (error.response) {
+        const errorRes = error.response.data?.message || "Something went wrong";
+        Alert.alert("Error", errorRes);
+      } else if (error.request) {
+        Alert.alert(
+          "Network Error",
+          "Cannot reach server. Check your connection."
+        );
+      } else {
+        Alert.alert("Error", error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleGoogleSignin = () => {
@@ -56,11 +98,10 @@ const Login = () => {
         >
           <View style={styles.loginContainer}>
             <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content" />
-            <View style={{ alignItems: "center",marginTop:35, }}>
+            <View style={{ alignItems: "center", marginTop: 35 }}>
               <Image
-                // source={require("../../../assets/pngs/appImg.png")}
                 source={require("../../assets/pngs/appImg.png")}
-                style={{ width: 310, height: 200,marginLeft:-50,}}
+                style={{ width: 310, height: 200, marginLeft: -50 }}
               />
             </View>
             <>
@@ -106,7 +147,7 @@ const Login = () => {
                             color: "red",
                             borderColor: "red",
                             marginLeft: 20,
-                            marginTop:-10,
+                            marginTop: -10,
                             // borderWidth:1,
                           }}
                         >
@@ -118,11 +159,11 @@ const Login = () => {
                     <View style={styles.buttonContainer}>
                       <Button
                         ButtonName="Send OTP"
-                        color="white"
+                        color="#FFFFFF"
                         fontSize={14}
-                        paddingVertical={9}
+                        paddingVertical={8}
                         fontWeight={600}
-                        onPress={handleSubmit}
+                        onPress={() => handleSubmit()}
                       />
                     </View>
                   </>
@@ -138,7 +179,7 @@ const Login = () => {
                 <Button
                   onPress={handleGoogleSignin}
                   ButtonName="Sign in With Google"
-                  paddingVertical={8}
+                  paddingVertical={7}
                 />
               </View>
             </>
@@ -146,6 +187,7 @@ const Login = () => {
         </ScrollView>
       </KeyboardAvoidingView>
       {/* </KeyboardAwareScrollView> */}
+      <Loading visible={loading}/>
     </>
   );
 };
@@ -156,13 +198,14 @@ const styles = StyleSheet.create({
   loginContainer: {
     flex: 1,
     // marginTop: 40,
-    backgroundColor:"#f8f8ff",
+    backgroundColor: "#f8f8ff",
     paddingBottom: 40,
   },
   inputContainer: {
     // backgroundColor:"pink",
     // width:200,
     marginLeft: 20,
+    // marginRight:20,
     // borderWidth:10,
   },
   input: {
@@ -171,7 +214,6 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
   },
   loginTextContainer: {
-    // backgroundColor:"pink",
     marginLeft: 20,
     marginBottom: 30,
   },
@@ -181,10 +223,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginLeft: 20,
-    marginRight: 30,
+    marginRight: 20,
     marginTop: 40,
-    backgroundColor: "#252525",
-    borderRadius: 8,
+    backgroundColor: "#093C31",
+    borderRadius: 10,
   },
   GooglebuttonContainer: {
     // width: 345,
@@ -197,7 +239,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     // backgroundColor:"pink",
     borderWidth: 1,
-    marginRight: 30,
+    marginRight: 20,
   },
   googleIcon: {
     width: 20,

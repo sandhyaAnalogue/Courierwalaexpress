@@ -1,22 +1,41 @@
 import { Tabs, useNavigation } from "expo-router";
-// import Home from "../../../assets/tabIcons/Home";
-import Home from "../../assets/svgIcons/Home";
+import { Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-// import Order from "../../../assets/tabIcons/Order";
+// Icons
+import Home from "../../assets/svgIcons/Home";
 import Order from "../../assets/svgIcons/Order";
 import Track from "../../assets/svgIcons/Track";
 import Profile from "../../assets/svgIcons/Profile";
-import { Text, TouchableOpacity } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const _layout = () => {
   const navigation = useNavigation();
-  const insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets(); // ✅ Now insets is defined
+
+  const tabBarStyle = Platform.select({
+    ios: {
+      height: insets.bottom + 60,
+      paddingBottom: insets.bottom + 20,
+    },
+    android: {
+      height: 60,
+      paddingBottom: 30,
+    },
+    web: {
+      height: 50,
+      paddingBottom: 10,
+    },
+    default: {
+      height: 60,
+      paddingBottom: 10,
+    },
+  });
+
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarStyle: {height:insets.bottom+50, paddingBottom: insets.bottom+20,},
+        tabBarStyle: tabBarStyle,
       }}
     >
       <Tabs.Screen
@@ -24,11 +43,7 @@ const _layout = () => {
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ focused }) => (
-            <Home
-              width={24}
-              height={24}
-              fill={focused ? "#007AFF" : "#8e8e93"}
-            />
+            <Home width={24} height={24} fill={focused ? "#007AFF" : "#8e8e93"} />
           ),
         }}
       />
@@ -37,11 +52,7 @@ const _layout = () => {
         options={{
           tabBarLabel: "My orders",
           tabBarIcon: ({ focused }) => (
-            <Order
-              width={24}
-              height={24}
-              fill={focused ? "#007AFF" : "#8e8e93"}
-            />
+            <Order width={24} height={24} fill={focused ? "#007AFF" : "#8e8e93"} />
           ),
         }}
       />
@@ -50,25 +61,16 @@ const _layout = () => {
         options={{
           tabBarLabel: "Track",
           tabBarIcon: ({ focused }) => (
-            <Track
-              width={24}
-              height={24}
-              fill={focused ? "#007AFF" : "#8e8e93"}
-            />
+            <Track width={24} height={24} fill={focused ? "#007AFF" : "#8e8e93"} />
           ),
         }}
       />
-
       <Tabs.Screen
         name="(profile)"
         options={{
           tabBarLabel: "Profile",
           tabBarIcon: ({ focused }) => (
-            <Profile
-              width={24}
-              height={24}
-              fill={focused ? "#007AFF" : "#8e8e93"}
-            />
+            <Profile width={24} height={24} fill={focused ? "#007AFF" : "#8e8e93"} />
           ),
         }}
       />
@@ -76,4 +78,4 @@ const _layout = () => {
   );
 };
 
-export default _layout;
+export default _layout;

@@ -10,8 +10,8 @@ import BookingIcon from "../../../assets/svgIcons/BooingIcon";
 import Rebook from "../../../assets/svgIcons/Rebook";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Feather from "@expo/vector-icons/Feather";
-import TextStyles from "../../TextStyles/TextStyles";
-
+// import TextStyles from "../../TextStyles/TextStyles";
+import { Platform } from "react-native";
 // data
 const orders = [
   {
@@ -32,52 +32,7 @@ const orders = [
     date: "13-05-2025",
     type: "Electronics",
   },
-  // {
-  //   id: "CW254617",
-  //   status: "Delivered",
-  //   date: "13-05-2025",
-  //   type: "Electronics",
-  // },
-];
-//dynamic colors getStatusStyle
-// const getStatusStyle = (status) => {
-//   switch (status.toLowerCase()) {
-//     case 'In-Transit':
-//       return {
-//         backgroundColor: '#E7E7E7',
-//         color: '#252525',
-//         borderWidth: 1,
-//         //  borderColor: '#252525',
-//       };
-//     case 'Awaiting pickup':
-//       return {
-//        backgroundColor: '#E7E7E7',
-//         color: '#eee',
-//         borderWidth: 1,
-//         // justifyContent:'center',
-//         // alignItems:'center'
-//         //  borderColor: '#252525',
-//       };
-//     case 'cancelled':
-//       return {
-//         backgroundColor: '#e7210fff',
-//         color: '#eee',
-//       borderWidth: 0
-//       };
-//     case 'delivered':
-//       return {
-//         backgroundColor: '#3ea340ff',
-//         color: '#eee',
-//       borderWidth: 0
-//       };
-//     default:
-//       return {
-//         backgroundColor: '#eee',
-//         color: '#333',
-//         borderColor: '#ccc',
-//       };
-//   }
-// };
+]
 
 export default function MyOrders() {
   const router = useRouter();
@@ -86,7 +41,8 @@ export default function MyOrders() {
   return (
     <ScrollView
       contentContainerStyle={styles.main}
-      // showsVerticalScrollIndicator={false}
+       showsVerticalScrollIndicator={false}
+
     >
       <Stack.Screen
         options={{
@@ -94,7 +50,13 @@ export default function MyOrders() {
             return (
               <View
                 style={{
-                  backgroundColor: "#f8f8ff",
+                  backgroundColor: "#F8F8ff",
+                 paddingTop:Platform.select({
+                     android:20,
+                     ios:20,
+                     web:30
+                 }),
+
                   paddingTop: inserts.top + 20,
                   flexDirection: "row",
                   alignItems: "center",
@@ -107,6 +69,7 @@ export default function MyOrders() {
                     padding: 6,
                     borderRadius: 16,
                     marginLeft: 20,
+                      // marginBottom:20
                   }}
                 >
                   <Feather name="chevron-left" size={20} color="black" />
@@ -117,6 +80,7 @@ export default function MyOrders() {
                     fontWeight: "500",
                     marginLeft: 10,
                     color: "#252525",
+                    //  marginBottom:20
                   }}
                 >
                   {" "}
@@ -177,7 +141,7 @@ export default function MyOrders() {
 
             {order.status === "Awaiting pickup" && (
               <View style={styles.insuredTag}>
-                <Text style={[TextStyles.STYLE_1_A22]}>Insured parcel</Text>
+                <Text>Insured parcel</Text>
               </View>
             )}
           </View>
@@ -216,9 +180,26 @@ const styles = StyleSheet.create({
   main: {
     padding: 10,
     paddingBottom: 30,
-    backgroundColor: "#f8f8ff",
-    // flex:1,
+     backgroundColor: "#F8F8ff",
+    //  backgroundColor: Platform.select({
+    // ios: "100%",
+    // android: "100%",
+    // web: "40%",
+    // default: "40%", 
+    
+  // }),
+    //  flex:1,
+      alignSelf: "center",
     marginBottom: 40,
+    // marginTop:10,
+      width: Platform.select({
+    ios: "100%",
+    android: "100%",
+    web: "50%",
+    default: "40%", 
+    
+  }),
+
   },
   container: {
     padding: 20,
@@ -226,6 +207,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     elevation: 2,
     marginTop: 20,
+     marginBottom:10,
     marginHorizontal: 10,
   },
   iconWrapper: {
@@ -262,34 +244,19 @@ const styles = StyleSheet.create({
   },
   
   labels: {
-    // borderWidth:1,
+    //  borderWidth:1,
     fontSize: 14,
     color: "#252525",
     fontWeight: "500",
   },
   value: {
-    // borderWidth:1,
-    fontSize: 10,
+    //  borderWidth:1,
+    fontSize: 12,
     color: "#6D6D6D",
     fontWeight: "500",
     marginLeft:2,
   },
-  //  status: {
-  //   fontSize: 14,
-  //   paddingHorizontal: 15,
-  //   paddingVertical: 6,
-  //  backgroundColor: '#E7E7E7',
-  //   borderRadius: 20,
-  //   borderWidth: 1,
-  //   borderColor: '#000000',
-  //   color: '#252525',
-  //   fontWeight: '500',
-  //  // maxWidth: 90,
-  //   flexWrap: 'wrap',
-  //    // lineHeight: 18,
-  //    textAlign: 'center',
-
-  // },
+ 
   actionsRow: {
     flexDirection: "row",
     alignItems: "center",
@@ -321,7 +288,7 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 14,
     fontWeight: "500",
-    backgroundColor: "#454545",
+    backgroundColor: "#093C31",
     //paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: 4,

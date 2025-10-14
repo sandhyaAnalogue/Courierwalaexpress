@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "sandhyadayyala",
     "name": "CorierwalaExpress",
     "slug": "MyApp",
     "version": "1.0.0",
@@ -16,7 +17,11 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.dsandhya.MyApp"
+      "package": "com.sandhyadayyala.MyApp",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -40,8 +45,8 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "recordAudioAndroid": true
         }
-      ]
-
+      ],
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true
@@ -49,7 +54,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "ddd87397-8b05-4f6a-b3a7-c8e2f629f6a0"
+        "projectId": "51eb5598-58fd-4ad6-8e05-90c88128003c"
       }
     }
   }

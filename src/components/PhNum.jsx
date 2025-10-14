@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     paddingHorizontal: 10,
     marginBottom: 20,
-    marginRight: 30,
+    marginRight: 20,
   },
   countryCode: {
     fontSize: 16,

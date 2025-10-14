@@ -8,32 +8,45 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 
-const CourierTypeDropDown = ({ data, onSelect, placeholder, textStyle,textStyle1 }) => {
+const CourierTypeDropDown = ({
+  data = [],
+  onSelect,
+  placeholder = "Select an option",
+  textStyle,
+  textStyle1,
+  error,
+  value,
+}) => {
   const [visible, setVisible] = useState(false);
-  const [selected, setSelected] = useState(null);
 
   const toggleDropdown = () => setVisible(!visible);
 
   const handleSelect = (item) => {
-    setSelected(item);
     setVisible(false);
-    onSelect?.(item);
+    onSelect?.(item); 
   };
+
+  const selectedItem = data.find((item) => item.value === value);
 
   return (
     <View style={styles.dropdownContainer}>
-      <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownButton}>
-        {/* Wrap Text in a flex:1 View to center it */}
+      <TouchableOpacity
+        onPress={toggleDropdown}
+        style={[
+          styles.dropdownButton,
+          error && styles.dropdownButtonError, 
+        ]}
+      >
         <View style={{ flex: 1 }}>
           <Text
             style={[
               styles.dropdownText,
-              !selected && styles.placeholderText,
+              !selectedItem && styles.placeholderText,
               textStyle,
             ]}
-            numberOfLines={1} // prevent overflow
+            numberOfLines={1}
           >
-            {selected ? selected.label : placeholder}
+            {selectedItem ? selectedItem.label : placeholder}
           </Text>
         </View>
 
@@ -44,26 +57,45 @@ const CourierTypeDropDown = ({ data, onSelect, placeholder, textStyle,textStyle1
         />
       </TouchableOpacity>
 
+      {error && <Text style={styles.errorText}>{error}</Text>}
+
       {visible && (
         <View style={styles.dropdown}>
-          {data.map((item) => (
-            <TouchableOpacity
-              key={item.value}
-              style={[styles.dropdownItem,textStyle1,]}
-              onPress={() => handleSelect(item)}
-            >
-              <Text>{item.label}</Text>
-            </TouchableOpacity>
-          ))}
+          <ScrollView style={{ maxHeight: 200 }}>
+            {data.map((item) => (
+              <TouchableOpacity
+                key={item.value}
+                style={[
+                  styles.dropdownItem,
+                  textStyle1,
+                  selectedItem?.value === item.value &&
+                    styles.selectedDropdownItem,
+                ]}
+                onPress={() => handleSelect(item)}
+              >
+                <Text
+                  style={[
+                    selectedItem?.value === item.value &&
+                      styles.selectedDropdownText,
+                  ]}
+                >
+                  {item.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
       )}
     </View>
   );
 };
 
+
+
+
 export default CourierTypeDropDown;
 
-    const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     backgroundColor: "#f8f8ff",
     paddingHorizontal: 20,
@@ -76,14 +108,10 @@ export default CourierTypeDropDown;
     fontWeight: "500",
     marginTop: 20,
     marginBottom: 6,
-    // backgroundColor:'red'
   },
   dropdownContainer: {
     marginBottom: 12,
-    position: 'relative',
-    // borderWidth:1,
-    
-
+    position: "relative",
   },
   dropdownButton: {
     borderWidth: 1,
@@ -95,7 +123,57 @@ export default CourierTypeDropDown;
     justifyContent: "space-between",
     alignItems: "center",
   },
-   dropdownButton2: {
+  dropdownButtonError: {
+    borderColor: "red", // Red border when error exists
+    borderWidth: 1, // Make it slightly thicker for visibility
+  },
+  dropdownText: {
+    fontSize: 12,
+    color: "#252525",
+    fontWeight: "500",
+  },
+  placeholderText: {
+    color: "#888888",
+    fontWeight: "400",
+    fontSize: 12,
+  },
+  dropdown: {
+    marginTop: 4,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 6,
+    backgroundColor: "#fff",
+    padding: 8,
+    position: "absolute",
+    zIndex: 1000,
+    width: "100%",
+    top: 45,
+    maxHeight: 200, // Limit height
+    elevation: 5, // For Android shadow
+    shadowColor: "#000", // For iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  dropdownItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#eee",
+  },
+  selectedDropdownItem: {
+    backgroundColor: "#f0f0f0", // Highlight selected item
+  },
+  selectedDropdownText: {
+    fontWeight: "600",
+    color: "#093C31", // Green color for selected item
+  },
+  errorText: {
+    color: "red",
+    fontSize: 10,
+    marginTop: 4,
+    marginLeft: 5,
+  },
+  dropdownButton2: {
     borderWidth: 1,
     borderColor: "#aaa",
     borderRadius: 6,
@@ -105,142 +183,96 @@ export default CourierTypeDropDown;
     justifyContent: "space-between",
     alignItems: "center",
   },
-  dropdownText: {
-    fontSize: 12,
-    color: "#252525",
-    fontWeight:'500'
-  },
-  placeholderText: {
-    color: "#888888",
-    fontWeight: "400",
-    //  textAlign: 'left', 
-    fontSize:12,
-  },
-   placeholderText2: {
+  placeholderText2: {
     color: "#e6dfdfff",
     fontWeight: "400",
-    fontSize:12,
-    //  textAlign: 'left', 
-     gap:10
+    fontSize: 12,
+    gap: 10,
   },
-
   dropdownIcon: {},
-  dropdown: {
-    marginTop: 4,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 6,
-    backgroundColor: "#fff",
-    padding: 8,
-    position: 'absolute',
-    zIndex: 1000, 
-    width: '100%',
-    top:45,
-  },
-  dropdownItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
-  },
   textInput: {
-    flex:1,
+    flex: 1,
     height: 40,
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 6,
-    // paddingHorizontal: 6,
     marginVertical: 12,
-    marginHorizontal:6,
+    marginHorizontal: 6,
     backgroundColor: "#fff",
-    fontSize:12,
-    
-
-  },
-  row:{
-    
-    flexDirection: 'row',
-    gap: 10,
-    paddingHorizontal:20 // Optional: for spacing between inputs
-  
-  },
-  textInputDropdown:{
-    // backgroundColor:'red'
-  },
-  
-  card: {
-    borderWidth: 0.2,
-    // borderColor: '#007aff',
-    borderRadius: 8,
-    padding: 16,
-    backgroundColor: '#fff',
-    margin: 10,
+    fontSize: 12,
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    gap: 10,
+    paddingHorizontal: 20,
+  },
+  textInputDropdown: {},
+  card: {
+    borderWidth: 0.2,
+    borderRadius: 8,
+    padding: 16,
+    backgroundColor: "#fff",
+    margin: 10,
   },
   name: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: "500",
     marginBottom: 4,
-    color:'#000000'
+    color: "#000000",
   },
   phone: {
     fontSize: 10,
-    color: '#5D5D5D',
-       fontWeight: '500',
+    color: "#5D5D5D",
+    fontWeight: "500",
   },
   callButton: {
-    backgroundColor: '#252525',
+    backgroundColor: "#252525",
     paddingVertical: 4,
     paddingHorizontal: 12,
     borderRadius: 6,
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'flex-end',
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-end",
   },
   callText: {
-    color: '#fff',
-    fontWeight: '600',
+    color: "#fff",
+    fontWeight: "600",
     marginLeft: 6,
     fontSize: 12,
   },
   arrivalText: {
     fontSize: 12,
-    color: '#5D5D5D',
+    color: "#5D5D5D",
     marginTop: 6,
-    fontWeight:'500'
+    fontWeight: "500",
   },
   chatButton: {
     marginTop: 16,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderRadius: 6,
     paddingVertical: 10,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   chatText: {
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: "500",
     marginLeft: 8,
-    fontWeight:500
   },
-   slotsContainer: {
+  slotsContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
   },
-   slotsContainer2: {
+  slotsContainer2: {
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    // paddingHorizontal:15
   },
   slotButton: {
-    width: "30%", // 3 per row
+    width: "30%",
     paddingVertical: 10,
     paddingHorizontal: 8,
     borderRadius: 4,
@@ -250,30 +282,14 @@ export default CourierTypeDropDown;
     marginBottom: 12,
     alignItems: "center",
   },
-  //  slotButton2: {
-  //   width: "30%", // 3 per row
-  //   paddingVertical: 10,
-  //   //  paddingHorizontal:8,
-  //   borderRadius: 4,
-  //   borderWidth: 0.2,
-  //   borderColor: "#252525",
-  //   backgroundColor: "#E7E7E7",
-  //   marginBottom: 12,
-  //   alignItems: "center",
-  // },
-  
   selectedSlotButton: {
     backgroundColor: "#252525",
     borderColor: "#252525",
   },
-  //  selectedSlotButton2: {
-  //   backgroundColor: "#252525",
-  //   borderColor: "#252525",
-  // },
   slotText: {
     fontSize: 12,
     color: "#252525",
-    fontWeight:'400'
+    fontWeight: "400",
   },
   selectedSlotText: {
     color: "#fff",
@@ -284,91 +300,45 @@ export default CourierTypeDropDown;
     fontSize: 14,
     color: "#252525",
   },
-  ////////////////Packe values////////////////////
   priceButton2: {
-  width: "30%", // 3 buttons per row
-  paddingVertical: 10,
-  // paddingHorizontal: 15,
-  borderRadius: 4,
-  borderWidth: 1,
-  borderColor: "#ccc",
-  backgroundColor: "#E7E7E7",
-  marginBottom: 12,
-  alignItems: "center",
-  justifyContent: "center",
-},
-
-selectedPiceButton2: {
-  backgroundColor: "#252525",
-  borderColor: "#252525",
-},
-
-selectedPiceText: {
-  color: "#F6F6F6",
-  fontWeight: "600",
-},
-
-slotText2: {
-  color: "#252525",
-  fontWeight: "500",
-  fontSize: 12,
-},
-
-// slotsContainer: {
-//   flexDirection: "row",
-//   flexWrap: "wrap",
-//   justifyContent: "space-between",
-// },
-
-
-
-
-// ///////////Price Esimations/////////////////
-// buttonContainers: {
-//   flexDirection: 'row',
-//   alignItems: 'center',
-//   justifyContent: 'space-between',
-//   backgroundColor: '#252525',
-//   paddingVertical: 12,
-//   paddingHorizontal: 20,
-//   paddingLeft:100,
-//   paddingRight:40,
-//   borderRadius: 10,
-//   marginBottom: 12,
-// },
-
-// buttonText: {
-//   color: '#F6F6F6',
-//   fontWeight: '600',
-//   fontSize: 12,
-//   textAlign: 'center',
-//   // flex: 1, // takes available space between icons
-// },
-
-// iconLeft: {
-//   marginRight: 10,
-// },
-
-// iconRight: {
-//   marginLeft: 40,
-// },
-//////////////////Price esimations///////////////
-
+    width: "30%",
+    paddingVertical: 10,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    backgroundColor: "#E7E7E7",
+    marginBottom: 12,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  selectedPiceButton2: {
+    backgroundColor: "#252525",
+    borderColor: "#252525",
+  },
+  selectedPiceText: {
+    color: "#F6F6F6",
+    fontWeight: "600",
+  },
+  slotText2: {
+    color: "#252525",
+    fontWeight: "500",
+    fontSize: 12,
+  },
   containers: {
     alignItems: "center",
     marginTop: 40,
   },
   buttonContainers: {
-   flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  backgroundColor: '#252525',
-  paddingVertical: 12,
-  paddingHorizontal: 30,
-  paddingLeft:100,
-  paddingRight:40,
-  borderRadius: 10,
-  marginBottom: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#252525",
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    paddingLeft: 100,
+    paddingRight: 40,
+    borderRadius: 10,
+    marginBottom: 12,
   },
   buttonText: {
     color: "#fff",
@@ -398,7 +368,7 @@ slotText2: {
   estimateText: {
     marginLeft: 8,
     color: "#000",
-    fontSize:12,
+    fontSize: 12,
     fontWeight: "500",
   },
   priceButtons: {
@@ -410,8 +380,6 @@ slotText2: {
   priceText: {
     color: "#F6F6F6",
     fontWeight: "600",
-    fontSize:14
+    fontSize: 14,
   },
-
-
 });

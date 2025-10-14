@@ -1,5 +1,6 @@
 import { useLocalSearchParams } from "expo-router";
 import {
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -18,7 +19,7 @@ import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import { PDFDocument, Page, rgb } from "react-native-pdf-lib";
+
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import * as Print from "expo-print";
@@ -173,87 +174,190 @@ export default function ordersDetailsScreen() {
 
   // DOWNLOAD-INVOICE START
   const handleDownload = async () => {
-    try {
-      const order = orders[0];
+  try {
+    const order = orders[0];
 
-      const htmlContent = `
+    const htmlContent = `
       <html>
         <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
           <style>
             body {
               font-family: Arial, sans-serif;
-              padding: 40px;
+              padding: 30px;
               line-height: 1.6;
               color: #333;
+              max-width: 100%;
             }
-            h2 {
+            .header {
               text-align: center;
               margin-bottom: 30px;
+              border-bottom: 2px solid #333;
+              padding-bottom: 15px;
+            }
+            .section {
+              margin-bottom: 20px;
             }
             .row {
               display: flex;
               justify-content: space-between;
-              margin-bottom: 10px;
+              margin-bottom: 12px;
+              padding: 8px 0;
+              border-bottom: 1px solid #eee;
             }
             .label {
               font-weight: bold;
-              width: 150px; /* adjust width for alignment */
+              width: 40%;
+              color: #252525;
             }
             .value {
-              flex: 1; /* value takes remaining space */
+              flex: 1;
               text-align: left;
+              color: #6D6D6D;
+            }
+            .total-row {
+              margin-top: 25px;
+              padding-top: 15px;
+              border-top: 2px solid #333;
+              font-weight: bold;
+              font-size: 18px;
+              background-color: #f8f8f8;
+              padding: 15px;
+              border-radius: 5px;
+            }
+            .footer {
+              margin-top: 30px;
+              text-align: center;
+              color: #666;
+              font-size: 12px;
+              border-top: 1px solid #ddd;
+              padding-top: 15px;
             }
           </style>
         </head>
         <body>
-          <h2>Invoice - ${order.bookingId}</h2>
-
-          <div class="row">
-            <div class="label">Item Name:</div>
-            <div class="value">${order.itemName}</div>
-          </div>
-          <div class="row">
-            <div class="label">Courier Type:</div>
-            <div class="value">${order.courierType}</div>
-          </div>
-          <div class="row">
-            <div class="label">Total Amount:</div>
-            <div class="value">₹${order.totalAmount}</div>
-          </div>
-          <div class="row">
-            <div class="label">Pickup Address:</div>
-            <div class="value">${order.pickupAddress}</div>
-          </div>
-          <div class="row">
-            <div class="label">Drop Address:</div>
-            <div class="value">${order.dropAddress}</div>
-          </div>
-          <div class="row">
-            <div class="label">Booking Date:</div>
-            <div class="value">${order.date}</div>
-          </div>
-          <div class="row">
-            <div class="label">Booking Time:</div>
-            <div class="value">${order.bookingTime}</div>
+          <div class="header">
+            <h1>INVOICE</h1>
+            <h3>Booking ID: ${order.bookingId}</h3>
+            <p>Status: ${order.status}</p>
           </div>
 
+          <div class="section">
+            <h3>Package Details</h3>
+            <div class="row">
+              <div class="label">Item Name:</div>
+              <div class="value">${order.itemName}</div>
+            </div>
+            <div class="row">
+              <div class="label">Courier Type:</div>
+              <div class="value">${order.courierType}</div>
+            </div>
+            <div class="row">
+              <div class="label">Dimensions & Weight:</div>
+              <div class="value">${order.dimensions}</div>
+            </div>
+            <div class="row">
+              <div class="label">Booking Mode:</div>
+              <div class="value">${order.bookingMode}</div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Timeline</h3>
+            <div class="row">
+              <div class="label">Booking Date:</div>
+              <div class="value">${order.date}</div>
+            </div>
+            <div class="row">
+              <div class="label">Booking Time:</div>
+              <div class="value">${order.bookingTime}</div>
+            </div>
+            <div class="row">
+              <div class="label">Pickup Date:</div>
+              <div class="value">${order.pickupdate}</div>
+            </div>
+            <div class="row">
+              <div class="label">Pickup Time:</div>
+              <div class="value">${order.pickupTime}</div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Address Details</h3>
+            <div class="row">
+              <div class="label">Pickup Address:</div>
+              <div class="value">${order.pickupAddress}</div>
+            </div>
+            <div class="row">
+              <div class="label">Drop Address:</div>
+              <div class="value">${order.dropAddress}</div>
+            </div>
+          </div>
+
+          <div class="section">
+            <h3>Recipient Details</h3>
+            <div class="row">
+              <div class="label">Recipient Name:</div>
+              <div class="value">${order.reciepientName}</div>
+            </div>
+            <div class="row">
+              <div class="label">Recipient Number:</div>
+              <div class="value">${order.reciepientNumber}</div>
+            </div>
+          </div>
+
+          <div class="total-row">
+            <div class="row">
+              <div class="label">Total Amount:</div>
+              <div class="value">₹${order.totalAmount}</div>
+            </div>
+          </div>
+
+          <div class="footer">
+            <p>Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
+            <p>* Final price may vary after physical verification during pickup</p>
+          </div>
         </body>
       </html>
     `;
 
-      const { uri } = await Print.printToFileAsync({ html: htmlContent });
-      await Sharing.shareAsync(uri);
-    } catch (error) {
-      console.log("Error generating PDF: ", error);
+    // Generate PDF with better configuration
+    const { uri } = await Print.printToFileAsync({
+      html: htmlContent,
+      base64: false,
+      width: 595, // A4 width in points
+      height: 842, // A4 height in points
+    });
+
+    console.log('PDF generated at:', uri);
+
+    // Check if sharing is available
+    const isSharingAvailable = await Sharing.isAvailableAsync();
+    
+    if (isSharingAvailable) {
+      // Share the PDF
+      await Sharing.shareAsync(uri, {
+        mimeType: 'application/pdf',
+        dialogTitle: 'Download Invoice',
+        UTI: 'com.adobe.pdf'
+      });
+    } else {
+      // Fallback: Show alert with file path
+      alert(`PDF generated successfully!\nFile saved at: ${uri}`);
     }
-  };
+
+  } catch (error) {
+    console.error("Error generating PDF: ", error);
+    alert("Failed to generate PDF. Please try again.");
+  }
+};
 
   // DOWNLOAD-INVOICE END
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
+    // <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
       <ScrollView>
-        <View style={{paddingBottom:10,}}>
+        <View style={{backgroundColor:"#f8f8ff",}}>
           <View style={styles.container}>
             {/* STACK-SCREEN */}
             <Stack.Screen
@@ -586,9 +690,13 @@ export default function ordersDetailsScreen() {
             </Text>
           </View>
           {/* LIVE-TRACKING END */}
+
+          <Pressable onPress={router.navigate("/screens/paymentMethodScreen")}>
+            <Text>Payent</Text>
+          </Pressable>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    // </SafeAreaView>
   );
 }
 
@@ -597,12 +705,13 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: "#FFFFFF",
-    marginTop: 10,
+    marginTop: 30,
     marginBottom: 10,
     marginHorizontal: 20,
     paddingHorizontal: 21,
     elevation: 5,
     borderRadius: 10,
+    // borderWidth:1,
   },
   rowBetween: {
     flexDirection: "row",
@@ -900,7 +1009,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   callButton: {
-    backgroundColor: "#252525",
+    backgroundColor: "#093C31",
     paddingVertical: 4,
     paddingHorizontal: 12,
     borderRadius: 6,
@@ -939,7 +1048,7 @@ const styles = StyleSheet.create({
   },
   downloadContainer: {
     flexDirection: "row",
-    backgroundColor: "#000000",
+    backgroundColor: "#093C31",
     alignItems: "center",
     justifyContent: "center",
     width: "42%",

@@ -33,6 +33,10 @@ const CourierBookingScreen = () => {
     router.navigate("/(instantBooking)");
   };
 
+  const handleScheduleBooking = ()=>{
+    router.navigate("/(scheduleBooking)")
+  }
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
       <ScrollView>
@@ -69,7 +73,7 @@ const CourierBookingScreen = () => {
               </View>
             </Pressable>
 
-            <Pressable style={[styles.LightbookCard, styles.lightCard]}>
+            <Pressable style={[styles.LightbookCard, styles.lightCard]} onPress={handleScheduleBooking}>
               <View style={{ marginVertical: 25 }}>
                 <CalenderIcon
                   width={Platform.select({ web: 26, default: 20 })}

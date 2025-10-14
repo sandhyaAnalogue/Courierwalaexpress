@@ -146,6 +146,7 @@ export default function TrackOrder() {
         keyboardShouldPersistTaps="handled"
       >
         {status && (
+          <View style={styles.contentwrapper}>
           <View style={styles.detailsCard}>
             {/* Booking Header */}
             <View style={styles.headerRow}>
@@ -174,6 +175,9 @@ export default function TrackOrder() {
                     textAlign: "center",
                     backgroundColor:
                       status === "Cancelled" ? "#FF0000" : "#d6dce7ff",
+  
+  
+
                   }}
                 >
                   {status}
@@ -239,6 +243,7 @@ export default function TrackOrder() {
                 currentStep={currentStep}
                 steps={steps}
                 onStepPress={onStepPress}
+                
               />
             </View>
 
@@ -254,7 +259,9 @@ export default function TrackOrder() {
               Live Tracking
             </Text>
           </View>
+          </View>
         )}
+        
       </ScrollView>
     </View>
   );
@@ -263,12 +270,17 @@ export default function TrackOrder() {
 const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-  scrollView: { flex: 1 },
+  scrollView: { flex: 1,},
   scrollContent: { paddingBottom: 30 },
   dropdownWrapper: {
     marginTop: 20,
     marginHorizontal: 18,
     zIndex: 10,
+    
+  },
+  contentwrapper:{
+    marginHorizontal:12
+
   },
   dropdown: {
     height: 50,
@@ -276,6 +288,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     paddingHorizontal: 11,
+     width: Platform.select({
+    ios: "100%",
+    android: "100%",
+    web: "50%",
+    default: "40%", 
+    // textAlign:'center'
+    
+  }),
+  alignSelf:'center'
+    
+
   },
   placeholderStyle: {
     fontSize: 14,
@@ -306,6 +329,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginBottom: 30,
     marginTop: 20,
+     width: Platform.select({
+    ios: "100%",
+    android: "100%",
+    web: "50%",
+    default: "40%", 
+    // textAlign:'center'
+    
+  }),
+  alignSelf:'center'
   },
   headerRow: {
     flexDirection: "row",
@@ -364,7 +396,10 @@ const styles = StyleSheet.create({
    detailBoxRight: {
    
     //  borderWidth:1,
-      width:'35%'
+      width:Platform.select({
+        android:'35%',
+        ios:'40%',web:'20%'
+      })
   
     
   },
@@ -415,5 +450,5 @@ const styles = StyleSheet.create({
   statusBadge: {
     borderRadius: 20,
     overflow: "hidden",
-  },
+  },
 });
