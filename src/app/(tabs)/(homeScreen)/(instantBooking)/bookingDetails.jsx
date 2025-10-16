@@ -14,6 +14,7 @@ import DownLoadIcon from "../../../../assets/svgIcons/DownLoadIcon";
 // import Rebook from '../../../assets/svgIcons/Rebook';
 import Feather from "@expo/vector-icons/Feather";
 import { Stack } from "expo-router";
+import { useSearchParams } from "expo-router/build/hooks";
 import { useState } from "react";
 import {
   SafeAreaView,
@@ -155,6 +156,10 @@ export default function ordersDetailsScreen() {
   const inserts = useSafeAreaInsets();
   const [selectedSize, setSelectedSize] = useState(null);
   const router = useRouter();
+  const params = useSearchParams();
+
+  const booking = params.booking ? JSON.parse(params.booking) : null;
+  console.log(booking,"paramsDATA")
   // const orders = orders[0].find(o => o.bookingId === id);
 
   // if (!orders) {

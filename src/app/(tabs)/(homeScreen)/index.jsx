@@ -15,8 +15,11 @@ import PlusIcon from "../../../assets/svgIcons/PlusIcon";
 import RiderIcon from "../../../assets/svgIcons/RiderIcon";
 import TransitIcon from "../../../assets/svgIcons/TransitIcon";
 import Curousel from "../../../components/Curousel";
+import HybridStorage from "../../../utils/helpers/HybridStorage";
+import { bookingDetailsApi } from "../../../services/apiCalls";
 
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useEffect } from "react";
 import { Stack, useRouter } from "expo-router";
 import { StatusBar } from "react-native";
 import { Platform } from "react-native";
@@ -29,6 +32,31 @@ const Home = () => {
   const router = useRouter();
   const inserts = useSafeAreaInsets();
   const [rideModalVisible, setRideModalVisible] = useState(false);
+  const [userName, setUserName] = useState();
+  const [allBookings, setAllBookings] = useState([]);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const profile = await HybridStorage.getItem("profileInfo");
+      console.log(profile.name, "retrieved profile");
+      setUserName(profile.name);
+    };
+    fetchProfile();
+  }, []);
+
+  //BOOKING-DETAILS API
+  useEffect(() => {
+    const bookingDetails = async () => {
+      try {
+        const res = await bookingDetailsApi();
+        console.log("BOOKING-DETAILS", res?.data.bookings);
+        setAllBookings(res?.data.bookings);
+      } catch (error) {
+        console.log(error.response, "error from all bookings");
+      }
+    };
+    bookingDetails();
+  }, []);
 
   const handleBookings = () => {
     router.push("(tabs)/(homeScreen)/bookCourier");
@@ -37,8 +65,6 @@ const Home = () => {
   const handleRide = () => {
     setRideModalVisible(true);
   };
-
-  
 
   const ordersData = [
     {
@@ -134,7 +160,7 @@ const Home = () => {
                       }}
                     >
                       {" "}
-                      Sandhya
+                      {userName}
                     </Text>
                   </View>
                   <View style={{ marginRight: 30 }}>
@@ -147,9 +173,11 @@ const Home = () => {
         />
 
         <View style={styles.container}>
+          {/* BANNER-START */}
           <View style={styles.slider}>
             <Curousel styleImg={styles.img} />
           </View>
+          {/* BANNER-END */}
 
           <View style={styles.bookingModes}>
             <Text style={styles.bookingtext}>Booking Modes</Text>
@@ -239,7 +267,7 @@ const Home = () => {
             >
               Recent bookings
             </Text>
-            {recentBookings.map((booking, index) => (
+            {allBookings.map((booking, index) => (
               <View key={index} style={styles.bookingCard}>
                 <View style={{ flexDirection: "row", gap: 5 }}>
                   <View style={styles.Bookingordericon}>
@@ -248,18 +276,26 @@ const Home = () => {
 
                   <View style={styles.bookingInfo}>
                     <Text style={styles.bookingId}>Booking ID</Text>
-                    <Text style={styles.bookingValue}>{booking.id}</Text>
+                    <Text style={styles.bookingValue}>{booking.bookingId}</Text>
                   </View>
                 </View>
 
                 <View style={styles.CourierInfo}>
                   <Text style={styles.bookingId1}>Courier Type</Text>
-                  <Text style={styles.bookingValue1}>{booking.type}</Text>
+                  <Text style={styles.bookingValue1}>
+                    {booking.courierType}
+                  </Text>
                 </View>
 
                 <Pressable
                   style={styles.detailsBtn}
-                  onPress={() => alert(`Details of ${booking.id}`)}
+                  onPress={() =>
+                    router.navigate(
+                      `/(instantBooking)/bookingDetails?booking=${encodeURIComponent(
+                        JSON.stringify(booking)
+                      )}`
+                    )
+                  }
                 >
                   <Text style={styles.detailsBtnText}>View Details</Text>
                 </Pressable>
@@ -297,6 +333,7 @@ const styles = StyleSheet.create({
     }),
     //  marginTop: 10,
     // borderWidth: 1,
+    paddingLeft: 5,
     // width:"90%"
   },
   img: {

@@ -21,21 +21,24 @@ import * as Yup from "yup";
 
 import Feather from "@expo/vector-icons/Feather";
 import { ScrollView } from "react-native";
-import InputField from "../../../../components/InputField";
+// import InputField from "../../../../components/InputField";
 import Location from "../../../../assets/svgIcons/Location";
 import UploadIcon from "../../../../assets/svgIcons/uploadIcon";
 import RemoveImgIcon from "../../../../assets/svgIcons/removeImgIcon";
-import Stepper from "../../../../components/Stepper";
+// import Stepper from "../../../../components/Stepper";
 import CourierTypeDropDown from "../../../../components/courierTypeDropDown";
 import { InputDropdown } from "../../../../components/bookForOthers";
 import CalculatorIcon from "../../../../assets/svgIcons/calculatorIcon";
 import CalculatorIconBlack from "../../../../assets/svgIcons/calculatorIconBlack";
 import RightArrowIcon from "../../../../assets/svgIcons/rightArrowIcon";
+import CustomInput from "../../../../components/CustomInput";
 
 import * as ImagePicker from "expo-image-picker";
 import Checkbox from "expo-checkbox";
 import { useState } from "react";
-import { error } from "pdf-lib";
+// import { error, values } from "pdf-lib";
+import { instantBooking } from "../../../../services/apiCalls";
+import { EstimatePrice } from "../../../../services/apiCalls";
 
 const screenHeight = Dimensions.get("window").height;
 
@@ -56,30 +59,119 @@ const parcelDetailsValidationSchema = Yup.object().shape({
     .positive("Weight must be positive")
     .min(0.5, "Weight must be at least 0.5kg")
     .max(999, "Weight cannot exceed 999kg"),
-  pickupAddress: Yup.string().required("Pickup address is required"),
-  dropAddress: Yup.string().required("Drop address is required"),
+
+  pickupLocation: Yup.object().shape({
+    address: Yup.string().required("Pickup address is required"),
+  }),
+  dropLocation: Yup.object().shape({
+    address: Yup.string().required("Drop address is required"),
+  }),
+
   courierSize: Yup.string().required("Service type is required"),
   specialInstructions: Yup.string(),
-  packageImages: Yup.array().min(1, "At least one package image is required"),
+
   insurance: Yup.boolean(),
-  insuredValue: Yup.string().when("insurance", {
+  //  insuredValue: Yup.string().test(
+  //     "insuredValue-required",
+  //     "Insured value is required when insurance is selected",
+  //     function (value) {
+  //       const { insurance } = this.parent;
+  //       return !insurance || (insurance && value && value.trim() !== "");
+  //     }
+  //   ),
+  //  acceptInsuranceTerms: Yup.boolean().test(
+  //     "acceptInsuranceTerms-required",
+  //     "You must accept insurance terms",
+  //     function (value) {
+  //       const { insurance } = this.parent;
+  //       return !insurance || (insurance && value === false);
+  //     }
+  //   ),
+
+  // recipientName: Yup.string().required("Recipient name is required"),
+  // recipientContact: Yup.string()
+  //   .required("Recipient mobile is required")
+  //   .matches(/^\d{10}$/, "Enter a valid 10-digit mobile number"),
+
+  recipientName: Yup.string().when("isBookingForSomeoneElse", {
     is: true,
-    then: Yup.string().required(
-      "Insured value is required when insurance is selected"
-    ),
+    then: (schema) => schema.required("Recipient name is required"),
+    otherwise: (schema) => schema.notRequired(),
   }),
-  acceptInsuranceTerms: Yup.boolean().when("insurance", {
+  recipientContact: Yup.string().when("isBookingForSomeoneElse", {
     is: true,
-    then: Yup.boolean().oneOf([true], "You must accept insurance terms"),
-  }),
-  bookOnBehalf: Yup.object().shape({
-    name: Yup.string().required("Recipient name is required"),
-    mobile: Yup.string()
-      .required("Recipient mobile is required")
-      .matches(/^\d{10}$/, "Enter a valid 10-digit mobile number"),
+    then: (schema) =>
+      schema
+        .required("Recipient contact is required")
+        .matches(/^\d{10}$/, "Enter valid 10 digit number"),
+    otherwise: (schema) => schema.notRequired(),
   }),
 });
 
+// const parcelDetailsValidationSchema = Yup.object().shape({
+//   courierType: Yup.string()
+//     .required("Courier type is required"),
+
+//   itemName: Yup.string()
+//     .required("Item name is required"),
+
+//   width: Yup.number()
+//     .nullable()
+//     .required("Width is required")
+//     .positive("Width must be positive")
+//     .min(1, "Width must be at least 1cm"),
+
+//   height: Yup.number()
+//     .nullable()
+//     .required("Height is required")
+//     .positive("Height must be positive")
+//     .min(1, "Height must be at least 1cm"),
+
+//   weight: Yup.number()
+//     .nullable()
+//     .required("Weight is required")
+//     .positive("Weight must be positive")
+//     .min(0.5, "Weight must be at least 0.5kg")
+//     .max(999, "Weight cannot exceed 999kg"),
+
+//   pickupLocation: Yup.object().shape({
+//     address: Yup.string().required("Pickup address is required"),
+//     latitude: Yup.string().nullable(),
+//     longitude: Yup.string().nullable(),
+//   }),
+
+//   dropLocation: Yup.object().shape({
+//     address: Yup.string().required("Drop address is required"),
+//     latitude: Yup.string().nullable(),
+//     longitude: Yup.string().nullable(),
+//   }),
+
+//   courierSize: Yup.string()
+//     .required("Service type is required"),
+
+//   specialInstructions: Yup.string(),
+
+//   insurance: Yup.boolean(),
+
+//   insuredValue: Yup.string().when("insurance", {
+//     is: true,
+//     then: Yup.string().required("Insured value is required when insurance is selected"),
+//     otherwise: Yup.string().notRequired(),
+//   }),
+
+//   acceptInsuranceTerms: Yup.boolean().when("insurance", {
+//     is: true,
+//     then: Yup.boolean().oneOf([true], "You must accept insurance terms"),
+//     otherwise: Yup.boolean().notRequired(),
+//   }),
+
+//   recipientName: Yup.string()
+//     .required("Recipient name is required"),
+
+//   recipientContact: Yup.string()
+//     .required("Recipient mobile is required")
+//     .matches(/^\d{10}$/, "Enter a valid 10-digit mobile number"),
+// })
 const index = () => {
   const inserts = useSafeAreaInsets();
   const [images, setImages] = useState([]);
@@ -87,8 +179,13 @@ const index = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [selectedType, setSelectedType] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
-  const [selectedPrice, setSelectedPrice] = useState(null);
   const [showEstimateOptions, setShowEstimateOptions] = useState(false);
+  const [isBookingForSomeoneElse, setIsBookingForSomeoneElse] = useState(false);
+  const [isInsured, setIsInsured] = useState(false);
+  const [selectedPrice, setSelectedPrice] = useState("");
+  const [acceptInsuranceTerms, setAcceptInsuranceTerms] = useState(false);
+  const [insureError, setInsureError] = useState("");
+  const [estimatePrice, setEstimatePrice] = useState(null);
 
   //UPLOADIMG
   const handleuploadImg = () => {
@@ -167,7 +264,47 @@ const index = () => {
     { label: "Economy", value: "economy" },
   ];
 
-  const packedvalues = ["10,000/-", "20,000/-", "30,000/-", "Above  30,000/-"];
+  const packedvalues = ["10,000", "20,000", "30,000", "Above  30,000"];
+
+  const handleEstimatePrice = async (values) => {
+    console.log("apihitting");
+    console.log(insureError, "INSUREeRROR");
+    console.log(isInsured, "IsInsured");
+    console.log(acceptInsuranceTerms, "ACCEPT");
+    console.log(selectedPrice, "selectPrice");
+
+    if (isInsured) {
+      if (!selectedPrice) {
+        setInsureError("Please select an insurance amount");
+        return;
+      }
+      if (!acceptInsuranceTerms) {
+        setInsureError("Please accept the insurance Terms & Conditions");
+        return;
+      }
+    }
+    setInsureError("");
+
+    try {
+      const formdata = new FormData();
+     
+      formdata.append("width", values.width);
+      formdata.append("height", values.height);
+      formdata.append("weight", values.weight);
+      formdata.append("isInsured", isInsured);
+      formdata.append("packagevalue", selectedPrice);
+      
+
+      const res = await EstimatePrice(formdata);
+      if (res.status === 200) {
+        console.log("success response", res?.data);
+        setEstimatePrice(res?.data.estimatedPrice);
+      }
+      setShowEstimateOptions(true);
+    } catch (error) {
+      console.log(error.response, "error from api//////////////");
+    }
+  };
 
   return (
     <View style={{ backgroundColor: "#f8f8ff" }}>
@@ -218,27 +355,34 @@ const index = () => {
             initialValues={{
               courierType: "",
               itemName: "",
-              width: "",
-              height: "",
-              weight: "",
-              pickupAddress: "",
-              dropAddress: "",
+              width: null,
+              height: null,
+              weight: null,
+              pickupLocation: {
+                address: "",
+                latitude: "17.27856598171986",
+                longitude: "78.54647018465576",
+              },
+              dropLocation: {
+                address: "",
+                latitude: "17.27856598171986",
+                longitude: "78.54647018465576",
+              },
               courierSize: "",
               specialInstructions: "",
-              packageImages: [],
+
               insurance: false,
               insuredValue: "",
               acceptInsuranceTerms: false,
-              bookOnBehalf: { name: "", mobile: "" },
+              packagevalue: "",
+              // acceptInsuranceTerms: false,
+              isBookingForSomeoneElse: false,
+
+              recipientName: "",
+              recipientContact: "6666677777",
             }}
             validationSchema={parcelDetailsValidationSchema}
-            onSubmit={(values) => {
-              console.log("Form submitted with:", {
-                ...values,
-                packageImages: images,
-              });
-              router.push("/bookingSummary");
-            }}
+            onSubmit={(values) => handleEstimatePrice(values)}
           >
             {({
               handleChange,
@@ -251,6 +395,7 @@ const index = () => {
               touched,
             }) => (
               <>
+                {console.log("formik error", errors)}
                 {/* Courier Type and Item Name */}
                 <View style={styles.courierTypecard}>
                   <View style={{ width: "45%", paddingTop: 14, marginLeft: 6 }}>
@@ -261,49 +406,45 @@ const index = () => {
                     </Text>
                     <CourierTypeDropDown
                       data={courierTypes}
-                      value={selectedType?.value}
+                      value={values?.courierType}
                       placeholder="Select type"
                       onSelect={(item) => {
                         setSelectedType(item);
                         setFieldValue("courierType", item.value);
-                        setFieldTouched("courierType", true);
+                        // setFieldTouched("courierType", true);
                       }}
                       selected={selectedType}
                       error={touched.courierType && errors.courierType}
                     />
-                    {/* {touched.courierType && errors.courierType && (
-                      <Text style={styles.errorText}>{errors.courierType}</Text>
-                    )} */}
                   </View>
 
                   <View style={{ width: "45%" }}>
-                    <InputField
-                      inpContainer={{ width: "100%" }}
-                      label="Item Name *"
-                      style={{ fontSize: 14, fontWeight: 500 }}
+                    <CustomInput
+                      inpContainer={{}}
+                      inpLabel="Item Name *"
+                      style={[{ fontSize: 14, fontWeight: 500 }]}
                       placeholder="Enter item name"
                       value={values.itemName}
                       onChangeText={handleChange("itemName")}
                       onBlur={handleBlur("itemName")}
                       error={touched.itemName && errors.itemName}
                     />
-                    {/* {touched.itemName && errors.itemName && (
-                      <Text style={styles.errorText}>{errors.itemName}</Text>
-                    )} */}
                   </View>
                 </View>
 
                 {/* Dimensions */}
                 <View style={styles.dimensionsContainer}>
                   <View style={{ width: "30%" }}>
-                    <InputField
+                    <CustomInput
                       inpContainer={{ width: "100%" }}
-                      label="Width (cm) *"
+                      inpLabel="Width (cm) *"
                       placeholder="0"
                       keyboardType="numeric"
                       placeholderStyle={{ fontWeight: "500", fontSize: 20 }}
                       value={values.width}
-                      onChangeText={handleChange("width")}
+                      onChangeText={(text) =>
+                        setFieldValue("width", text ? Number(text) : null)
+                      }
                       onBlur={handleBlur("width")}
                       error={touched.width && errors.width}
                     />
@@ -313,13 +454,15 @@ const index = () => {
                   </View>
 
                   <View style={{ width: "30%" }}>
-                    <InputField
+                    <CustomInput
                       inpContainer={{ width: "100%" }}
-                      label="Height (cm) *"
+                      inpLabel="Height (cm) *"
                       keyboardType="numeric"
                       placeholder="0"
                       value={values.height}
-                      onChangeText={handleChange("height")}
+                      onChangeText={(text) =>
+                        setFieldValue("height", text ? Number(text) : null)
+                      }
                       onBlur={handleBlur("height")}
                       error={touched.height && errors.height}
                     />
@@ -328,14 +471,16 @@ const index = () => {
                     )} */}
                   </View>
 
-                  <View style={{ width: "32%", marginTop: 8 }}>
-                    <InputField
-                      inpContainer={{ width: "90%" }}
-                      label="Weight (kg) *"
+                  <View style={{ width: "33%", marginTop: 8 }}>
+                    <CustomInput
+                      inpContainer={{ width: "100%" }}
+                      inpLabel="Weight (kg) *"
                       keyboardType="numeric"
                       placeholder="0"
                       value={values.weight}
-                      onChangeText={handleChange("weight")}
+                      onChangeText={(text) =>
+                        setFieldValue("weight", text ? Number(text) : null)
+                      }
                       onBlur={handleBlur("weight")}
                       error={touched.weight && errors.weight}
                     />
@@ -356,20 +501,27 @@ const index = () => {
                     placeholder="Enter pick up address"
                     style={[
                       styles.addressinp,
-                      touched.pickupAddress &&
-                        errors.pickupAddress &&
+                      touched.pickupLocation &&
+                        errors.pickupLocation &&
                         styles.inputError,
                     ]}
                     placeholderTextColor="#888888"
                     keyboardType="default"
-                    value={values.pickupAddress}
-                    onChangeText={handleChange("pickupAddress")}
-                    onBlur={handleBlur("pickupAddress")}
+                    value={values.pickupLocation.address}
+                    onChangeText={(text) =>
+                      setFieldValue("pickupLocation.address", text)
+                    }
+                    onBlur={() =>
+                      setFieldTouched("pickupLocation.address", true)
+                    }
                     multiline
                   />
-                  {touched.pickupAddress && errors.pickupAddress && (
-                    <Text style={styles.errorText}>{errors.pickupAddress}</Text>
-                  )}
+                  {touched.pickupLocation?.address &&
+                    errors.pickupLocation?.address && (
+                      <Text style={styles.errorText}>
+                        {errors.pickupLocation.address}
+                      </Text>
+                    )}
                 </View>
 
                 {/* Drop Address */}
@@ -382,20 +534,25 @@ const index = () => {
                     placeholder="Enter drop address"
                     style={[
                       styles.addressinp,
-                      touched.dropAddress &&
-                        errors.dropAddress &&
+                      touched.dropLocation &&
+                        errors.dropLocation &&
                         styles.inputError,
                     ]}
                     placeholderTextColor="#888888"
                     keyboardType="default"
-                    value={values.dropAddress}
-                    onChangeText={handleChange("dropAddress")}
-                    onBlur={handleBlur("dropAddress")}
+                    value={values.dropLocation.address}
+                    onChangeText={(text) =>
+                      setFieldValue("dropLocation.address", text)
+                    }
+                    onBlur={() => setFieldTouched("dropLocation.address", true)}
                     multiline
                   />
-                  {touched.dropAddress && errors.dropAddress && (
-                    <Text style={styles.errorText}>{errors.dropAddress}</Text>
-                  )}
+                  {touched.dropLocation?.address &&
+                    errors.dropLocation?.address && (
+                      <Text style={styles.errorText}>
+                        {errors.dropLocation.address}
+                      </Text>
+                    )}
                 </View>
 
                 {/* Choose Services */}
@@ -415,12 +572,13 @@ const index = () => {
                   </Text>
                   <CourierTypeDropDown
                     data={courierSizes}
-                    value={selectedType?.value}
+                    value={values?.courierSize}
                     placeholder="Select type"
                     onSelect={(item) => {
+                      console.log("item", item);
                       setSelectedSize(item);
                       setFieldValue("courierSize", item.value);
-                      setFieldTouched("courierSize", true);
+                      // setFieldTouched("courierSize", true);
                     }}
                     selected={selectedSize}
                     error={touched.courierSize && errors.courierSize}
@@ -450,14 +608,8 @@ const index = () => {
                 <View style={styles.imgUploadContainer}>
                   <Text style={styles.labelText1}>Package Images *</Text>
                   <Pressable
-                    style={[
-                      styles.imguploader,
-                      touched.packageImages &&
-                        errors.packageImages &&
-                        styles.inputError,
-                    ]}
+                    style={[styles.imguploader]}
                     onPress={() => {
-                      setFieldTouched("packageImages", true);
                       handleuploadImg();
                     }}
                   >
@@ -499,7 +651,6 @@ const index = () => {
                         <Pressable
                           style={styles.removeIcon}
                           onPress={() => {
-                            setFieldTouched("packageImages", true);
                             removeImage(index);
                           }}
                         >
@@ -510,9 +661,6 @@ const index = () => {
                   </View>
 
                   {/* Show package images error below the images */}
-                  {touched.packageImages && errors.packageImages && (
-                    <Text style={styles.errorText}>{errors.packageImages}</Text>
-                  )}
                 </View>
                 {/* Upload Image Modal */}
                 <Modal
@@ -558,45 +706,65 @@ const index = () => {
                   </View>
                 </Modal>
 
-             <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
-  <InputDropdown
-    placeholder="Book on Behalf someone else"
-    style={styles.textInputDropdown}  
-    value={values.bookOnBehalf}
-    onSelect={(val) => {
-      setFieldValue("bookOnBehalf", val);
-      setFieldTouched("bookOnBehalf", true);
-    }}
-    onBlur={() => setFieldTouched("bookOnBehalf", true)}
-    error={touched.bookOnBehalf && errors.bookOnBehalf}
-  />
+                <View style={{ marginHorizontal: 20, marginVertical: 10 }}>
+                  {/* <InputDropdown
+                    placeholder="Book on Behalf someone else"
+                    style={styles.textInputDropdown}
+                    inp1={values.recipientName}
+                    inp2={values.recipientContact}
+                    onSelect={(val) => {
+                      setFieldValue("recipientName", val);
+                    }}
+                    onBlur={() => setFieldTouched("recipientName", true)}
+                    error={touched.recipientName && errors.recipientName}
+                  /> */}
 
- 
-  {/* {touched.bookOnBehalf?.name && errors.bookOnBehalf?.name && (
-    <Text style={styles.errorText}>{errors.bookOnBehalf.name}</Text>
-  )}
-  {touched.bookOnBehalf?.mobile && errors.bookOnBehalf?.mobile && (
-    <Text style={styles.errorText}>{errors.bookOnBehalf.mobile}</Text>
-  )} */}
-</View>
-
+                  <InputDropdown
+                    placeholder="Book on Behalf someone else"
+                    isBooking={() => {
+                      setIsBookingForSomeoneElse(!isBookingForSomeoneElse);
+                      setFieldValue(
+                        "isBookingForSomeoneElse",
+                        !isBookingForSomeoneElse
+                      );
+                    }}
+                    value1={values.recipientName}
+                    value2={values.recipientContact}
+                    onChange1={(value) => {
+                      setFieldValue("recipientName", value);
+                    }}
+                    onChange2={(value) => {
+                      setFieldValue("recipientContact", value);
+                    }}
+                    // onChange2={handleChange("recipientContact")}
+                    onBlur1={handleBlur("recipientName")}
+                    onBlur2={handleBlur("recipientContact")}
+                    // error1={touched.recipientName && errors.recipientName}
+                    // error2={touched.recipientContact && errors.recipientContact}
+                  />
+                  {isBookingForSomeoneElse &&
+                    (!values.recipientName || !values.recipientContact) && (
+                      <Text
+                        style={{ color: "red", fontSize: 12, marginTop: 5 }}
+                      >
+                        Please fill recipient name and contact before proceeding
+                      </Text>
+                    )}
+                </View>
 
                 {/* Insurance Section */}
                 <View style={styles.checkboxContainer}>
                   <Checkbox
-                    value={values.insurance}
+                    value={isInsured}
                     onValueChange={(value) => {
-                      setFieldValue("insurance", value);
-                      setFieldTouched("insurance", true);
-
-                      // Reset insurance-related fields when insurance is turned off
-                      if (!value) {
-                        setFieldValue("insuredValue", "");
-                        setFieldValue("acceptInsuranceTerms", false);
-                        setSelectedPrice(null);
-                      }
+                      setIsInsured(value);
+                      // if (!value) {
+                      //   setSelectedPrice(null);
+                      //   setAcceptInsuranceTerms(false);
+                      //   setInsureError("");
+                      // }
                     }}
-                    color={values.insurance ? "#252525" : undefined}
+                    color={values.isInsured ? "#252525" : undefined}
                     style={{ borderColor: "#000000", width: 16, height: 16 }}
                   />
                   <Text
@@ -609,11 +777,8 @@ const index = () => {
                     Insure my parcel
                   </Text>
                 </View>
-                {touched.insurance && errors.insurance && (
-                  <Text style={styles.errorText}>{errors.insurance}</Text>
-                )}
 
-                {values.insurance && (
+                {isInsured && (
                   <>
                     <View style={styles.slotsContainer}>
                       {packedvalues.map((price, index) => (
@@ -621,33 +786,28 @@ const index = () => {
                           key={index}
                           style={[
                             styles.priceButton2,
-                            values.insuredValue === price &&
+
+                            selectedPrice === price &&
                               styles.selectedPiceButton2,
                           ]}
                           onPress={() => {
                             setSelectedPrice(price);
-                            setFieldValue("insuredValue", price);
-                            setFieldTouched("insuredValue", true);
+                            setInsureError("");
                           }}
                         >
                           <Text
                             numberOfLines={1}
                             style={[
                               styles.slotText2,
-                              values.insuredValue === price &&
+                              selectedPrice === price &&
                                 styles.selectedPiceText,
                             ]}
                           >
-                            {price}
+                            {price}/-
                           </Text>
                         </TouchableOpacity>
                       ))}
                     </View>
-                    {touched.insuredValue && errors.insuredValue && (
-                      <Text style={styles.errorText}>
-                        {errors.insuredValue}
-                      </Text>
-                    )}
 
                     {/* Accept Insurance Terms */}
                     <View
@@ -659,14 +819,12 @@ const index = () => {
                       }}
                     >
                       <Checkbox
-                        value={values.acceptInsuranceTerms}
+                        value={acceptInsuranceTerms}
                         onValueChange={(value) => {
-                          setFieldValue("acceptInsuranceTerms", value);
-                          setFieldTouched("acceptInsuranceTerms", true);
+                          setAcceptInsuranceTerms(value);
+                          setInsureError("");
                         }}
-                        color={
-                          values.acceptInsuranceTerms ? "#252525" : undefined
-                        }
+                        color={acceptInsuranceTerms ? "#252525" : undefined}
                         style={{
                           borderColor: "#000000",
                           width: 16,
@@ -684,12 +842,6 @@ const index = () => {
                         I accept the insurance Terms & Conditions
                       </Text>
                     </View>
-                    {touched.acceptInsuranceTerms &&
-                      errors.acceptInsuranceTerms && (
-                        <Text style={styles.errorText}>
-                          {errors.acceptInsuranceTerms}
-                        </Text>
-                      )}
 
                     {/* Insurance Fee */}
                     <View style={styles.insuranceFeeCard}>
@@ -714,6 +866,18 @@ const index = () => {
                         transit
                       </Text>
                     </View>
+                    {insureError ? (
+                      <Text
+                        style={{
+                          color: "red",
+                          fontSize: 12,
+                          marginTop: 6,
+                          marginHorizontal: 13,
+                        }}
+                      >
+                        {insureError}
+                      </Text>
+                    ) : null}
                   </>
                 )}
 
@@ -722,7 +886,12 @@ const index = () => {
                   {!showEstimateOptions && (
                     <TouchableOpacity
                       style={styles.buttonContainers}
-                      onPress={() => setShowEstimateOptions(true)}
+                      // onPress={() => setShowEstimateOptions(true)}
+                      onPress={() => {
+                        console.log("errors", errors);
+
+                        handleSubmit();
+                      }}
                     >
                       <View
                         style={{
@@ -749,12 +918,27 @@ const index = () => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.priceButtons}>
-                          <Text style={styles.priceText}>₹ 256</Text>
+                          <Text style={styles.priceText}>
+                            ₹ {estimatePrice}
+                          </Text>
                         </TouchableOpacity>
                       </View>
 
                       {/* Buttons */}
                       <View
+                        // onPress={
+                        //   ()=>{
+                        //     const data={
+
+                        //     }
+                        //     router.push({
+                        //       pathname:"/f",
+                        //       params:{
+                        //         data:JSON.stringify(data)
+                        //       }
+                        //     })
+                        //   }
+                        // }
                         style={{
                           flexDirection: "row",
                           justifyContent: "space-between",
@@ -780,7 +964,40 @@ const index = () => {
                             Back
                           </Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={handleSubmit}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            const data = {
+                              courierType: values.courierType,
+                              itemName: values.itemName,
+                              width: values.width,
+                              height: values.height,
+                              weight: values.weight,
+                              bookingMode:values.courierSize,
+                              pickupAddress: values.pickupLocation.address,
+                              dropAddress: values.dropLocation.address,
+                              specialInstructions: values.specialInstructions,
+                              isBookingForSomeoneElse:
+                                values.isBookingForSomeoneElse,
+                              recipientName: values.recipientName,
+                              recipientContact: values.recipientContact,
+                              isInsured: isInsured,
+                              packagevalue: selectedPrice,
+                              estimatedPrice: estimatePrice,
+                              packageImages: images,
+                              // selectedPrice:selectedPrice,
+                              pickupLatitude: values.pickupLocation.latitude,
+                              pickupLongitude: values.pickupLocation.longitude,
+                              dropLatitude: values.dropLocation.longitude,
+                              dropLongitude: values.dropLocation.longitude,
+                            };
+                            router.push({
+                              pathname: "/bookingSummary",
+                              params: {
+                                parcelData: JSON.stringify(data),
+                              },
+                            });
+                          }}
+                        >
                           <Text
                             style={{
                               borderWidth: 1,
@@ -819,6 +1036,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   courierTypecard: {
+    // borderWidth:1,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -992,6 +1210,7 @@ const styles = StyleSheet.create({
   selectedPiceButton2: {
     backgroundColor: "#093C31",
     borderColor: "#093C31",
+    color: "#FFFFFF",
   },
   selectedPiceText: {
     color: "#F6F6F6",
@@ -1066,6 +1285,6 @@ const styles = StyleSheet.create({
     color: "red",
     fontSize: 10,
     marginTop: 4,
-    marginLeft: 5,
-  },
+    marginLeft: 5,
+  },
 });

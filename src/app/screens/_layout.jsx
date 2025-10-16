@@ -119,10 +119,8 @@ const _layout = () => {
         //   ),
         // }}
       />
-      <Stack.Screen name="qrCode" options={{
-    headerShown: false, 
-  }}
- />
+      <Stack.Screen name="qrCode" options={{ headerShown: false, }}/>
+      {/* <Stack.Screen name="paymentMethodScreen" /> */}
     </Stack>
   );
 };

@@ -8,6 +8,8 @@ import {
   StatusBar,
 } from "react-native";
 
+import { useEffect } from "react";
+
 // import ArrowIcon from "../../../../assets/svgs/SVGIcons/ArrowIcon"
 import ArrowIcon from "../../../assets/svgIcons/ArrowIcon";
 
@@ -25,6 +27,7 @@ import CalenderIcon from "../../../assets/svgIcons/CalenderIcon";
 import QuickBooking from "../../../assets/svgIcons/QuickBooking";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
+import HybridStorage from "../../../utils/helpers/HybridStorage";
 
 const CourierBookingScreen = () => {
   const router = useRouter();
@@ -36,6 +39,8 @@ const CourierBookingScreen = () => {
   const handleScheduleBooking = ()=>{
     router.navigate("/(scheduleBooking)")
   }
+  
+
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8ff" }}>

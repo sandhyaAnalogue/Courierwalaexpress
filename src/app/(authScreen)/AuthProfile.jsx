@@ -51,6 +51,7 @@ import { AuthContext } from "../../utils/AuthProvider";
 import Loading from "../../components/Loading"
 
 import { createProfileVerification } from "../../services/apiCalls";
+import HybridStorage from "../../utils/helpers/HybridStorage";
 
 const ProfileScreen = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -154,8 +155,10 @@ const ProfileScreen = () => {
                   });
                   if (res.status === 200) {
                     console.log(res.data, "Profile Data");
+                    await HybridStorage.setItem("profileInfo",values)
                     resetForm();
                     router.push("/(homeScreen)");
+                   
                   }
                 } catch (error) {
                   console.log("error",error)

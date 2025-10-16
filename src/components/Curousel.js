@@ -8,59 +8,85 @@ import {
   Pressable,
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
+import { bannersApiRes } from "../services/apiCalls";
+import Loading from "../components/Loading";
 
 const { width } = Dimensions.get("window");
 const ITEM_WIDTH = width - 40; // image size
 const ITEM_SPACING = 20; // gap between images
 
-const images = [
-  {
-    id: "1",
-    title: "Slide 1",
-    img: "https://media.istockphoto.com/id/1415551661/photo/receiving-a-delivery-from-the-mailman-stock-photo.webp?a=1&b=1&s=612x612&w=0&k=20&c=ytYhiEqktioryio5T657t2ncDN8bkjZRqvxfaURDcig=",
-  },
-  {
-    id: "2",
-    title: "Slide 2",
-    img: "https://media.istockphoto.com/id/1369503096/photo/unsatisfied-customer-returning-order-to-delivery-boy-at-home-concept-of-hassel-free-product.webp?a=1&b=1&s=612x612&w=0&k=20&c=9Gxg0IzOR4Bf4__7iAXRKfFtguiMtzz8WMOfnxZgLxM=",
-  },
-  {
-    id: "3",
-    title: "Slide 3",
-    img: "https://media.istockphoto.com/id/2204300725/photo/portrait-of-delivery-person-wearing-uniform-stock-photo.webp?a=1&b=1&s=612x612&w=0&k=20&c=i_-JLb-6RxQWdwFIldNkhXPS8hB4-0Z_XbO6eFjfFAQ=",
-  },
-];
-
 const Curousel = ({ styleImg, styleContainer }) => {
   const scrollX = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef(null);
   const [currentInd, setCurrentInd] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    const bannersApi = async () => {
+      setLoading(true);
+      try {
+        const res = await bannersApiRes();
+        setImages(res?.data);
+      } catch (error) {
+        console.log(error.response, "error from banners");
+      } finally {
+        setLoading(false);
+      }
+    };
+    bannersApi();
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       let nextInd = (currentInd + 1) % images.length;
       setCurrentInd(nextInd);
 
-      flatListRef.current?.scrollToIndex({
-        index: nextInd,
-        animated: true,
-      });
+      // flatListRef.current?.scrollToIndex({
+      //   index: nextInd,
+      //   animated: true,
+      // });
     }, 3000);
     return () => clearInterval(interval);
   }, [currentInd]);
+
+  // const images = [
+  //   {
+  //     id: "1",
+  //     title: "Slide 1",
+  //     // img: "https://media.istockphoto.com/id/1415551661/photo/receiving-a-delivery-from-the-mailman-stock-photo.webp?a=1&b=1&s=612x612&w=0&k=20&c=ytYhiEqktioryio5T657t2ncDN8bkjZRqvxfaURDcig=",
+  //     img: `${img[0].bannerImg}`,
+  //   },
+  //   {
+  //     id: "2",
+  //     title: "Slide 2",
+  //     img: "https://media.istockphoto.com/id/1369503096/photo/unsatisfied-customer-returning-order-to-delivery-boy-at-home-concept-of-hassel-free-product.webp?a=1&b=1&s=612x612&w=0&k=20&c=9Gxg0IzOR4Bf4__7iAXRKfFtguiMtzz8WMOfnxZgLxM=",
+  //   },
+  //   {
+  //     id: "3",
+  //     title: "Slide 3",
+  //     img: "https://media.istockphoto.com/id/2204300725/photo/portrait-of-delivery-person-wearing-uniform-stock-photo.webp?a=1&b=1&s=612x612&w=0&k=20&c=i_-JLb-6RxQWdwFIldNkhXPS8hB4-0Z_XbO6eFjfFAQ=",
+  //   },
+  // ];
   return (
     <View style={[styles.container, styleContainer]}>
+      <Loading visible={loading} />
       <Animated.FlatList
         data={images}
         ref={flatListRef}
         keyExtractor={(item, ind) => ind.toString()}
         horizontal
+        showsHorizontalScrollIndicator={false}
         pagingEnabled={false}
         snapToInterval={ITEM_WIDTH + ITEM_SPACING}
         contentContainerStyle={{ paddingHorizontal: ITEM_SPACING / 2 }}
-        showsHorizontalScrollIndicator={true}
         snapToAlignment="center"
         decelerationRate="fast"
+        getItemLayout={(data, index) => ({
+          length: ITEM_WIDTH + ITEM_SPACING,
+          offset: (ITEM_WIDTH + ITEM_SPACING) * index,
+          index,
+        })}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
           { useNativeDriver: false }
@@ -68,7 +94,9 @@ const Curousel = ({ styleImg, styleContainer }) => {
         renderItem={({ item }) => (
           <View style={styles.imgContainer}>
             <Image
-              source={{ uri: item.img }}
+              source={{
+                uri: `${process.env.EXPO_PUBLIC_BASE_URL}${item?.bannerImg}`,
+              }}
               style={[styles.image, styleImg]}
             />
           </View>
@@ -76,43 +104,45 @@ const Curousel = ({ styleImg, styleContainer }) => {
       />
 
       <View style={styles.dotsContainer}>
-        {images.map((_, index) => {
-          const inputRange = [
-            (index - 1) * (ITEM_WIDTH + ITEM_SPACING),
-            index * (ITEM_WIDTH + ITEM_SPACING),
-            (index + 1) * (ITEM_WIDTH + ITEM_SPACING),
-          ];
+        {images.length > 0 &&
+          images.map((_, index) => {
+            const inputRange = [
+              (index - 1) * (ITEM_WIDTH + ITEM_SPACING),
+              index * (ITEM_WIDTH + ITEM_SPACING),
+              (index + 1) * (ITEM_WIDTH + ITEM_SPACING),
+            ];
 
-          const dotWidth = scrollX.interpolate({
-            inputRange,
-            outputRange: [8, 16, 8], // middle dot bigger
-            extrapolate: "clamp",
-          });
+            const dotWidth = scrollX.interpolate({
+              inputRange,
+              outputRange: [8, 16, 8], // middle dot bigger
+              extrapolate: "clamp",
+            });
 
-          const dotOpacity = scrollX.interpolate({
-            inputRange,
-            outputRange: [0.3, 1, 0.3], // fade effect
-            extrapolate: "clamp",
-          });
+            const dotOpacity = scrollX.interpolate({
+              inputRange,
+              outputRange: [0.3, 1, 0.3], // fade effect
+              extrapolate: "clamp",
+            });
 
-          return (
-            <Pressable
-              key={index}
-              onPress={() => {
-                setCurrentInd(index);
-                flatListRef.current?.scrollToIndex({
-                  index,
-                  animated: true,
-                });
-              }}
-            >
-              <Animated.View
+            return (
+              <Pressable
                 key={index}
-                style={[styles.dot, { width: dotWidth, opacity: dotOpacity }]}
-              />
-            </Pressable>
-          );
-        })}
+                onPress={() => {
+                  if (flatListRef.current && Number.isInteger(index)) {
+                    flatListRef.current.scrollToIndex({
+                      index,
+                      animated: true,
+                    });
+                  }
+                }}
+              >
+                <Animated.View
+                  key={index}
+                  style={[styles.dot, { width: dotWidth, opacity: dotOpacity }]}
+                />
+              </Pressable>
+            );
+          })}
       </View>
     </View>
   );
@@ -121,15 +151,22 @@ const Curousel = ({ styleImg, styleContainer }) => {
 export default Curousel;
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    // borderWidth:1,
+    // alignItems:"center"
+  },
   image: {
+    // borderWidth:1,
+    // alignItems:"center",
     width: width - 40,
     borderRadius: 5,
     height: 200,
     resizeMode: "cover",
   },
   imgContainer: {
+    // borderWidth:1,
     width: ITEM_WIDTH,
+    // width:"100%",
     marginRight: ITEM_SPACING,
   },
   dotsContainer: {

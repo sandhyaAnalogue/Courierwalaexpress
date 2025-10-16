@@ -16,6 +16,7 @@ import { useRouter, Stack } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Feather from "@expo/vector-icons/Feather";
 import MiddleArrowIcon from "../../../assets/svgIcons/orderIcon/MiddleArrowIcon";
+import Mapservices from "../../maps/mapServices";
 
 const orderStatuses = [
   { label: "Awaiting pickup", value: "Awaiting pickup" },
@@ -42,12 +43,12 @@ const orderData = {
   courierType: "Electronics",
   itemName: "Watch",
   totalAmount: 326,
-  dimensions: "10x10x10 cm", 
+  dimensions: "10x10x10 cm",
   bookingMode: "Online",
 };
 
 export default function TrackOrder() {
-  const [status, setStatus] = useState(orderStatuses[0].value);
+  const [status, setStatus] = useState("");
   const [currentStep, setCurrentStep] = useState(0);
   const [isFocus, setIsFocus] = useState(false);
 
@@ -147,49 +148,43 @@ export default function TrackOrder() {
       >
         {status && (
           <View style={styles.contentwrapper}>
-          <View style={styles.detailsCard}>
-            {/* Booking Header */}
-            <View style={styles.headerRow}>
-              <View style={styles.bookingInfo}>
-                <View style={styles.iconWrapper}>
-                  <BookingIcon width={18} height={18} />
+            <View style={styles.detailsCard}>
+              {/* Booking Header */}
+              <View style={styles.headerRow}>
+                <View style={styles.bookingInfo}>
+                  <View style={styles.iconWrapper}>
+                    <BookingIcon width={18} height={18} />
+                  </View>
+                  <View style={{ marginLeft: 8 }}>
+                    <Text style={styles.label}>Booking ID</Text>
+                    <Text style={styles.bookingId}>{orderData.bookingId}</Text>
+                  </View>
                 </View>
-                <View style={{ marginLeft: 8 }}>
-                  <Text style={styles.label}>Booking ID</Text>
-                  <Text style={styles.bookingId}>{orderData.bookingId}</Text>
+
+                <View style={styles.statusBadge}>
+                  <Text
+                    style={{
+                      maxWidth: 100,
+                      fontSize: 10,
+                      paddingHorizontal: 14,
+                      paddingVertical: 8,
+                      borderRadius: 25,
+                      borderWidth: status === "Cancelled" ? 0 : 1,
+                      borderColor: "#000000",
+                      color: status === "Cancelled" ? "#FFFFFF" : "#252525",
+                      fontWeight: "500",
+                      textAlign: "center",
+                      backgroundColor:
+                        status === "Cancelled" ? "#FF0000" : "#d6dce7ff",
+                    }}
+                  >
+                    {status}
+                  </Text>
                 </View>
               </View>
-
-              <View style={styles.statusBadge}>
-                <Text
-                  style={{
-                    maxWidth: 100,
-                    fontSize: 10,
-                    paddingHorizontal: 14,
-                    paddingVertical: 8,
-                    borderRadius: 25,
-                    borderWidth: status === "Cancelled" ? 0 : 1,
-                    borderColor: "#000000",
-                    color: status === "Cancelled" ? "#FFFFFF" : "#252525",
-                    fontWeight: "500",
-                    textAlign: "center",
-                    backgroundColor:
-                      status === "Cancelled" ? "#FF0000" : "#d6dce7ff",
-  
-  
-
-                  }}
-                >
-                  {status}
-                </Text>
-              </View>
-            </View>
-
-            {/* Details */}
-            {/* <View style={{ marginHorizontal: 15 }}> */}
-              <View style={[styles.detailRow,{
-              
-              }]}>
+              {/* Details */}
+              {/* <View style={{ marginHorizontal: 15 }}> */}
+              <View style={[styles.detailRow, {}]}>
                 <View style={styles.detailBoxLeft}>
                   <View style={styles.labelValuePair}>
                     <Text style={styles.labelData}>Booking Date</Text>
@@ -204,13 +199,11 @@ export default function TrackOrder() {
                     <Text style={styles.value}>{orderData.courierType}</Text>
                   </View>
                 </View>
-                <View style={{marginBottom:40}}>
+                <View style={{ marginBottom: 40 }}>
                   <MiddleArrowIcon width={20} height={20} />
                 </View>
 
-                <View style={[styles.detailBoxRight,{
-                  
-                }]}>
+                <View style={[styles.detailBoxRight, {}]}>
                   <View style={styles.labelValuePair}>
                     <Text style={styles.labelData}>Booking Time</Text>
                     <Text style={styles.value}>{orderData.bookingTime}</Text>
@@ -226,42 +219,40 @@ export default function TrackOrder() {
                   </View>
                 </View>
               </View>
-           
-
-            {/* Divider */}
-            <View style={styles.line} />
-
-            {/* Total */}
-            <View style={styles.totalAmountContainer}>
-              <Text style={styles.amt}>Total</Text>
-              <Text style={styles.totalAmount}>₹{orderData.totalAmount}</Text>
+              {/* Divider */}
+              <View style={styles.line} />
+              {/* Total */}
+              <View style={styles.totalAmountContainer}>
+                <Text style={styles.amt}>Total</Text>
+                <Text style={styles.totalAmount}>₹{orderData.totalAmount}</Text>
+              </View>
+              {/* Progress Bar */}
+              <View style={{ marginTop: 16 }}>
+                <MultiStepProgressBar
+                  currentStep={currentStep}
+                  steps={steps}
+                  onStepPress={onStepPress}
+                />
+              </View>
+              {status === "Awaiting pickup" && (
+                <>
+                  <Text
+                    style={{
+                      marginTop: 16,
+                      fontWeight: "500",
+                      fontSize: 14,
+                      color: "#252525",
+                      margin: 10,
+                    }}
+                  >
+                    Live Tracking
+                  </Text>
+                  <Mapservices />
+                </>
+              )}{" "}
             </View>
-
-            {/* Progress Bar */}
-            <View style={{ marginTop: 16 }}>
-              <MultiStepProgressBar
-                currentStep={currentStep}
-                steps={steps}
-                onStepPress={onStepPress}
-                
-              />
-            </View>
-
-            <Text
-              style={{
-                marginTop: 16,
-                fontWeight: "500",
-                fontSize: 14,
-                color: "#252525",
-                margin: 10,
-              }}
-            >
-              Live Tracking
-            </Text>
-          </View>
           </View>
         )}
-        
       </ScrollView>
     </View>
   );
@@ -270,17 +261,15 @@ export default function TrackOrder() {
 const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-  scrollView: { flex: 1,},
-  scrollContent: { paddingBottom: 30 },
+  // scrollView: { flexGrow: 1 }
+  scrollContent: {paddingBottom:90 },
   dropdownWrapper: {
     marginTop: 20,
     marginHorizontal: 18,
     zIndex: 10,
-    
   },
-  contentwrapper:{
-    marginHorizontal:12
-
+  contentwrapper: {
+    marginHorizontal: 12,
   },
   dropdown: {
     height: 50,
@@ -288,17 +277,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     paddingHorizontal: 11,
-     width: Platform.select({
-    ios: "100%",
-    android: "100%",
-    web: "50%",
-    default: "40%", 
-    // textAlign:'center'
-    
-  }),
-  alignSelf:'center'
-    
-
+    width: Platform.select({
+      ios: "100%",
+      android: "100%",
+      web: "50%",
+      default: "40%",
+      // textAlign:'center'
+    }),
+    alignSelf: "center",
   },
   placeholderStyle: {
     fontSize: 14,
@@ -329,15 +315,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginBottom: 30,
     marginTop: 20,
-     width: Platform.select({
-    ios: "100%",
-    android: "100%",
-    web: "50%",
-    default: "40%", 
-    // textAlign:'center'
-    
-  }),
-  alignSelf:'center'
+    width: Platform.select({
+      ios: "100%",
+      android: "100%",
+      web: "50%",
+      default: "40%",
+      // textAlign:'center'
+    }),
+    alignSelf: "center",
   },
   headerRow: {
     flexDirection: "row",
@@ -378,39 +363,29 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 20,
     alignItems: "center",
-    paddingHorizontal:10
+    paddingHorizontal: 10,
     // gap:20
-    
-   
-    
-  
-    
   },
   detailBoxLeft: {
-   
     //  borderWidth:1,
-     width:'40%'
-  
-    
+    width: "40%",
   },
-   detailBoxRight: {
-   
+  detailBoxRight: {
     //  borderWidth:1,
-      width:Platform.select({
-        android:'35%',
-        ios:'40%',web:'20%'
-      })
-  
-    
+    width: Platform.select({
+      android: "35%",
+      ios: "40%",
+      web: "20%",
+    }),
   },
-   value1: {
-  fontSize: 12,
-  color: "#6D6D6D",
-  fontWeight: "400",
-  // flexShrink: 1, 
-  // flexWrap: "wrap", 
-  // width:'78%'
-},
+  value1: {
+    fontSize: 12,
+    color: "#6D6D6D",
+    fontWeight: "400",
+    // flexShrink: 1,
+    // flexWrap: "wrap",
+    // width:'78%'
+  },
 
   // middleIconWrapper:{
   //    color:"red",
@@ -419,16 +394,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   value: {
-   fontSize: 12,
-  color: "#6D6D6D",
-  fontWeight: "400",
+    fontSize: 12,
+    color: "#6D6D6D",
+    fontWeight: "400",
   },
   line: {
     // height: 1,
     // backgroundColor: "#ddd",
-    borderBottomWidth:1,
+    borderBottomWidth: 1,
     marginTop: 10,
-    marginHorizontal:10
+    marginHorizontal: 10,
   },
   totalAmountContainer: {
     marginTop: 20,

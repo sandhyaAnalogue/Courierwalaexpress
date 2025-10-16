@@ -43,6 +43,10 @@ expo install expo-application
 
 npm i react-native-loading-spinner-overlay
 
+npx expo install react-native-maps
+npx expo install expo-location
+npx expo install expo-device
+
 
 
 

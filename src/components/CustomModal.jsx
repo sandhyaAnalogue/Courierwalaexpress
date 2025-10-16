@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 
-const CustomModal = ({ visible, onClose, text, title = "Select Payment" }) => {
+const CustomModal = ({ visible, onClose, text, title = "Select Payment" ,onPress}) => {
   return (
     <Modal
       animationType="slide"
@@ -17,7 +17,7 @@ const CustomModal = ({ visible, onClose, text, title = "Select Payment" }) => {
 
           <TouchableOpacity
             style={styles.closeButton}
-            onPress={onClose}
+            onPress={onPress || onClose}
           >
             <Text style={styles.buttonText}>Ok</Text>
           </TouchableOpacity>

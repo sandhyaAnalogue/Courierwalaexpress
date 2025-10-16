@@ -176,7 +176,7 @@ const OTPForm = () => {
       const resendOTPRes = await resendOtpVerification();
       if (resendOTPRes.status === 200) {
         console.log(resendOTPRes.data,"RESEND OTP")
-        Alert.alert(resendOTPRes.data.otp);
+        Alert.alert("OTP Sent",`Your OTP is: ${resendOTPRes.data.otp}`);
 
         setResendCount(resendCount + 1);
         setOtp(Array(6).fill(""));

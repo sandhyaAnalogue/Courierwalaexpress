@@ -1,8 +1,8 @@
 {
   "expo": {
-    "owner": "sandhyadayyala",
+    "owner": "courierwala-express",
     "name": "CorierwalaExpress",
-    "slug": "MyApp",
+    "slug": "courierwala-express",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/adaptive-icon.png",
@@ -17,7 +17,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.sandhyadayyala.MyApp",
+      "package": "com.aits.corierwalaexpress",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAXo-SdIMqO9E96LVD17OzwzoEItjr4cJ0"
+        }
+      },
       "permissions": [
         "android.permission.CAMERA",
         "android.permission.RECORD_AUDIO"
@@ -38,6 +43,13 @@
           "backgroundColor": "#ffffff"
         }
       ],
+    
+       [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
+      ],
       [
         "expo-camera",
         {
@@ -54,7 +66,8 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "51eb5598-58fd-4ad6-8e05-90c88128003c"
+        "projectId": "295bc354-6bdc-4226-9cf0-5eb64fadffbe"
+
       }
     }
   }

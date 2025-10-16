@@ -8,12 +8,14 @@ import {
 } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import { Stack, useRouter, useLocalSearchParams } from "expo-router";
+import { useSearchParams } from "expo-router";
+import { useState } from "react";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { ScrollView } from "react-native";
-import React from "react";
+import { instantBooking } from "../../../../services/apiCalls";
 
 import BooingIcon from "../../../../assets/svgIcons/BooingIcon";
 import img1 from "../../../../assets/svgIcons/img1";
@@ -21,6 +23,7 @@ import img2 from "../../../../assets/svgIcons/img2";
 import img3 from "../../../../assets/svgIcons/img3";
 import img4 from "../../../../assets/svgIcons/img4";
 import img5 from "../../../../assets/svgIcons/img5";
+import CustomModal from "../../../../components/CustomModal";
 
 const orders = [
   {
@@ -128,8 +131,10 @@ const orders = [
 const bookingSummary = () => {
   const router = useRouter();
   const inserts = useSafeAreaInsets();
-
-  const { id } = useLocalSearchParams();
+  const [modalVisible, setModalVisible] = useState(false);
+  const { id, parcelData } = useLocalSearchParams();
+  console.log("parcelData", parcelData && JSON.parse(parcelData));
+  const data = parcelData && JSON.parse(parcelData);
   const statusLower = orders[0].status.toLowerCase();
   const isInTransit = statusLower === "in-transit";
   const isCancelled = statusLower === "cancelled";
@@ -137,69 +142,122 @@ const bookingSummary = () => {
 
   const showParcel = isInTransit || isAwaitingPickup;
 
+  const handleConfirmBooking = async () => {
+    console.log(data?.packagevalue, "/////////////////////");
+    console.log("before sending data to api", data);
+    try {
+      const formdata = new FormData();
+      formdata.append("courierType", data?.courierType);
+      formdata.append("itemName", data?.itemName);
+      formdata.append("width", data?.width);
+      formdata.append("height", data?.height);
+      formdata.append("weight", data?.weight);
+      formdata.append("pickupAddress", data?.pickupAddress);
+      formdata.append("dropAddress", data?.dropAddress);
+      formdata.append("specialInstructions", data?.specialInstructions);
+      formdata.append("isBookingForSomeoneElse", data?.isBookingForSomeoneElse);
+      formdata.append("recipientName", data?.recipientName);
+      formdata.append("recipientContact", data?.recipientContact);
+      formdata.append("isInsured", data?.isInsured);
+
+      //  console.log("-0-0-0-0-0-00--0",packageValue)
+      formdata.append(
+        "packagevalue",
+        String(data?.packagevalue)?.replace(/,/g, "")
+      );
+
+      formdata.append("estimatedPrice", data?.estimatedPrice);
+      // formdata.append("packageImages", data?.packageImages);
+      data?.packageImages?.forEach((imageUri, index) => {
+        const filename = imageUri.split("/").pop();
+        const type = "image/jpeg"; // or detect from extension
+        formdata.append("packageImages", {
+          uri: imageUri,
+          name: filename,
+          type,
+        });
+      });
+
+      formdata.append("pickupLatitude", data?.pickupLatitude);
+      formdata.append("pickupLongitude", data?.pickupLongitude);
+      formdata.append("dropLatitude", data?.dropLatitude);
+      formdata.append("dropLongitude", data?.dropLongitude);
+
+      console.log(formdata, "FORMDATA");
+
+      const res = await instantBooking(formdata);
+      if (res.status === 201) {
+        setModalVisible(true);
+      }
+      console.log(res);
+    } catch (error) {
+      console.log(error.response, "error from confirmBooking");
+    }
+  };
+
   return (
     // <SafeAreaView style={{ flex: 1, backgroundColor: "#f8f8ff" }}>
-      <ScrollView>
-        <View style={{ backgroundColor: "#f8f8ff" ,paddingBottom:20}}>
-          <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content" />
+    <ScrollView>
+      <View style={{ backgroundColor: "#f8f8ff", paddingBottom: 20 }}>
+        <StatusBar backgroundColor="#f8f8ff" barStyle="dark-content" />
 
-          {/* STACK-SCREEN */}
-          <Stack.Screen
-            options={{
-              header: () => {
-                return (
-                  <View
-                    style={{
-                      backgroundColor: "#f8f8ff",
-                      paddingTop: inserts.top + 20,
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TouchableOpacity
-                      onPress={() => router.back()}
-                      style={{
-                        backgroundColor: "#E7E7E7",
-                        padding: 6,
-                        borderRadius: 16,
-                        marginLeft: 20,
-                      }}
-                    >
-                      <Feather name="chevron-left" size={20} color="black" />
-                    </TouchableOpacity>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontWeight: "500",
-                        marginLeft: 10,
-                        color: "#252525",
-                      }}
-                    >
-                      {" "}
-                      Parcel Details
-                    </Text>
-                  </View>
-                );
-              },
-            }}
-          />
-          {/* STACK-SCREEN-END */}
-
-          <View style={styles.container}>
-            <View style={styles.rowBetween}>
-              <View>
-                <Text
+        {/* STACK-SCREEN */}
+        <Stack.Screen
+          options={{
+            header: () => {
+              return (
+                <View
                   style={{
-                    fontSize: 16,
-                    fontWeight: "600",
-                    color: "#000000",
-                    marginTop: 10,
+                    backgroundColor: "#f8f8ff",
+                    paddingTop: inserts.top + 20,
+                    flexDirection: "row",
+                    alignItems: "center",
                   }}
                 >
-                  Booking Summary
-                </Text>
-              </View>
-              {/* <View style={styles.row}>
+                  <TouchableOpacity
+                    onPress={() => router.back()}
+                    style={{
+                      backgroundColor: "#E7E7E7",
+                      padding: 6,
+                      borderRadius: 16,
+                      marginLeft: 20,
+                    }}
+                  >
+                    <Feather name="chevron-left" size={20} color="black" />
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: "500",
+                      marginLeft: 10,
+                      color: "#252525",
+                    }}
+                  >
+                    {" "}
+                    Parcel Details
+                  </Text>
+                </View>
+              );
+            },
+          }}
+        />
+        {/* STACK-SCREEN-END */}
+
+        <View style={styles.container}>
+          <View style={styles.rowBetween}>
+            <View>
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "600",
+                  color: "#000000",
+                  marginTop: 10,
+                }}
+              >
+                Booking Summary
+              </Text>
+            </View>
+            {/* <View style={styles.row}>
                   <View style={styles.iconWrapper}>
                     <BooingIcon width={18} height={18} />
                   </View>
@@ -208,7 +266,7 @@ const bookingSummary = () => {
                     <Text style={styles.value}>{orders[0].bookingId}</Text>
                   </View>
                 </View> */}
-              {/* <View>
+            {/* <View>
                   <Text
                     style={{
                       maxWidth: 100,
@@ -233,181 +291,209 @@ const bookingSummary = () => {
                   </Text>
                 </View> */}
 
-              {/* {showParcel && (
+            {/* {showParcel && (
               <View style={styles.insuredTag}>
                 <Text style={[TextStyles.STYLE_1_A22]}>Insured parcel</Text>
               </View>
             )} */}
-            </View>
+          </View>
 
-            {/* First Detail Row */}
-            <View style={styles.detailRow}>
-              {/* Booking Date & Booking Time */}
-              <View style={styles.detailBox}>
-                <Text style={styles.labeldata}>Booking Date</Text>
-                <Text style={styles.value}>{orders[0].date}</Text>
-              </View>
-              <View style={styles.detailBox}>
-                <Text style={styles.labeldata1}>Booking Time</Text>
-                <Text style={styles.value}>{orders[0].bookingTime}</Text>
-              </View>
+          <View style={styles.detailRow}>
+            {/* Courier Type & Item Name */}
+            <View style={styles.detailBox}>
+              <Text style={styles.labeldata}>Courier Type</Text>
+              <Text style={styles.value}>{data?.courierType}</Text>
             </View>
-
-            <View style={styles.detailRow}>
-              {/* Dimensions & Booking Mode */}
-              <View style={styles.detailBox}>
-                <Text style={styles.labeldata}>Dimensions</Text>
-                <Text style={styles.value}>{orders[0].dimensions}</Text>
-              </View>
-              <View style={styles.detailBox}>
-                <Text style={styles.labeldata2}>Booking Mode</Text>
-                <Text style={styles.value}>{orders[0].bookingMode}</Text>
-              </View>
+            <View style={styles.detailBox}>
+              <Text style={styles.labeldata3}>Item Name</Text>
+              <Text style={styles.value}>{data?.itemName}</Text>
             </View>
+          </View>
 
-            <View style={styles.detailRow}>
-              {/* Courier Type & Item Name */}
-              <View style={styles.detailBox}>
-                <Text style={styles.labeldata}>Courier Type</Text>
-                <Text style={styles.value}>{orders[0].courierType}</Text>
-              </View>
-              <View style={styles.detailBox}>
-                <Text style={styles.labeldata3}>Item Name</Text>
-                <Text style={styles.value}>{orders[0].itemName}</Text>
-              </View>
+          {/* First Detail Row */}
+          <View style={styles.detailRow}>
+            {/* Booking Date & Booking Time */}
+            <View style={styles.detailBox}>
+              <Text style={styles.labeldata}>Booking Date</Text>
+              <Text style={styles.value}>{orders[0].date}</Text>
             </View>
-
-            <View style={styles.detailRow}>
-              {/* Pickup Date & Pickup Time */}
-              <View style={styles.detailBox}>
-                <Text style={styles.labeldata}>Pickup Date</Text>
-                <Text style={styles.value}>{orders[0].pickupdate}</Text>
-              </View>
-              <View style={styles.detailBox}>
-                <Text style={styles.labeldata4}>Pickup Time</Text>
-                <Text style={styles.value}>{orders[0].pickupTime}</Text>
-              </View>
+            <View style={styles.detailBox}>
+              <Text style={styles.labeldata1}>Booking Time</Text>
+              <Text style={styles.value}>{orders[0].bookingTime}</Text>
             </View>
+          </View>
 
+          <View style={styles.detailRow}>
+            {/* Dimensions & Booking Mode */}
+            <View style={styles.detailBox}>
+              <Text style={styles.labeldata}>Dimensions</Text>
+              <Text
+                style={styles.value}
+              >{`${data?.width} x ${data?.height},${data?.weigth}`}</Text>
+            </View>
+            <View style={styles.detailBox}>
+              <Text style={styles.labeldata2}>Booking Mode</Text>
+              <Text style={styles.value}>{data?.bookingMode}</Text>
+            </View>
+          </View>
+
+          {/* <View style={styles.detailRow}>
+            {/* Pickup Date & Pickup Time */}
+          {/* <View style={styles.detailBox}> */}
+          {/* <Text style={styles.labeldata}>Pickup Date</Text> */}
+          {/* <Text style={styles.value}>{orders[0].pickupdate}</Text> */}
+          {/* </View> */}
+          {/* <View style={styles.detailBox}> */}
+          {/* <Text style={styles.labeldata4}>Pickup Time</Text> */}
+          {/* <Text style={styles.value}>{orders[0].pickupTime}</Text> */}
+          {/* </View> */}
+          {/* </View> */}
+
+          {data?.isBookingForSomeoneElse && (
             <View style={styles.detailRow}>
               {/* Recipient Name & Recipient Number */}
               <View style={styles.detailBox}>
                 <Text style={styles.labeldata}>Recipient Name</Text>
-                <Text style={styles.value}>{orders[0].reciepientName}</Text>
+                <Text style={styles.value}>{data?.recipientName}</Text>
               </View>
               <View style={styles.detailBox}>
                 <Text style={styles.labeldata5}>Recipient Number</Text>
-                <Text style={styles.value}>{orders[0].reciepientNumber}</Text>
+                <Text style={styles.value}>{data?.recipientContact}</Text>
               </View>
             </View>
+          )}
 
-            <View style={styles.detailRow}>
-              {/* Pickup Address & Drop Address */}
-              <View style={[styles.detailBox]}>
-                <Text style={styles.labeldata}>Pickup Address</Text>
-                <Text style={[styles.value1, { flexShrink: 1 }]}>
-                  {orders[0].pickupAddress}
-                </Text>
-              </View>
-              <View style={[styles.detailBox, { marginLeft: 15 }]}>
-                <Text style={styles.labeldata6}>Drop Address</Text>
-                <Text style={[styles.value1, { flexShrink: 1 }]}>
-                  {orders[0].dropAddress}
-                </Text>
-              </View>
+          <View style={styles.detailRow}>
+            {/* Pickup Address & Drop Address */}
+            <View style={[styles.detailBox]}>
+              <Text style={styles.labeldata}>Pickup Address</Text>
+              <Text style={[styles.value1, { flexShrink: 1 }]}>
+                {data?.pickupAddress}
+              </Text>
             </View>
-
-            <View>
-              <Text style={styles.imagedata}>Package images</Text>
+            <View style={[styles.detailBox, { marginLeft: 15 }]}>
+              <Text style={styles.labeldata6}>Drop Address</Text>
+              <Text style={[styles.value1, { flexShrink: 1 }]}>
+                {data?.dropAddress}
+              </Text>
             </View>
+          </View>
 
-            <View style={styles.packageImagesContainer}>
-              {Array.isArray(orders[0].packageImages) &&
-                orders[0].packageImages.map((imgObj, i) => {
-                  const SvgComponent = imgObj.SvgComponent;
-                  return (
-                    <View
-                      key={i}
-                      style={{ alignItems: "center", marginRight: 1 }}
-                    >
-                      <SvgComponent width={20} height={20} />
-                      <Text style={{ fontSize: 10, color: "#444" }}>
-                        {imgObj.title}
-                      </Text>
-                    </View>
-                  );
-                })}
-            </View>
+          <View>
+            <Text style={styles.imagedata}>Package images</Text>
+          </View>
 
-            {/* INSURED-PARCEL-START */}
+          <View style={styles.packageImagesContainer}>
+            {data?.packageImages?.length > 0 &&
+              data?.packageImages.map((imgObj, i) => {
+                return (
+                  <View
+                    key={i}
+                    style={{ alignItems: "center", marginRight: 1, gap: 4 }}
+                  >
+                    <Image
+                      source={{ uri: imgObj }}
+                      style={{
+                        width: 30,
+                        height: 30,
+                      }}
+                    />
+                    <Text style={{ fontSize: 10, color: "#444" }}>
+                      Img{i + 1}
+                    </Text>
+                  </View>
+                );
+              })}
+          </View>
+
+          {/* INSURED-PARCEL-START */}
+          {data?.isInsured && (
             <View style={styles.packedparcel}>
               <Text style={styles.parcel}>This parcel is insured</Text>
-              <Text style={{ color: "#6D6D6D" }}>Covered: ₹20,000</Text>
-            </View>
-            {/* INSURED-PARCEL-END */}
-
-            <View style={styles.line}></View>
-
-            <View style={styles.detailRow}>
-              <View style={styles.price}>
-                <Text style={styles.amount}>Total Amount</Text>
-              </View>
-              <View style={styles.price}>
-                <Text style={styles.amount}>₹{orders[0].totalAmount}</Text>
-              </View>
-            </View>
-            <View style={{ marginBottom: 20 }}>
-              <Text style={styles.para} numberOfLines={2}>
-                * Final Price may vary after physical {"\n"}
-                <Text></Text> verification during pickup
+              <Text style={{ color: "#6D6D6D" }}>
+                Covered: ₹{data?.packagevalue}
               </Text>
+            </View>
+          )}
+
+          {/* INSURED-PARCEL-END */}
+
+          <View style={styles.line}></View>
+
+          <View style={styles.detailRow}>
+            <View style={styles.price}>
+              <Text style={styles.amount}>Total Amount</Text>
+            </View>
+            <View style={styles.price}>
+              <Text style={styles.amount}>₹{data?.estimatedPrice}</Text>
             </View>
           </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: 40,
-              // borderWidth:1,
-              marginBottom:5,
-              gap:10,
-              marginHorizontal:20,
-            }}
-          >
-            <TouchableOpacity>
-              <Text
-                style={{
-                  borderWidth: 1,
-                  paddingHorizontal: 65,
-                  paddingVertical: 10,
-                  borderRadius: 5,
-                  color: "#252525",
-                  fontWeight: 600,
-                }}
-              >
-                Back
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={()=>router.navigate("/bookingDetails")}>
-              <Text
-                style={{
-                  borderWidth: 1,
-                  paddingHorizontal: 22,
-                  paddingVertical: 10,
-                  borderRadius: 5,
-                  backgroundColor: "#093C31",
-                  color: "#FFFFFF",
-                  fontWeight: 400,
-                }}
-              >
-                Confirm booking
-              </Text>
-            </TouchableOpacity>
+          <View style={{ marginBottom: 20 }}>
+            <Text style={styles.para} numberOfLines={2}>
+              * Final Price may vary after physical {"\n"}
+              <Text></Text> verification during pickup
+            </Text>
           </View>
         </View>
-      </ScrollView>
+
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: 40,
+            // borderWidth:1,
+            marginBottom: 5,
+            gap: 10,
+            marginHorizontal: 20,
+          }}
+        >
+          <TouchableOpacity onPress={() => router.back()}>
+            <Text
+              style={{
+                borderWidth: 1,
+                paddingHorizontal: 65,
+                paddingVertical: 10,
+                borderRadius: 5,
+                color: "#252525",
+                fontWeight: 600,
+              }}
+            >
+              Back
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleConfirmBooking()}>
+            <Text
+              style={{
+                borderWidth: 1,
+                paddingHorizontal: 22,
+                paddingVertical: 10,
+                borderRadius: 5,
+                backgroundColor: "#093C31",
+                color: "#FFFFFF",
+                fontWeight: 400,
+              }}
+            >
+              Confirm booking
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <CustomModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          text={
+            data?.isInsured
+              ? "Your parcel is insured"
+              : "A delivery partner will be assigned shortly"
+          }
+          title="The booking is confirmed"
+          // onPress={() => {
+          //   router.navigate("(tabs)/(homeScreen)/(instantBooking)/bookingDetails");
+          // }}
+        />
+      </View>
+    </ScrollView>
     // </SafeAreaView>
   );
 };
@@ -418,7 +504,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    marginTop:20,
+    marginTop: 20,
     backgroundColor: "#FFFFFF",
     // marginTop: 5,
     marginHorizontal: 20,
@@ -447,6 +533,7 @@ const styles = StyleSheet.create({
   // },
   detailBox: {
     flex: 1,
+
     paddingHorizontal: 10,
   },
   labeldata: {
@@ -461,6 +548,13 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     marginBottom: 4,
     marginRight: 26,
+  },
+  labeldataname: {
+    fontSize: 14,
+    color: "#000000",
+    fontWeight: "500",
+    marginBottom: 4,
+    marginRight: 43,
   },
   labeldata2: {
     fontSize: 14,

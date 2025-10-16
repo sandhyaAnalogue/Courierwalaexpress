@@ -22,6 +22,7 @@ import { AuthContext } from "../../utils/AuthProvider";
 
 import { loginApi } from "../../services/apiCalls";
 import Loading from "../../components/Loading";
+import HybridStorage from "../../utils/helpers/HybridStorage";
 
 const Login = () => {
   // const isFocused = useIsFocused();
@@ -47,11 +48,15 @@ const Login = () => {
       if (phNumRes?.data?.token) {
      
         console.log(values.userPhNum, "userNumber");
+        console.log(phNumRes.data.token, "token");
         console.log(phNumRes.data.otp, "otp");
 
+        const storedToken = await HybridStorage.setItem("mainToken",phNumRes?.data?.token );
         login(phNumRes.data.token);
+
         resetForm();
         router.push("/OTPscreen");
+         Alert.alert("OTP",`Your OTP is: ${phNumRes.data.otp}`)
       } else {
         Alert.alert(
           "Error",
@@ -59,6 +64,7 @@ const Login = () => {
         );
       }
     } catch (error) {
+      console.log(error.response,"error response")
       if (error.response) {
         const errorRes = error.response.data?.message || "Something went wrong";
         Alert.alert("Error", errorRes);

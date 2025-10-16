@@ -14,6 +14,7 @@ const CustomInput = ({
   containerStyle,
   input,
   value,
+  inpContainer,
   rightIcon,
   leftIcon,
 }) => {
@@ -22,12 +23,14 @@ const CustomInput = ({
       {inpLabel && (
         <Text style={[styles.label, inputLabelStyle]}>{inpLabel}</Text>
       )}
-      <View style={[styles.inputWrapper, error && styles.errorInput]}>
+      <View style={[styles.inputWrapper,inpContainer, error && styles.errorInput]}>
         {leftIcon && <View style={styles.iconLeft}>{leftIcon}</View>}
         <TextInput
           placeholder={placeholder}
           value={value}
-          style={[styles.input, input]}
+          style={{borderColor:1,fontSize:12,fontWeight:"400"}}
+          placeholderTextColor="#888888"
+          // style={[styles.input, input]}
           onChangeText={onChangeText}
           keyboardType={keyboardType}
           editable={editable}
@@ -51,33 +54,35 @@ export default CustomInput;
 const styles = StyleSheet.create({
   container: {
     marginVertical: 10,
-    width: width - 30,
+    // borderWidth:1,
+    marginRight:5
   },
   label: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "500",
     color: "#333",
     marginBottom: 6,
   },
-  input: {
-    // borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 6,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    fontSize: 16,
-    color: "#000",
-  },
+  // input: {
+  //   borderWidth: 1,
+  //   borderColor: "#ccc",
+  //   borderRadius: 6,
+  //   paddingVertical: 10,
+  //   paddingHorizontal: 12,
+  //   fontSize: 16,
+  //   color: "#000",
+  // },
 
   errorInput: {
     borderColor: "red",
   },
   errorText: {
     color: "red",
-    fontSize: 12,
+    fontSize: 10,
     marginTop: 4,
   },
   inputWrapper: {
+
     flexDirection: "row",
     alignItems: "center",
     borderWidth: 1,
@@ -85,6 +90,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     paddingHorizontal: 10,
     backgroundColor: "white",
+    paddingVertical:3,
   },
   iconLeft: {
     marginRight: 8,
